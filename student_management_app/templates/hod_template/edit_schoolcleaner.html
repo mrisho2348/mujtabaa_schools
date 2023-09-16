@@ -1,0 +1,161 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+  {% if cooker %}
+    Update Cleaner Information
+  {% else %}
+    Add Cleaner Information
+  {% endif %}
+{% endblock page_title %}
+
+{% block main_content %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Add the form here -->
+        <form method="post" enctype="multipart/form-data" action="{% if cleaner %}{% url 'update_cleaner_info_save' cleaner.id %}{% else %}{% url 'add_cleaner_info' %}{% endif %}">
+          {% csrf_token %}
+          <!-- Personal Information -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" required value="{% if cleaner %}{{ cleaner.admin.first_name }}{% endif %}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" required value="{% if cleaner %}{{ cleaner.admin.last_name }}{% endif %}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="contact_number">Contact Number</label>
+                <input type="text" class="form-control" id="contact_number" name="contact_number" required value="{% if cleaner %}{{ cleaner.contact_number }}{% endif %}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" required value="{% if cleaner %}{{ cleaner.address }}{% endif %}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{% if cleaner and cleaner.date_of_birth %}{{ cleaner.date_of_birth|date:'Y-m-d' }}{% endif %}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" name="gender">
+                  <option value="male" {% if cleaner and cleaner.gender == 'male' %}selected{% endif %}>Male</option>
+                  <option value="female" {% if cleaner and cleaner.gender == 'female' %}selected{% endif %}>Female</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cooking_shift_hours">Cleaning Shift Hours</label>
+                <input type="text" class="form-control" id="cooking_shift_hours" name="cooking_shift_hours" value="{% if cleaner %}{{ cleaner.cleaning_shift_hours }}{% endif %}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="uniform_size">Uniform Size</label>
+                <input type="text" class="form-control" id="uniform_size" name="uniform_size" value="{% if cleaner %}{{ cleaner.uniform_size }}{% endif %}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cleaning_duties">cleaning duties</label>
+                <textarea class="form-control" id="cleaning_duties" name="cleaning_duties" rows="3">{% if cleaner %}{{ cleaner.cleaning_duties }}{% endif %}</textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="emergency_contact_name">Emergency Contact Name</label>
+                <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name" value="{% if cleaner %}{{ cleaner.emergency_contact_name }}{% endif %}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="emergency_contact_number">Emergency Contact Number</label>
+                <input type="text" class="form-control" id="emergency_contact_number" name="emergency_contact_number" value="{% if cleaner %}{{ cleaner.emergency_contact_number }}{% endif %}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="years_of_experience">Years of Experience</label>
+                <input type="number" class="form-control" id="years_of_experience" name="years_of_experience" value="{% if cleaner %}{{ cleaner.years_of_experience }}{% endif %}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="performance_ratings">Performance Ratings</label>
+                <textarea class="form-control" id="performance_ratings" name="performance_ratings" rows="3">{% if cleaner %}{{ cleaner.performance_ratings }}{% endif %}</textarea>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="profile_pic">Profile Picture:</label>
+                    <input type="file" class="form-control-file" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png" data-max-size="5242880">
+                    <small class="form-text text-danger">Accepted formats: JPG, JPEG, PNG | Maximum file size: 5MB</small>
+                </div>
+                {% if cleaner.profile_pic %}
+                <div class="form-group col-md-6">
+                  <img src="{{ cleaner.profile_pic }}" alt="Profile Picture" class="img-fluid"  width="200" height="200">
+              </div>
+              {% else %}
+              <p>no profle  uploaded</p>
+                {% endif %}
+               
+            </div>
+          </div>
+          <!-- Add other fields as needed -->
+
+          <div class="card-footer">
+            <div class="form-row">
+              <div>
+                {% if messages %}
+                  <div class="col-12">
+                    {% for message in messages %}
+                      {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                      {% elif message.tags == 'success' %}
+                        <div class="alert alert-primary">{{ message }}</div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-secondary btn-block">
+              {% if cooker %}
+                Update Cleaner Info
+              {% else %}
+                Save Cleaner Info
+              {% endif %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock main_content %}

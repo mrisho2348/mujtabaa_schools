@@ -1,0 +1,196 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+   All {{page_obj.current_class}} Registered Students
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_student' %}">
+        <i class="fas fa-plus"></i> New student
+    </a>
+    <a class="btn btn-primary" href="#">
+        <i class="fas fa-upload"></i> Upload students
+    </a>
+{% endblock breadcrumb %}
+{% load static %}
+{% block main_content %}
+<div class="table-responsive">
+    <div class="row">
+        <div class="col-md-3">
+            <form method="GET" action="{% url 'manage_student' %}">
+                <div class="input-group">
+                    <input type="number" name="per_page" class="form-control" placeholder="Items per page" aria-label="Items per page" aria-describedby="per-page-btn" min="1">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-primary btn-sm" type="submit" id="per-page-btn">Set</button>
+                    </div>
+                </div>
+            </form>
+            <p>Show <strong>{{ page_obj.paginator.per_page }}</strong> Entries</p>
+        </div>
+        <div class="col-md-3 ml-">
+            <form method="GET" action="{% url 'student-list' %}">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search by registration number" aria-label="Search" aria-describedby="search-btn" disabled>
+                    <div class="input-group-prepend">
+                        <button class="btn btn-primary" type="submit" id="search-btn" disabled>Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <form id="filter-form" action="{% url 'manage_student' %}">
+                <div class="input-group">
+                    <select name="current_class" class="form-control" id="current-class-select">
+                        <option value="">Select  Class</option>
+                        <option value="Baby">Baby</option>
+                        <option value="KG1">KG1</option>
+                        <option value="KG2">KG2</option>
+                        <option value="I">I</option>
+                        <option value="II">II</option>
+                        <option value="III">III</option>
+                        <option value="IV">IV</option>
+                        <option value="V">V</option>
+                        <option value="VI">VI</option>
+                        <option value="Form I">Form I</option>
+                        <option value="Form II">Form II</option>
+                        <option value="Form III">Form III</option>
+                        <option value="Form IV">Form IV</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" id="filter-btn">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm">
+    <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Full Name</th>
+            <th>Education Level</th>
+            <th>CURRENT CLASS</th>
+            <th>Gender</th>
+            <th>Picture</th>
+            <th>REGISTRATION DATE</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="student-table-body">
+        {% for student in page_obj %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.admin.first_name }} {{ student.admin.last_name }}</td>
+            <td>{{ student.school_segment }}</td>
+            <td>{{ student.current_class }}</td>
+            <td>{{ student.gender }}</td>
+            {% if student.profile_pic %}
+            <td><img src="{{ student.profile_pic }}" style="width:100px;" alt="Profile Picture" /></td>
+          {% else %}
+            <td><p>No profile picture</p></td>
+          {% endif %}
+            <td>{{ student.admin.date_joined }}</td>
+            <td class="text-center">
+                <a href="{% url 'single_student_detail' student_id=student.id  %}">
+                    <button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>
+                </a>
+                <a href="{% url 'edit_student' student_id=student.admin.id  %}">
+                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>
+                </a>
+                <a href="#">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Are you sure to delete this student?') === false) event.preventDefault()"><i class="fa fa-trash"></i></button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if page_obj.has_other_pages %}
+<div aria-label="pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for page in page_obj.paginator.page_range %}
+        {% if page_obj.number == page %}
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ page }}<span class="sr-only">(current)</span></span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
+<script src="{% static 'plugins/jquery/jquery-3.6.0.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        // Submit the form on filter button click
+        $('#filter-btn').click(function() {
+            $('#filter-form').submit();
+        });
+    
+        // Handle form submission and AJAX request
+        $('#filter-form').submit(function(e) {
+            e.preventDefault();
+            var currentClass = $('#current-class-select').val();
+            var selectedClassName = $('#current-class-select option:selected').text();
+    
+            // Update the heading text
+            $('#page-title').text("All " + selectedClassName + " Registered Students");
+    
+            // Perform AJAX request and update the student table
+            $.ajax({
+                url: "{% url 'manage_student' %}",
+                data: {current_class: currentClass},
+                dataType: 'json',
+                success: function(response) {
+                    var students = response.students;
+                    var tableBody = $('#student-table-body');
+                    tableBody.empty();
+                    for (var i = 0; i < students.length; i++) {
+                        var student = students[i];
+                        var row = '<tr>' +
+                            '<td>' + student.id + '</td>' +
+                            '<td>' + student.admin.first_name + ' ' + student.admin.last_name + '</td>' +
+                            '<td>' + student.school_segment + '</td>' +
+                            '<td>' + student.current_class + '</td>' +
+                            '<td>' + student.gender + '</td>' +
+                            '<td>' + student.admin.date_joined + '</td>' +
+                            '<td class="text-center">' +
+                            '<a href="/single_student_detail/' + encodeURIComponent(student.admin.id) + '/">' +
+                            '<button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>' +
+                            '</a>' +
+                            '<a href="/edit_student/' + encodeURIComponent(student.admin.id) + '/">' +
+                            '<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>' +
+                            '</a>' +
+                            '<a href="#">' +
+                            '<button type="button" class="btn btn-danger btn-sm" onclick="if(confirm(\'Are you sure to delete this student?\') === false) event.preventDefault()"><i class="fa fa-trash"></i></button>' +
+                            '</a>' +
+                            '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock main_content %}

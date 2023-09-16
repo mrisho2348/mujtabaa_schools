@@ -1,0 +1,59 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id %}
+            Update Contact Information
+        {% else %}
+            Add Contact Information
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id %}
+            Update Contact Information
+        {% else %}
+            Add Contact Information
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="alternate_contact_number">Alternate Contact Number</label>
+          <input type="text" class="form-control" id="alternate_contact_number" name="alternate_contact_number" required {% if driver_id and contact_info %}value="{{ contact_info.alternate_contact_number }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required {% if driver_id and contact_info %}value="{{ contact_info.email }}" {% endif %}>
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary"  name="continue_filling">Save Contact Information</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          {% if driver_id %}
+            <a href="{% url 'add_driver_emergency_contact_info' driver_id=driver_id %}" class="btn btn-info">Skip and Continue to the Next Form</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

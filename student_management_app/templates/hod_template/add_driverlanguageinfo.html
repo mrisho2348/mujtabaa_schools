@@ -1,0 +1,59 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id and spoken_languages %}
+            Update Spoken Languages
+        {% else %}
+            Add Spoken Languages
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id and spoken_languages %}
+            Update Spoken Languages
+        {% else %}
+            Add Spoken Languages
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="spoken_languages">Spoken Languages</label>
+          <select class="form-control" id="spoken_languages" name="spoken_languages" multiple>
+            <option value="English" {% if spoken_languages and 'English' in spoken_languages %}selected{% endif %}>English</option>
+            <option value="Spanish" {% if spoken_languages and 'Spanish' in spoken_languages %}selected{% endif %}>Spanish</option>
+            <option value="French" {% if spoken_languages and 'French' in spoken_languages %}selected{% endif %}>French</option>
+            <!-- Add more language options here -->
+          </select>
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary" name="continue_filling">Save Spoken Languages</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'add_driver_references' driver_id=driver_id %}" class="btn btn-info">Skip and Continue to the Next Form</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

@@ -1,0 +1,71 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+  Cleaner Details
+{% endblock page_title %}
+
+{% block main_content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="content-wrappe">
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <!-- Cooker Details card -->
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Cleaner Details</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4>{{ cleaner.admin.get_full_name }}</h4>
+                                        <p><strong>Contact Number:</strong> {{ cleaner.contact_number }}</p>
+                                        <p><strong>Address:</strong> {{ cleaner.address }}</p>
+                                        <p><strong>Date of Birth:</strong> {{ cleaner.date_of_birth }}</p>
+                                        <p><strong>Gender:</strong> {{ cleaner.gender }}</p>
+                                        {% if cleaner.profile_pic %}
+                                            <img src="{{ cleaner.profile_pic }}" alt="Profile Picture" width="200" height="200">
+                                        {% else %}
+                                            <p>No Image</p>
+                                        {% endif %}
+
+                                        {% if cleaner.cooking_shift_hours %}
+                                            <h4>Additional Information:</h4>
+                                            <p><strong>Cooking Shift Hours:</strong> {{ cleaner.cooking_shift_hours }}</p>
+                                            <p><strong>Uniform Size:</strong> {{ cleaner.uniform_size }}</p>
+                                            <p><strong>Special Dietary Requirements:</strong> {{ cleaner.special_dietary_requirements }}</p>
+                                        {% endif %}
+
+                                        {% if cleaner.assigned_classrooms.exists %}
+                                            <h4>Assigned Classrooms:</h4>
+                                            <ul>
+                                                {% for classroom in cleaner.assigned_classrooms.all %}
+                                                    <li>{{ classroom.name }} (Grade: {{ classroom.grade_level }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                        {% if cleaner.emergency_contact_name and cleaner.emergency_contact_number %}
+                                            <h4>Emergency Contact:</h4>
+                                            <p><strong>Name:</strong> {{ cleaner.emergency_contact_name }}</p>
+                                            <p><strong>Contact Number:</strong> {{ cleaner.emergency_contact_number }}</p>
+                                        {% endif %}
+
+                                        {% if cleaner.years_of_experience and cleaner.performance_ratings %}
+                                            <h4>Experience and Ratings:</h4>
+                                            <p><strong>Years of Experience:</strong> {{ cleaner.years_of_experience }}</p>
+                                            <p><strong>Performance Ratings:</strong> {{ cleaner.performance_ratings }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+{% endblock main_content %}

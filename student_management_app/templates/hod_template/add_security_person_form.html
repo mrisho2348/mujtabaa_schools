@@ -1,0 +1,185 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+  Add Security Person Information
+{% endblock page_title %}
+
+{% block main_content %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Add the form here -->
+        <form method="post" enctype="multipart/form-data" action="{% url 'add_security_person_info_save' %}">
+          {% csrf_token %}
+          <!-- Personal Information -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="contact_number">Contact Number</label>
+                <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" name="gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="profile_pic">Profile Picture</label>
+                <input type="file" class="form-control-file" id="profile_pic" name="profile_pic" accept=".png, .jpeg, .jpg" data-max-size="5242880">
+                <small class="form-text text-danger">Accepted formats: JPG, JPEG, PNG | Maximum file size: 5MB</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="security_clearance_expiry">Security Clearance Expiry</label>
+                <input type="date" class="form-control" id="security_clearance_expiry" name="security_clearance_expiry">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="patrol_area">Patrol Area</label>
+                <input type="text" class="form-control" id="patrol_area" name="patrol_area">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="security_training_courses">Security Training Courses</label>
+                <textarea class="form-control" id="security_training_courses" name="security_training_courses" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="emergency_contact_name">Emergency Contact Name</label>
+                <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="emergency_contact_number">Emergency Contact Number</label>
+                <input type="text" class="form-control" id="emergency_contact_number" name="emergency_contact_number">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="shift_start_time">Shift Start Time</label>
+                <input type="time" class="form-control" id="shift_start_time" name="shift_start_time">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="shift_end_time">Shift End Time</label>
+                <input type="time" class="form-control" id="shift_end_time" name="shift_end_time">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="years_of_experience">Years of Experience</label>
+                <input type="number" class="form-control" id="years_of_experience" name="years_of_experience" min="0">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="uniform_size">Uniform Size</label>
+                <input type="text" class="form-control" id="uniform_size" name="uniform_size">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="vehicle_assigned">Vehicle Assigned</label>
+                <select class="form-control" id="vehicle_assigned" name="vehicle_assigned">
+                  <option value="" selected>Choose a vehicle</option>
+                  <!-- Add options for available vehicles -->
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="form-row">
+              <div>
+                {% if messages %}
+                  <div class="col-12">
+                    {% for message in messages %}
+                      {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                      {% elif message.tags == 'success' %}
+                        <div class="alert alert-primary">{{ message }}</div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <button type="submit" name="continue_filling" class="btn btn-secondary btn-block">Save security person info </button>
+           
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock main_content %}

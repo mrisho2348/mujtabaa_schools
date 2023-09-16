@@ -1,0 +1,117 @@
+{% extends 'hod_template/base_template.html' %}
+{% load custom_template_tags %}
+{% block page_title %}
+    All {{current_class }} Students Results
+{% endblock page_title %}
+
+
+{% block main_content %}
+<div class="table-responsive">
+    <div class="row">
+        <div class="col-md-3">
+            <form method="GET" action="{% url 'manage_subject' %}">
+                <div class="input-group ">
+                    <input type="number" name="per_page" class="form-control" placeholder="Items per page" aria-label="Items per page" aria-describedby="per-page-btn" min="1">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-primary mr-3 btn-sm" type="submit" id="per-page-btn">Set</button>
+                    </div>
+                </div>
+            </form>
+            <p>Show <strong>{{ page_obj.paginator.per_page }}</strong> Entries</p>
+        </div>
+        <div class="col-md-6 ml-5">
+            <form method="GET" action="{% url 'manage_subject' %}">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search by subject name or school segment" aria-label="Search" aria-describedby="search-btn">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-primary" type="submit" id="search-btn">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm" id="studentResultsTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Division</th>
+            <th>Total Grade Points</th> <!-- Updated the header -->
+            <th>Position</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student_data in student_info %} <!-- Updated to use student_info -->
+        <tr>
+            <td>{{ student_data.student.id }}</td>
+            <td>{{ student_data.student.admin.first_name }} {{ student_data.student.admin.last_name }}</td>
+            <!-- Display Division -->
+            <td>
+                {% if student_data.division != 'Division Not Available' %}
+                    {{ student_data.division }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if student_data.total_grade_points != 'Total Grade Points Not Available' %}
+                    {{ student_data.total_grade_points }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if student_data.position != 'Position Not Available' %}
+                    {{ student_data.position }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td class="text-center">
+                <a href="{% url 'subject_wise_result' student_id=student_data.student.id exam_type_id=exam_type.id %}" title="Subject-wise Results">
+                    <button type="button" class="btn btn-info btn-sm">
+                        <i class="fa fa-list-alt text-white"></i>
+                    </button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if page_obj.has_other_pages %}
+<div aria-label="pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+        </li>
+        {% endif %}
+        {% for page in page_obj.paginator.page_range %}
+        {% if page_obj.number == page %}
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ page }}<span class="sr-only">(current)</span></span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        // Initialize DataTable with your table's ID
+        $('#studentResultsTable').DataTable();
+    });
+</script>
+{% endblock main_content %}

@@ -1,0 +1,94 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id and employment_info %}
+            Update Employment Information
+        {% else %}
+            Add Employment Information
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id and employment_info %}
+            Update Employment Information
+        {% else %}
+            Add Employment Information
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="date_of_joining">Date of Joining</label>
+          <input type="date" class="form-control" id="date_of_joining" name="date_of_joining" required {% if employment_info %}value="{{ employment_info.date_of_joining }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="employment_start_date">Employment Start Date</label>
+          <input type="date" class="form-control" id="employment_start_date" name="employment_start_date" required {% if employment_info %}value="{{ employment_info.employment_start_date }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="employment_end_date">Employment End Date</label>
+          <input type="date" class="form-control" id="employment_end_date" name="employment_end_date" required {% if employment_info %}value="{{ employment_info.employment_end_date }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="salary">Salary</label>
+          <input type="text" class="form-control" id="salary" name="salary" required {% if employment_info %}value="{{ employment_info.salary }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="salary_information">Salary Information</label>
+          <textarea class="form-control" id="salary_information" name="salary_information" rows="3">{% if employment_info %}{{ employment_info.salary_information }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="performance_ratings">Performance Ratings</label>
+          <textarea class="form-control" id="performance_ratings" name="performance_ratings" rows="3">{% if employment_info %}{{ employment_info.performance_ratings }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="shift_schedule">Shift Schedule</label>
+          <input type="text" class="form-control" id="shift_schedule" name="shift_schedule" {% if employment_info %}value="{{ employment_info.shift_schedule }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="driving_hours">Driving Hours</label>
+          <input type="text" class="form-control" id="driving_hours" name="driving_hours" {% if employment_info %}value="{{ employment_info.driving_hours }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="uniform_size">Uniform Size</label>
+          <input type="text" class="form-control" id="uniform_size" name="uniform_size" {% if employment_info %}value="{{ employment_info.uniform_size }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="uniform_issued_date">Uniform Issued Date</label>
+          <input type="date" class="form-control" id="uniform_issued_date" name="uniform_issued_date" {% if employment_info %}value="{{ employment_info.uniform_issued_date }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="uniform_return_date">Uniform Return Date</label>
+          <input type="date" class="form-control" id="uniform_return_date" name="uniform_return_date" {% if employment_info %}value="{{ employment_info.uniform_return_date }}" {% endif %}>
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary" name="continue_filling">Save Employment Information</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'add_driver_vehicle_info' driver_id=driver_id %}" class="btn btn-info">Skip and Continue to the Next Form</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

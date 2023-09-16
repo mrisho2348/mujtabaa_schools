@@ -1,0 +1,89 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Add Staff
+{% endblock page_title %}
+{% block main_content %}
+  {% load static %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <h2 class="card-header">Add Staff Skills</h2>
+                  <div class="card-body">
+                    <form enctype="multipart/form-data" method="POST" action="{% url 'skills_form' staff_id=staff_id %}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="subject_expertise">Subject Expertise:</label>
+                        <textarea class="form-control" id="subject_expertise" name="subject_expertise"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="teaching_methods">Teaching Methods:</label>
+                        <textarea class="form-control" id="teaching_methods" name="teaching_methods"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="professional_development">Professional Development:</label>
+                        <textarea class="form-control" id="professional_development" name="professional_development"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="language_proficiency">Language Proficiency:</label>
+                        <textarea class="form-control" id="language_proficiency" name="language_proficiency"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="technology_skills">Technology Skills:</label>
+                        <textarea class="form-control" id="technology_skills" name="technology_skills"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="special_skills">Special Skills:</label>
+                        <textarea class="form-control" id="special_skills" name="special_skills"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="certificate">Certificate:</label>
+                        <input type="file" class="form-control-file" id="certificate" name="certificate"  accept=".pdf, .docx">
+                        <small class="form-text text-danger">Allowed file formats: .pdf<br>Maximum file size: 5MB</small>
+
+
+                      </div>                   
+                  
+                  </div>
+                  <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block">Add Staff Skills</button>
+                      </div>
+                    </div>
+                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock main_content %}

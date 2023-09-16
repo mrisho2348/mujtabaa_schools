@@ -1,5 +1,5 @@
 """
-ASGI config for madrasatul_mujtabaa project.
+ASGI config for taboracollage project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'madrasatul_mujtabaa.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taboracollage.settings')
 
 application = get_asgi_application()

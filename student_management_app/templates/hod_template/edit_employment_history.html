@@ -1,0 +1,84 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Edit Staff
+{% endblock page_title %}
+{% block main_content %}
+  {% load static %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <h2 class="card-header">Edit Staff employment history </h2>
+                  <div class="card-body">
+                    <form method="post" action="{% url 'edit_staff_employment_history' staff_id=staff_id %}">
+                      {% csrf_token %}
+                        <div class="form-group">
+                          <label for="employment_history">Employment History:</label>
+                          <textarea class="form-control" id="employment_history" name="employment_history">{% if employment_history %}{{ employment_history.employment_history }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group">
+                          <label for="company_name">Company Name:</label>
+                          <input type="text" class="form-control" id="company_name" name="company_name" value="{% if employment_history %}{{ employment_history.company_name }}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                          <label for="company_address">Company Address:</label>
+                          <textarea class="form-control" id="company_address" name="company_address">{% if employment_history %}{{ employment_history.company_address }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Position:</label>
+                          <input type="text" class="form-control" id="position" name="position" value="{% if employment_history %}{{ employment_history.position }}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                          <label for="start_date">Start Date:</label>
+                          <input type="date" class="form-control" id="start_date" name="start_date" value="{% if employment_history %}{{ employment_history.start_date }}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                          <label for="end_date">End Date:</label>
+                          <input type="date" class="form-control" id="end_date" name="end_date" value="{% if employment_history %}{{ employment_history.end_date }}{% endif %}">
+                        </div>
+                        <!-- Add more fields as needed, such as job responsibilities, achievements, etc. -->
+                      
+                  
+                  </div>
+                  <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block">Edit Staff employment history </button>
+                      </div>
+                    </div>
+                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock main_content %}

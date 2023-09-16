@@ -1,0 +1,75 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+Security Details
+{% endblock page_title %}
+
+{% block main_content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="content-wrappe">
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <!-- Cooker Details card -->
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Security Details</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4>{{ security.admin.get_full_name }}</h4>
+                                        <p><strong>username:</strong> {{ security.admin.username }}</p>
+                                        <p><strong>email:</strong> {{ security.admin.email }}</p>
+                                        <p><strong>Contact Number:</strong> {{ security.contact_number }}</p>
+                                        <p><strong>Address:</strong> {{ security.address }}</p>
+                                        <p><strong>Date of Birth:</strong> {{ security.date_of_birth }}</p>
+                                        <p><strong>Gender:</strong> {{ security.gender }}</p>
+                                        {% if security.profile_pic %}
+                                            <img src="{{ security.profile_pic }}" alt="Profile Picture" width="200" height="200">
+                                        {% else %}
+                                            <p>No Image</p>
+                                        {% endif %}
+
+                                        {% if security.security_clearance_expiry %}
+                                            <h4>Additional Information:</h4>
+                                            <p><strong>security clearance expiry:</strong> {{ security.security_clearance_expiry }}</p>
+                                            <p><strong>Uniform Size:</strong> {{ security.uniform_size }}</p>
+                                            <p><strong>security training courses:</strong> {{ security.security_training_courses }}</p>
+                                            <p><strong>shift start time:</strong> {{ security.shift_start_time }}</p>
+                                            <p><strong>shift End time:</strong> {{ security.shift_end_time }}</p>
+                                        {% endif %}
+
+                                        {% if cooker.assigned_classrooms.exists %}
+                                            <h4>Assigned Classrooms:</h4>
+                                            <ul>
+                                                {% for vehicle in security.vehicle_assigned.all %}
+                                                    <li>{{ vehicle.name }} (Grade: {{ vehicle.grade_level }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                        {% if security.emergency_contact_name and security.emergency_contact_number %}
+                                            <h4>Emergency Contact:</h4>
+                                            <p><strong>Name:</strong> {{ security.emergency_contact_name }}</p>
+                                            <p><strong>Contact Number:</strong> {{ security.emergency_contact_number }}</p>
+                                        {% endif %}
+
+                                        {% if security.years_of_experience and security.performance_ratings %}
+                                            <h4>Experience and Ratings:</h4>
+                                            <p><strong>Years of Experience:</strong> {{ security.years_of_experience }}</p>
+                                            <p><strong>patrol area:</strong> {{ security.patrol_area }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+{% endblock main_content %}

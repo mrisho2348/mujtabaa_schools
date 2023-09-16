@@ -1,0 +1,129 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+    Manage classroom
+{% endblock page_title %}
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_schoolclassroom' %}">
+        <i class="fas fa-plus"></i> New classroom
+    </a>
+    <a class="btn btn-primary" href="#">
+        <i class="fas fa-upload"></i> Upload classroom
+    </a>
+{% endblock breadcrumb %}
+{% block main_content %}
+    {% load static %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="content-wrappe">
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <!-- Course Details table -->
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">classroom Details</h3>
+                                    </div>
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap table-bordered table-striped table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Course Name</th>
+                                                    <th>Grade Level</th>
+                                                    <th>Capacity</th>
+                                                    <th>Room Number</th>
+                                                    <th>Building</th>
+                                                    <th>Description</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for course in courses %}
+                                                    <tr>
+                                                        <td>{{ course.name }}</td>
+                                                        <td>{{ course.grade_level }}</td>
+                                                        <td>{{ course.capacity }}</td>
+                                                        <td>{{ course.room_number }}</td>
+                                                        <td>{{ course.building }}</td>
+                                                        <td>{{ course.description }}</td>
+                                                        <td>
+                                                            {% if course.is_active %}
+                                                                <span class="badge bg-success">Active</span>
+                                                            {% else %}
+                                                                <span class="badge bg-danger">Inactive</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{% url 'update_classroom' classroom_id=course.id %}" class="btn btn-success" data-toggle="tooltip" title="Edit classroom">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                            <a href="{% url 'delete_classroom' classroom_id=course.id %}" class="btn btn-danger" data-toggle="tooltip" title="Delete classroom">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                            <a href="{% url 'classroom_detail' classroom_id=course.id %}" class="btn btn-info" data-toggle="tooltip" title="View classroom">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Add the following script inside the <head> or at the bottom of the template -->
+    <script>
+        // JavaScript code for activating/deactivating classrooms
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all status badges
+            const statusBadges = document.querySelectorAll('.badge');
+            function getCookie(name) {
+                const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+                return cookieValue ? cookieValue.pop() : '';
+            }
+            // Add event listener to each badge
+            statusBadges.forEach(function (badge) {
+                badge.addEventListener('click', function () {
+                    const isActive = badge.classList.contains('bg-success');
+                    const classroomId = badge.parentNode.parentNode.getAttribute('data-classroom-id');
+                    const apiUrl = `/api/update_classroom_status/${classroomId}/`;
+
+                    // Call the API endpoint to update the classroom status
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'), // Replace 'getCookie' with a function to retrieve the CSRF token from the cookies
+                        },
+                        body: JSON.stringify({
+                            is_active: !isActive,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the badge style to reflect the new status
+                        badge.classList.toggle('bg-success', !isActive);
+                        badge.classList.toggle('bg-danger', isActive);
+                        badge.textContent = !isActive ? 'Inactive' : 'Active';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle the error or display an error message to the user
+                    });
+                });
+            });
+        });
+    </script>
+
+{% endblock main_content %}

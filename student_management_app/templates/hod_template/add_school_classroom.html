@@ -1,0 +1,94 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Add Classroom
+{% endblock page_title %}
+{% block main_content %}
+  {% load static %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <h2 class="card-header">Add Classroom</h2>
+                  <div class="card-body">
+                    <form method="POST" action="{% url 'add_classroom' %}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="grade_level">Grade Level:</label>
+                        <input type="text" class="form-control" id="grade_level" name="grade_level" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="capacity">Capacity:</label>
+                        <input type="number" class="form-control" id="capacity" name="capacity" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="room_number">Room Number:</label>
+                        <input type="text" class="form-control" id="room_number" name="room_number">
+                      </div>
+                      <div class="form-group">
+                        <label for="building">Building:</label>
+                        <input type="text" class="form-control" id="building" name="building">
+                      </div>
+                      <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="class_rules">Class Rules:</label>
+                        <textarea class="form-control" id="class_rules" name="class_rules"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="class_events">Class Events:</label>
+                        <textarea class="form-control" id="class_events" name="class_events"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="additional_notes">Additional Notes:</label>
+                        <textarea class="form-control" id="additional_notes" name="additional_notes"></textarea>
+                      </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block">Add Classroom</button>
+                      </div>
+                    </div>
+                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock main_content %}

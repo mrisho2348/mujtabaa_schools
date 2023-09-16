@@ -1,0 +1,81 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Add Car
+{% endblock page_title %}
+{% block main_content %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-primary">
+              <h2 class="card-header">Add Car Information</h2>
+              <div class="card-body">
+                <form enctype="multipart/form-data" method="POST" action="{% url 'add_car_view' %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="make">Make:</label>
+                    <input type="text" class="form-control" id="make" name="make" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="model">Model:</label>
+                    <input type="text" class="form-control" id="model" name="model" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="year">Year:</label>
+                    <input type="number" class="form-control" id="year" name="year" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="license_plate">License Plate:</label>
+                    <input type="text" class="form-control" id="license_plate" name="license_plate">
+                  </div>
+                  <div class="form-group">
+                    <label for="color">Color:</label>
+                    <input type="text" class="form-control" id="color" name="color">
+                  </div>
+                  <div class="form-group">
+                    <label for="owner">driver :</label>
+                    <select class="form-control" id="owner" name="owner">
+                      <option value="">Select an driver</option>
+                      {% for driver in drivers %}
+                        <option value="{{ driver.id }}">{{ driver.first_name }} {{ driver.last_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="certificate">Certificate:</label>
+                    <input type="file" class="form-control-file" id="certificate" name="certificate" accept=".pdf, .docx">
+                    <small class="form-text text-danger">Allowed file formats: .pdf<br>Maximum file size: 5MB</small>
+                  </div>                   
+                  
+                  <div class="form-group">
+                    <div class="card-footer">
+                      {% if messages %}
+                        <div class="form-row">
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </div>
+                      {% endif %}
+                      <div class="form-row">
+                        <div class="col-md-12">
+                          <button type="submit" class="btn btn-primary btn-block">Add Car</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock main_content %}

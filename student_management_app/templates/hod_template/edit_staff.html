@@ -1,0 +1,206 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Edit Staff  | name: {{ username}} | #ID. {{id}} 
+{% endblock page_title %}
+{% block main_content %}
+  {% load static %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <h2 class="card-header">Edit Staff </h2>
+                  <div class="card-body">
+                    <form method="post" action="{% url 'edit_staff_save'  %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="first_name">First Name:</label>
+                              <input type="text" class="form-control" id="first_name" name="first_name" value="{{ staff.admin.first_name }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="last_name">Last Name:</label>
+                              <input type="text" class="form-control" id="last_name" name="last_name" value="{{ staff.admin.last_name }}">
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="email">Email:</label>
+                              <input type="email" class="form-control" id="email" name="email" value="{{ staff.admin.email }}" disabled>
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="username">Username:</label>
+                              <input type="text" class="form-control" id="username" name="username" value="{{ staff.admin.username }}" disabled>
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="surname">Surname:</label>
+                              <input type="text" class="form-control" id="surname" name="surname" value="{{ staff.surname }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="address">Address:</label>
+                              <textarea class="form-control" id="address" name="address">{{ staff.address }}</textarea>
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="street_address">Street Address:</label>
+                              <input type="text" class="form-control" id="street_address" name="street_address" value="{{ staff.street_address }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="house_number">House Number:</label>
+                              <input type="text" class="form-control" id="house_number" name="house_number" value="{{ staff.house_number }}">
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="date_of_birth">Date of Birth:</label>
+                              <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ staff.date_of_birth }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="contact_number">Contact Number:</label>
+                              <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ staff.contact_number }}">
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="gender">Gender:</label>
+                              <input type="text" class="form-control" id="gender" name="gender" value="{{ staff.gender }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="background_check">Background Check:</label>
+                              <textarea class="form-control" id="background_check" name="background_check">{{ staff.background_check }}</textarea>
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="availability">Availability:</label>
+                              <input type="text" class="form-control" id="availability" name="availability" value="{{ staff.availability }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="preferred_grade_level">Preferred Grade Level:</label>
+                              <input type="text" class="form-control" id="preferred_grade_level" name="preferred_grade_level" value="{{ staff.preferred_grade_level }}">
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="salary_expectations">Salary Expectations:</label>
+                              <input type="text" class="form-control" id="salary_expectations" name="salary_expectations" value="{{ staff.salary_expectations }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="personal_statement">Personal Statement:</label>
+                              <textarea class="form-control" id="personal_statement" name="personal_statement">{{ staff.personal_statement }}</textarea>
+                          </div>
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="national_identity_number">National Identity Number:</label>
+                              <input type="text" class="form-control" id="national_identity_number" name="national_identity_number" value="{{ staff.national_identity_number }}">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="national_id_photo">National ID Photo:</label>
+                            <input type="file" class="form-control-file" id="national_id_photo" name="national_id_photo" accept=".pdf" data-max-size="5242880">
+                            <small class="form-text text-danger">Accepted formats: PDF | Maximum file size: 5MB</small>
+                        </div>
+                        {% if staff.national_id_photo %}
+                        <div class="form-group col-md-6">
+                            <a href="{{ staff.national_id_photo }}" target="_blank">View current National ID Photo</a>
+                        </div>
+                        {% else %}
+                        <p>no National ID Photo uploaded</p>
+                        {% endif %}
+                        
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="subjects">Subjects:</label>
+                          <select class="form-control" id="subjects" name="subjects" multiple>
+                              {% for subject in all_subjects %}
+                              {% if subject in staff.subjects.all %}
+                                <option value="{{ subject.id }}" selected>{{ subject.subject_name }}</option>
+                              {% else %}
+                                <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                              {% endif %}
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="profile_pic">Profile Picture:</label>
+                        <input type="file" class="form-control-file" id="profile_pic" name="staff_photo" accept=".jpg, .jpeg, .png" data-max-size="5242880">
+                        <small class="form-text text-danger">Accepted formats: JPG, JPEG, PNG | Maximum file size: 5MB</small>
+                    </div>
+                    {% if staff.profile_pic %}
+                    <div class="form-group col-md-6">
+                      <img src="{{ staff.profile_pic }}" alt="Profile Picture" class="img-fluid">
+                  </div>
+                  {% else %}
+                  <p>no profle  uploaded</p>
+                    {% endif %}
+                   
+                      </div>  
+                    
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="sheia_address">Sheia Address:</label>
+                              <input type="text" class="form-control" id="sheia_address" name="sheia_address" value="{{ staff.address }}">
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="birth_certificate">Birth Certificate:</label>
+                            <input type="file" class="form-control-file" id="birth_certificate" name="birth_certificate_photo" accept=".pdf" data-max-size="5242880">
+                            <small class="form-text text-danger">Accepted formats: PDF | Maximum file size: 5MB</small>
+                        </div>
+                        {% if staff.birth_certificate_photo %}
+                        <div class="form-group col-md-6">
+                            <a href="{{ staff.birth_certificate_photo }}" target="_blank">View current Birth Certificate</a>
+                        </div>
+                        {% else %}
+                        <p>no birth certificate uploaded</p>
+                        {% endif %}
+                      </div>
+                      <!-- Add the remaining fields as needed -->
+               
+                  
+                  </div>
+                  <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block">Update Staff</button>
+                      </div>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock main_content %}

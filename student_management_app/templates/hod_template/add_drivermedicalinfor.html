@@ -1,0 +1,61 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id %}
+            Update Medical Information
+        {% else %}
+            Add Medical Information
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id %}
+            Update Medical Information
+        {% else %}
+            Add Medical Information
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="blood_group">Blood Group</label>
+          <input type="text" class="form-control" id="blood_group" name="blood_group" required {% if driver_id and medical_info %}value="{{ medical_info.blood_group }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="medical_conditions">Medical Conditions</label>
+          <textarea class="form-control" id="medical_conditions" name="medical_conditions" rows="3" required>{% if driver_id and medical_info %}{{ medical_info.medical_conditions }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="health_condition">Health Condition</label>
+          <textarea class="form-control" id="health_condition" name="health_condition" rows="3" required>{% if driver_id and medical_info %}{{ medical_info.health_condition }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary"  name="continue_filling">Save Medical Information</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'add_driver_license_info' driver_id=driver_id %}" class="btn btn-info">Skip and Continue to the Next Form</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

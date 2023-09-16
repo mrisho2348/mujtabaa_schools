@@ -1,0 +1,127 @@
+{% extends 'hod_template/base_template.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container mt-5">
+  <!-- Driver Personal Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Personal Info
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Full Name: <span style="color: blue;">{{ driver.admin.first_name }}</span> <span style="color: blue;">{{ driver.admin.last_name }}</span></h5>
+      <p class="card-text">License Number: {{ driver.license_number }}</p>
+      <p class="card-text">Contact Number: {{ driver.contact_number }}</p>
+      <p class="card-text">Address: {{ driver.address }}</p>
+      <p class="card-text">Date of Birth: {{ driver.date_of_birth }}</p>
+      <p class="card-text">Gender: {{ driver.gender }}</p>
+      <!-- Add other personal information fields here -->
+    </div>
+  </div>
+
+  <!-- Driver Medical Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Medical Info
+    </div>
+    <div class="card-body">
+      <p class="card-text">Blood Group: {% if driver.medical_info %}{{ driver.medical_info.blood_group }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Medical Conditions: {% if driver.medical_info %}{{ driver.medical_info.medical_conditions }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Health Condition: {% if driver.medical_info %}{{ driver.medical_info.health_condition }}{% else %}Not available{% endif %}</p>
+    </div>
+  </div>
+
+  <!-- Driver License Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver License Info
+    </div>
+    <div class="card-body">
+      <p class="card-text">License Type: {% if driver.license_info %}{{ driver.license_info.license_type }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">License Expiry Date: {% if driver.license_info %}{{ driver.license_info.drivers_license_expiry_reminder }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Additional Licenses: {% if driver.license_info %}{{ driver.license_info.additional_licenses }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Certification: {% if driver.license_info %}{{ driver.license_info.certification }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Driver Training Certifications: {% if driver.license_info %}{{ driver.license_info.driver_training_certifications }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Experience in Transportation: {% if driver.license_info %}{{ driver.license_info.experience_in_transportation }}{% else %}Not available{% endif %}</p>
+    </div>
+  </div>
+
+  <!-- Driver Contact Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Contact Info
+    </div>
+    <div class="card-body">
+      <p class="card-text">Alternate Contact Number: {% if driver.contact_info %}{{ driver.contact_info.alternate_contact_number }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Email: {% if driver.contact_info %}{{ driver.contact_info.email }}{% else %}Not available{% endif %}</p>
+    </div>
+  </div>
+
+  <!-- Driver Employment Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Employment Info
+    </div>
+    <div class="card-body">
+      <p class="card-text">Date of Joining: {% if driver.employment_info %}{{ driver.employment_info.date_of_joining }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Employment Start Date: {% if driver.employment_info %}{{ driver.employment_info.employment_start_date }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Employment End Date: {% if driver.employment_info %}{{ driver.employment_info.employment_end_date }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Salary: {% if driver.employment_info %}{{ driver.employment_info.salary }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Salary Information: {% if driver.employment_info %}{{ driver.employment_info.salary_information }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Performance Ratings: {% if driver.employment_info %}{{ driver.employment_info.performance_ratings }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Shift Schedule: {% if driver.employment_info %}{{ driver.employment_info.shift_schedule }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Driving Hours: {% if driver.employment_info %}{{ driver.employment_info.driving_hours }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Uniform Size: {% if driver.employment_info %}{{ driver.employment_info.uniform_size }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Uniform Issued Date: {% if driver.employment_info %}{{ driver.employment_info.uniform_issued_date }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Uniform Return Date: {% if driver.employment_info %}{{ driver.employment_info.uniform_return_date }}{% else %}N/A{% endif %}</p>
+    </div>
+  </div>
+
+  <!-- Driver Vehicle Info -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Vehicle Info
+    </div>
+    <div class="card-body">
+      <p class="card-text">Vehicle Assigned: {% if driver.vehicle_info %}{{ driver.vehicle_info.vehicle_assigned }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Personal Vehicle Information: {% if driver.vehicle_info %}{{ driver.vehicle_info.personal_vehicle_information }}{% else %}Not available{% endif %}</p>
+      <p class="card-text">Vehicle Registration Number: {% if driver.vehicle_info %}{{ driver.vehicle_info.vehicle_registration_number }}{% else %}N/A{% endif %}</p>
+      <p class="card-text">Vehicle Maintenance Records: {% if driver.vehicle_info %}{{ driver.vehicle_info.vehicle_maintenance_records }}{% else %}Not available{% endif %}</p>
+    </div>
+  </div>
+
+  <!-- Driver Languages Spoken -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver Languages Spoken
+    </div>
+    <div class="card-body">
+      {% if driver.languages_spoken.exists %}
+        {% for language in driver.languages_spoken.all %}
+          <p class="card-text">Language: {{ language.language }}</p>
+        {% endfor %}
+      {% else %}
+        <p class="card-text">N/A</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Driver References -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Driver References
+    </div>
+    <div class="card-body">
+      {% if driver.references.exists %}
+        {% for reference in driver.references.all %}
+          <p class="card-text">Reference Name: {{ reference.reference_name }}</p>
+          <p class="card-text">Reference Contact: {{ reference.reference_contact }}</p>
+        {% endfor %}
+      {% else %}
+        <p class="card-text">N/A</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock main_content %}

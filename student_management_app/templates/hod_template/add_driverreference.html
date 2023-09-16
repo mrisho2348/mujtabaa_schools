@@ -1,0 +1,69 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id and references %}
+            Update References
+        {% else %}
+            Add References
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id and references %}
+            Update References
+        {% else %}
+            Add References
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="reference_name">Reference Name</label>
+          <input type="text" class="form-control" id="reference_name" name="reference_name" required {% if references %}value="{{ references.0.reference_name }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="reference_contact">Reference Contact</label>
+          <input type="text" class="form-control" id="reference_contact" name="reference_contact" required {% if references %}value="{{ references.0.reference_contact }}" {% endif %}>
+        </div>
+
+        <!-- You can add more reference fields here if needed -->
+        <!-- Example: -->
+        <!-- <div class="form-group">
+          <label for="reference_name2">Reference Name 2</label>
+          <input type="text" class="form-control" id="reference_name2" name="reference_name2" {% if references and references|length > 1 %}value="{{ references.1.reference_name }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="reference_contact2">Reference Contact 2</label>
+          <input type="text" class="form-control" id="reference_contact2" name="reference_contact2" {% if references and references|length > 1 %}value="{{ references.1.reference_contact }}" {% endif %}>
+        </div> -->
+
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary" name="continue_filling">Save References</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'driver_form' %}" class="btn btn-info">Skip and Finish</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

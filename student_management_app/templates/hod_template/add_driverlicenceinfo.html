@@ -1,0 +1,63 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+        {% if driver_id and license_info %}
+            Update License Information
+        {% else %}
+            Add License Information
+        {% endif %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {% if driver_id and license_info %}
+            Update License Information
+        {% else %}
+            Add License Information
+        {% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="license_type">License Type</label>
+          <input type="text" class="form-control" id="license_type" name="license_type" required {% if license_info %}value="{{ license_info.license_type }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="drivers_license_expiry_reminder">Driver's License Expiry Reminder</label>
+          <input type="date" class="form-control" id="drivers_license_expiry_reminder" name="drivers_license_expiry_reminder" required {% if license_info %}value="{{ license_info.drivers_license_expiry_reminder }}" {% endif %}>
+        </div>
+        <div class="form-group">
+          <label for="additional_licenses">Additional Licenses</label>
+          <textarea class="form-control" id="additional_licenses" name="additional_licenses" rows="3" required>{% if license_info %}{{ license_info.additional_licenses }}{% endif %}</textarea>
+        </div>
+        <!-- Add other fields for certification, driver_training_certifications, and experience_in_transportation here -->
+
+        <div class="form-group">
+            <div class="form-row">
+                <div>
+                  {% if messages %}
+                    <div class="col-12">
+                      {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                          <div class="alert alert-danger">{{ message }}</div>
+                        {% elif message.tags == 'success' %}
+                          <div class="alert alert-primary">{{ message }}</div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          <button type="submit" class="btn btn-primary"  name="continue_filling">Save License Information</button>
+          <a href="{% url 'driver_form' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'add_driver_contact_info' driver_id=driver_id %}" class="btn btn-info">Skip and Continue to the Next Form</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

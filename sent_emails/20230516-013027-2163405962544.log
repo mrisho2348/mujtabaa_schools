@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: mrisho@gmail.com
+Date: Mon, 15 May 2023 22:30:27 -0000
+Message-ID: <168418982799.20408.6145955843584376212@mrisho>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/accounts/reset/MQ/bo9qur-f733e0b6f808d93846793682eea49f0f/
+
+Your username, in case you’ve forgotten: mrisho23
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------

@@ -1,0 +1,82 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+  Edit Staff
+{% endblock page_title %}
+{% block main_content %}
+  {% load static %}
+  <section class="content">
+    <div class="container-fluid">
+      <div class="content-wrappe">
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <h2 class="card-header">Edit Staff  References </h2>
+                  <div class="card-body">
+                    <form action="{% url 'edit_staff_reference' staff_id=staff_id %}" method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="staff_position">Staff Position:</label>
+                        <input type="text" class="form-control" id="staff_position" name="staff_position" value="{% if references %}{{ references.staff_position }}{% endif %}">
+                      </div>
+                      <div class="form-group">
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" value="{% if references %}{{ references.company_name }}{% endif %}">
+                      </div>
+                      <div class="form-group">
+                        <label for="company_address">Company Address:</label>
+                        <textarea class="form-control" id="company_address" name="company_address">{% if references %}{{ references.company_address }}{% endif %}</textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="company_contact_person">Company Contact Person:</label>
+                        <input type="text" class="form-control" id="company_contact_person" name="company_contact_person" value="{% if references %}{{ references.company_contact_person }}{% endif %}">
+                      </div>
+                      <div class="form-group">
+                        <label for="company_contact_email">Company Contact Email:</label>
+                        <input type="email" class="form-control" id="company_contact_email" name="company_contact_email" value="{% if references %}{{ references.company_contact_email }}{% endif %}">
+                      </div>
+                      <div class="form-group">
+                        <label for="company_contact_phone">Company Contact Phone:</label>
+                        <input type="text" class="form-control" id="company_contact_phone" name="company_contact_phone" value="{% if references %}{{ references.company_contact_phone }}{% endif %}">
+                      </div>
+                      <!-- Add the remaining form fields based on your References model attributes -->
+                  
+                  <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block">Edit Staff  References</button>
+                      </div>
+                    </div>
+                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock main_content %}

@@ -1,0 +1,36 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% load static %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <!-- Classroom Information -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Classroom Information
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Name: {{ classroom.name }}</h5>
+            <p class="card-text">Grade Level: {{ classroom.grade_level }}</p>
+            <p class="card-text">Capacity: {{ classroom.capacity }}</p>
+            <p class="card-text">Room Number: {{ classroom.room_number }}</p>
+            <p class="card-text">Building: {{ classroom.building }}</p>
+            <p class="card-text">Description: {{ classroom.description }}</p>
+            <p class="card-text">Is Active: {% if classroom.is_active %}Yes{% else %}No{% endif %}</p>
+        </div>
+    </div>
+    {% if classroom.class_rules %}
+    <!-- Additional Fields (if applicable) -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Additional Fields
+        </div>
+        <div class="card-body">
+            <p class="card-text">Class Rules: {{ classroom.class_rules }}</p>
+            <p class="card-text">Class Events: {{ classroom.class_events }}</p>
+            <p class="card-text">Additional Notes: {{ classroom.additional_notes }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock main_content %}
