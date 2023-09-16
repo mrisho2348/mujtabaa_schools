@@ -1,0 +1,236 @@
+ 
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+       Add exams  
+{% endblock page_title %}
+{% block main_contents %}
+{% load static %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <!-- Content Header (Page header) -->    
+        
+            <!-- Main content -->
+            <section class="content">
+              <div class="container-fluid">
+                <div class="row">
+                  <!-- left column -->
+                  <di class="col-md-12">
+                    <div class="container-fluid mt-4">
+                        <h1>Add Exam</h1>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Exam Details</h5>
+                                <form id="exam-form">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="name">Exam Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="totalMarks">Total Marks</label>
+                                        <input type="number" class="form-control" id="totalMarks" name="totalMarks" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="studentGroups">Student Groups</label>
+                                        <select class="form-control" name="studentGroups" id="group-select" required>
+                                            <!-- Options will be populated dynamically -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subjects">Subjects</label>
+                                        <select class="form-control" name="subjects" id="subject-select" required>
+                                            <!-- Options will be populated dynamically -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="questionPaper">Question Paper</label>
+                                        <select class="form-control" name="questionPaper" id="questionPaper" required>
+                                            <option value="">Select a Question Paper</option>
+                                            <!-- Options will be populated dynamically -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="startTime">Start Time</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="startDate">Date:</label>
+                                                <input type="date" class="form-control" id="startDate" name="startDate" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="startTime">Time:</label>
+                                                <input type="time" class="form-control" id="startTime" name="startTime" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endTime">End Time</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="endDate">Date:</label>
+                                                <input type="date" class="form-control" id="endDate" name="endDate" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="endTime">Time:</label>
+                                                <input type="time" class="form-control" id="endTime" name="endTime" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="duration">Duration (minutes)</label>
+                                        <input type="number" class="form-control" id="duration" name="duration" required>
+                                    </div>
+                                    <!-- Other fields here -->
+                                    <div class="text-right">
+                                        <!-- Save buttons -->
+                                        <button type="button" class="btn btn-success" id="save">Save</button>
+                                        <button type="button" class="btn btn-primary" id="save-continue">Save and Continue Adding</button>
+                                        <button type="button" class="btn btn-primary" id="save-edit">Save and Continue Editing</button>
+                                    </div>
+                                </form>
+                                <!-- Alert container -->
+                                <div id="alert-container" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+        
+                  </di>
+
+                  </div>
+                  <!--/.col (right) -->
+                </div>
+             
+              
+            </section>
+            <!-- /.content -->
+          </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          // Get the current date and time
+          var now = new Date();
+          var currentDate = now.toISOString().split('T')[0];
+          var currentTime = now.toISOString().split('T')[1].slice(0, 5);
+  
+          // Set default values for start date and time
+          $('#startDate').val(currentDate);
+          $('#startTime').val(currentTime);
+  
+          // Set default values for end date and time
+          $('#endDate').val(currentDate);
+          $('#endTime').val(currentTime);
+  
+          // Fetch and populate student groups
+          function populateStudentGroups() {
+              $.ajax({
+                  type: 'GET',
+                  url: '{% url "exams:get_student_groups" %}',  // Update with the actual URL name or path
+                  success: function(response) {
+                      var groupSelect = $('#group-select');
+                      response.forEach(function(group) {
+                          groupSelect.append($('<option>', {
+                              value: group.id,
+                              text: group.name
+                          }));
+                      });
+                  },
+                  error: function(xhr, status, error) {
+                      console.error('Error fetching student groups:', error);
+                  }
+              });
+          }
+  
+          // Fetch and populate subjects
+          function populateSubjects() {
+              $.ajax({
+                  type: 'GET',
+                  url: '{% url "exams:get_subjects" %}',  // Update with the actual URL name or path
+                  success: function(response) {
+                      var subjectSelect = $('#subject-select');
+                      response.forEach(function(subject) {
+                          subjectSelect.append($('<option>', {
+                              value: subject.id,
+                              text: subject.name
+                          }));
+                      });
+                  },
+                  error: function(xhr, status, error) {
+                      console.error('Error fetching subjects:', error);
+                  }
+              });
+          }
+  
+          // Fetch and populate question papers
+          function populateQuestionPapers() {
+              $.ajax({
+                  type: 'GET',
+                  url: '{% url "exams:get_question_papers" %}',  // Update with the actual URL name or path
+                  success: function(response) {
+                      var questionPaperSelect = $('#questionPaper');
+                      response.forEach(function(questionPaper) {
+                          questionPaperSelect.append($('<option>', {
+                              value: questionPaper.id,
+                              text: questionPaper.name
+                          }));
+                      });
+                  },
+                  error: function(xhr, status, error) {
+                      console.error('Error fetching question papers:', error);
+                  }
+              });
+          }
+  
+          // Call the functions to populate data when the page is ready
+          populateStudentGroups();
+          populateSubjects();
+          populateQuestionPapers();
+  
+          // Validate and submit the form
+          $('#save, #save-continue, #save-edit').on('click', function() {
+              var action = $(this).attr('id');
+              var formData = $('#exam-form').serialize();
+  
+              $.ajax({
+                  type: 'POST',
+                  url: '{% url "exams:add_exam_save" %}',  // Update with the actual URL name or path
+                  data: formData + '&action=' + action,
+                  success: function(response) {
+                      displayAlert('success', response.message);
+                      if (action === 'save-continue') {
+                          $('#exam-form')[0].reset();
+                      } else if (action === 'save-edit') {
+                          // Implement logic to navigate to the edit page
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      var errorMessage = error;
+                      if (xhr.responseJSON && xhr.responseJSON.message) {
+                          errorMessage = xhr.responseJSON.message;
+                      }
+                      displayAlert('danger', 'Error saving exam: ' + errorMessage);
+                  }
+              });
+          });
+  
+          // Display Bootstrap alert
+          function displayAlert(type, message) {
+              var alertHtml = `
+                  <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                      ${message}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              `;
+              $('#alert-container').html(alertHtml);
+          }
+      });
+  </script>
+
+  {% endblock main_contents %}

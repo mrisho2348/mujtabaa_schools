@@ -1,0 +1,48 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block main_content %}
+<div class="container-fluid my-2">
+    <ul class="list-group">
+        {% for i in paper %}
+            {% if  i.completed == 1 %}
+            <li class="list-group-item list-group-item-action my-1"><h5>{{ i.examname }}</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ i.examname }}" name="paper">
+                    <input type="submit" class="btn btn-info" value="View result">
+                </form>
+            </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock main_content %}
+{% comment %} <div class="container-fluid">
+    {% for exam in completed_exams %}
+    <li class="list-group-item list-group-item-action my-1">
+        <h4>{{ exam.examname }}</h4>
+        <ul>
+            {% for question in exam.questions.all %}
+                <li>{{ question.question }}</li>
+                <ul>
+                    <li>A. {{ question.optionA }}</li>
+                    <li>B. {{ question.optionB }}</li>
+                    <li>C. {{ question.optionC }}</li>
+                    <li>D. {{ question.optionD }}</li>
+                </ul>
+                <br>
+                <p>Selected Option: {{ question.choice }}</p>
+                <p>Correct Answer: {{ question.answer }}</p>
+                <p>Status: {% if question.is_correct %}Correct{% else %}Wrong{% endif %}</p>
+            {% endfor %}
+        </ul>
+        <p>Score: {{ exam.score }}</p>
+        <p>{% if exam.is_failed %}Passed{% else %}Failed{% endif %}</p>
+    </li>
+    {% endfor %}
+
+    <h4>Overall Results</h4>
+    <p>Total completed exams: {{ results.total_completed_exams }}</p>
+    <p>Total passed exams: {{ results.total_passed_exams }}</p>
+    <p>Average score: {{ results.average_score }}</p>
+</div> {% endcomment %}

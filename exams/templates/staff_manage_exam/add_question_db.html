@@ -1,0 +1,141 @@
+ 
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+       Add questions  
+{% endblock page_title %}
+{% block main_contents %}
+{% load static %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <!-- Content Header (Page header) -->    
+        
+            <!-- Main content -->
+            <section class="content">
+              <div class="container-fluid">
+                <div class="row">
+                  <!-- left column -->
+                  <div class="col-md-12">
+                    <div class="container-fluid mt-4">
+                        <h1>Create/Edit Question</h1>
+                        <div id="question-card" class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Question</h5>
+                                <div id="alert-container"></div>
+                                <form id="question-form">
+                                    <div class="form-group">
+                                        <label for="question">Question</label>
+                                        <input type="text" class="form-control" id="question" name="question" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="optionA">Option A</label>
+                                        <input type="text" class="form-control" id="optionA" name="optionA" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="optionB">Option B</label>
+                                        <input type="text" class="form-control" id="optionB" name="optionB" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="optionC">Option C</label>
+                                        <input type="text" class="form-control" id="optionC" name="optionC" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="optionD">Option D</label>
+                                        <input type="text" class="form-control" id="optionD" name="optionD" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="answer">Answer</label>
+                                        <input type="text" class="form-control" id="answer" name="answer" required>
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-success" id="save-continue">Save and Continue Adding</button>
+                                        <button type="button" class="btn btn-primary" id="save-edit">Save and Continue Editing</button>
+                                        <button type="button" class="btn btn-primary" id="save">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                   
+                        
+
+        
+                  </div>
+
+                  </div>
+                  <!--/.col (right) -->
+                </div>
+             
+              
+            </section>
+            <!-- /.content -->
+          </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+   <!-- Add Bootstrap JS and other scripts here -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   <script>
+       $(document).ready(function() {
+           $('#save').on('click', function() {
+               if ($('#question-form')[0].checkValidity()) {
+                   var formData = $('#question-form').serialize();
+                   saveQuestion(formData);
+               } else {
+                   displayAlert('danger', 'Please fill  all  fields is required.');
+               }
+           });
+
+           $('#save-continue').on('click', function() {
+               if ($('#question-form')[0].checkValidity()) {
+                   var formData = $('#question-form').serialize();
+                   saveQuestion(formData);
+                   $('#question-form')[0].reset();
+               } else {
+                   displayAlert('danger', 'Please fill  all required fields is required.');
+               }
+           });
+
+           $('#save-edit').on('click', function() {
+               if ($('#question-form')[0].checkValidity()) {
+                   var formData = $('#question-form').serialize();
+                   saveQuestion(formData);
+               } else {
+                   displayAlert('danger', 'Please fill  all required fields is required.');
+               }
+           });
+
+           function displayAlert(type, message) {
+               var alertHtml = `
+                   <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                       ${message}
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                       </button>
+                   </div>
+               `;
+               $('#alert-container').html(alertHtml);
+           }
+
+           function saveQuestion(formData) {
+               $.ajax({
+                   type: 'POST',
+                   url: '{% url "exams:add_question_save" %}',  // Update with the actual URL name or path
+                   data: formData,
+                   success: function(response) {
+                       displayAlert('success', response.message);
+                   },
+                   error: function(xhr, status, error) {
+                       var errorMessage = error;
+                       if (xhr.responseJSON && xhr.responseJSON.message) {
+                           errorMessage = xhr.responseJSON.message;
+                       }
+                       displayAlert('danger', 'Error saving question: ' + errorMessage);
+                   }
+               });
+           }
+       });
+   </script>
+
+  {% endblock main_contents %}

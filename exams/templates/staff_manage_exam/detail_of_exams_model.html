@@ -1,0 +1,35 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+    Exam Details
+{% endblock page_title %}
+{% block main_contents %}
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>Exam Details</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ exam.name }}</h5>
+            <p class="card-text">
+                <p><strong>Total Marks:</strong> {{ exam.total_marks }}</p>
+                <p><strong>Duration:</strong> {{ exam.duration }} minutes</p>
+                <p><strong>Question Paper:</strong> {{ exam.question_paper.qPaperTitle }}</p>
+                <p><strong>Student Group:</strong> {% if exam.group %}{{ exam.group.name }}{% else %}N/A{% endif %}</p>
+                <p><strong>Subjects:</strong>
+                    {% for subject in exam.subjects.all %}
+                        {{ subject.subject_name }}
+                    {% endfor %}
+                </p>
+                
+                <p><strong>Start Time:</strong> {{ exam.start_time|date:"F d, Y H:i A" }}</p>
+                <p><strong>End Time:</strong> {{ exam.end_time|date:"F d, Y H:i A" }}</p>
+                <p><strong>Is Published:</strong> {% if exam.is_published %}Yes{% else %}No{% endif %}</p>
+                {% if exam.is_published %}
+                    <p><strong>Publish Date:</strong> {{ exam.publish_date|date:"F d, Y H:i A" }}</p>
+                {% endif %}
+            </p>
+            <a href="{% url 'exams:edit_exam_model' exam.id %}" class="btn btn-primary">Edit Exam</a>
+        </div>
+    </div>
+</div>
+{% endblock main_contents %}

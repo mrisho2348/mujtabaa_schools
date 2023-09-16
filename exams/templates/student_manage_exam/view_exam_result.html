@@ -1,0 +1,10 @@
+{% extends 'student_template/base_template.html' %}
+{% block main_content %}
+<div class="container-fluid">
+    <div align='center'>
+        <br>
+        <a href="{% url 'exams:exams' %}" class="btn btn-primary" text-align='center'>Exams</a><br><br><br>
+        <a href="{% url 'exams:results' %}" class="btn btn-primary" text-align='center'>Results</a><br><br><br>
+    </div>
+</div>
+{% endblock main_content %}

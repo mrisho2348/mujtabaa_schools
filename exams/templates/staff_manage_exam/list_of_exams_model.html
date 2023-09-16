@@ -1,0 +1,134 @@
+{% extends '../staff_template/base_template.html' %}
+{% block page_title %}
+    Exams
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'exams:add_exam_model' %}">
+        <i class="fas fa-plus"></i> New Exam
+    </a>
+    <!-- Add more breadcrumb links if needed -->
+{% endblock breadcrumb %}
+{% block main_contents %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Exams</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Total Marks</th>
+                                                <th>Duration</th>
+                                                <th>Students group</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for exam in exams %}
+                                            <tr>
+                                                <td>{{ exam.name }}</td>
+                                                <td>{{ exam.total_marks }}</td>
+                                                <td>{{ exam.duration }}</td>
+                                                <td>
+                                                    {% if exam.group %}
+                                                        {{ exam.group.name }}
+                                                    {% else %}
+                                                        N/A
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if not exam.is_published %}
+                                                    <button class="btn btn-success btn-sm" onclick="publishExam({{ exam.id }})">Publish</button>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'exams:edit_exam_model' exam.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                                    <button class="btn btn-danger btn-sm" onclick="deleteExamModel({{ exam.id }})">Delete</button>
+                                                    <a href="{% url 'exams:view_exam_model' exam.id %}" class="btn btn-info btn-sm">View</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+
+    function publishExam(examId) {
+        $.ajax({
+            type: 'POST',
+            url: '{% url "exams:publish_exam" %}',
+            data: {
+                exam_id: examId,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                // Show a Bootstrap alert message for success
+                $('.alert-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = 'An error occurred while publishing the exam.';
+                if (xhr.status === 404) {
+                    errorMessage = 'Exam not found.';
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Internal server error. Please try again later.';
+                }
+                $('.alert-message').html('<div class="alert alert-danger">' + errorMessage + '</div>');
+            }
+        });
+    }
+    
+
+    function deleteExamModel(examId) {
+        if (confirm('Are you sure you want to delete this exam?')) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "exams:delete_exam_model" %}',
+                data: {
+                    exam_id: examId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    // Show a Bootstrap alert message
+                    $('.alert-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error response
+                    $('.alert-message').html('<div class="alert alert-danger">Error: ' + xhr.responseText + '</div>');
+                }
+            });
+        }
+    }
+</script>
+
+{% endblock main_contents %}

@@ -1,0 +1,29 @@
+{% extends 'student_template/base_template.html' %}
+{% block main_content %}
+<div class="container-fluid my-2">
+    <h3 align="center">Score : {{ exam.score }}</h3>
+    <ol class="list-group">
+        {% for ques in quesn %}
+        <li class="list-group-item list-group-item-action my-1"><h4>{{ ques.question }}</h4>
+            <ul>A. {{ques.optionA}}</ul>
+            <ul>B. {{ques.optionB}}</ul>
+            <ul>C. {{ques.optionC}}</ul>
+            <ul>D. {{ques.optionD}}</ul>
+        <br>
+
+        {% if ques.choice != 'E' %}
+        <a>Selected Option - {{ques.choice}}</a><br>
+        {% endif %}
+        <a>Correct answer - {{ques.answer}}</a><br>
+        {% if ques.choice == ques.answer and ques.choice != 'E' %}
+        <a>Status: Correct</a><br>
+        {% elif ques.choice == 'E' %}
+        <a>Status: Not attempted</a><br>
+        {% else %}
+        <a>Status: Wrong</a><br>
+        {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+{% endblock main_content %}

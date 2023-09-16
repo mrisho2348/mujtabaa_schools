@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .question-text {
+            font-weight: bold;
+        }
+        
+        .option-label {
+            display: block;
+            margin: 5px 0;
+        }
+        
+        .option-text {
+            color: #6c757d; /* Gray color */
+        }
+    </style>
+    <title>View Paper</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <a href= class="btn btn-info my-2 my-sm-0"></a>
+            </form>
+        </div>
+    </nav>
+
+    <h3>{{ exam.name }}</h3>
+    <input type="hidden" id="mins" value="2">
+    <input type="hidden" id="secs" value="0">
+    <div>
+        <p>Time left: <span id="countdown"></span></p>
+    </div>
+    <form method="POST" id="examform">
+        {% csrf_token %}
+        <ol>
+            {% for question in questions %}
+            <div class="question">
+                <p class="question-text">{{ forloop.counter }}. {{ question.question }}</p>
+                <label class="option-label"><input type="radio" name="{{ question.question }}" value="A"> <span class="option-text">{{ question.optionA }}</span></label><br>
+                <label class="option-label"><input type="radio" name="{{ question.question }}" value="B"> <span class="option-text">{{ question.optionB }}</span></label><br>
+                <label class="option-label"><input type="radio" name="{{ question.question }}" value="C"> <span class="option-text">{{ question.optionC }}</span></label><br>
+                <label class="option-label"><input type="radio" name="{{ question.question }}" value="D"> <span class="option-text">{{ question.optionD }}</span></label><br>
+            </div>
+            {% endfor %}
+        </ol>
+        <input type="hidden" value="{{ exam.name }}" name="papertitle">
+        <input type="hidden" value="{{ exam.name }}" name="paper">
+        <input type="submit" value="Submit" name="PaperSubmit" onclick="submitFormOkay = true;">
+    </form>
+
+    <script type="text/javascript">
+        var milisec = 0;
+        var seconds = document.getElementById("secs").value;
+        var minutes = document.getElementById("mins").value;
+
+        function display() {
+            if (minutes == 0 && seconds == 0) {
+                document.getElementById("examform").submit();
+            }
+            if (seconds == 0) {
+                minutes = minutes - 1
+                seconds = 60
+            }
+            seconds -= 1
+            document.getElementById("dsec").innerHTML = seconds
+            document.getElementById("dmin").innerHTML = minutes
+            setTimeout(display, 1000);
+        }
+        display();
+    </script>
+</body>
+</html>

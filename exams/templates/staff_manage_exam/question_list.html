@@ -1,0 +1,157 @@
+{% extends '../staff_template/base_template.html' %}
+{% block page_title %}
+    Question lists 
+{% endblock page_title %}
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'exams:add_question' %}">
+        <i class="fas fa-plus"></i> New Question
+    </a>
+    <!-- Add more breadcrumb links if needed -->
+{% endblock breadcrumb %}
+{% block main_contents %}
+{% load static %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <!-- Content Header (Page header) -->
+        
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-12">
+                            <!-- general form elements -->
+                            <div class="changelist-form-container">
+                                <form id="changelist-form" method="post" novalidate>
+                                    {% csrf_token %}
+                                    
+                                    <div class="actions">
+                                        <div class="alert-message"></div>
+
+                                        <label>
+                                            Action:
+                                            <select id="action-select" name="action" required>
+                                                <option value="" selected>---------</option>
+                                                <option value="delete_selected">Delete selected question_dbs</option>
+                                            </select>
+                                        </label>
+                                        <button id="action-button" type="submit" class="button" title="Run the selected action" name="action" value="delete_selected">Go</button>
+                                        <span class="action-counter" style="display: inline;"></span>
+                                    </div>
+                                    
+                                    <div class="results">
+                                        <table id="result_list" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="action-checkbox-column">
+                                                        <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+                                                        <div class="clear"></div>
+                                                    </th>
+                                                    <th scope="col" class="column-__str__">
+                                                        <div class="text"><span>Question_db</span></div>
+                                                        <div class="clear"></div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for question in questions %}
+                                                <tr>
+                                                    <td class="action-checkbox">
+                                                        <input type="checkbox" name="_selected_action" value="{{ question.qno }}" class="action-select">
+                                                    </td>
+                                                    <td class="field-__str__">
+                                                        <a href="{% url 'exams:question_edit' question.qno %}">
+                                                            Question No.{{ question.qno }}: {{ question.question }} Options:
+                                                            A. {{ question.optionA }}
+                                                            B. {{ question.optionB }}
+                                                            C. {{ question.optionC }}
+                                                            D. {{ question.optionD }}
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <p class="paginator">{{ questions|length }} question_dbs</p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Handle the dropdown change event
+    $('#action-select').on('change', function() {
+        var selectedValue = this.value;
+
+        // Update the "Go" button's action attribute
+        {% comment %} $('#changelist-form').attr('action', '{% url "exams:handle_action" %}?action=' + selectedValue); {% endcomment %}
+        
+        // Update the UI based on the selected action
+        if (selectedValue === 'delete_selected') {
+            $('.action-counter').text('0 of {{ questions|length }} selected');
+        } else {
+            $('.action-counter').text('');
+        }
+    });
+
+    // Update the "Go" button's text based on selected item count
+function updateActionButtonText() {
+    var selectedItemsCount = $('input[name="_selected_action"]:checked').length;
+    $('#action-button').text(`Go (${selectedItemsCount} selected)`);
+}
+
+// Handle checkbox changes
+$('input[name="_selected_action"]').on('change', function() {
+    updateActionButtonText();  // Update the button text
+});
+    // Handle form submission
+    $('#changelist-form').on('submit', function(event) {
+        var selectedValue = $('#action-select').val();
+        if (selectedValue === 'delete_selected') {
+            var selectedItems = $('input[name="_selected_action"]:checked');
+            if (selectedItems.length === 0) {
+                event.preventDefault();
+                $('.alert-message').html('<div class="alert alert-danger">You must select at least one question to delete.</div>');
+            } else {
+                // Make an AJAX call to handle the selected action
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "exams:handle_action" %}',
+                    data: {
+                        action: selectedValue,
+                        selected_items: selectedItems.map(function () {
+                            return this.value;
+                        }).get()
+                    },
+                    success: function(response) {
+                        // Update the UI
+                        if (selectedValue === 'delete_selected') {
+                            // Remove deleted items from the list
+                            selectedItems.closest('tr').remove();
+                            
+                            // Show a Bootstrap alert message
+                            $('.alert-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the error response
+                        $('.alert-message').html('<div class="alert alert-danger">Error: ' + xhr.responseText + '</div>');
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+{% endblock main_contents %}
