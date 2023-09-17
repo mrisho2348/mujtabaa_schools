@@ -2078,7 +2078,7 @@ def update_parent(request, parent_id):
 
         if request.method == 'POST':
             # Retrieve form field values from the request
-            name = request.POST.get('name')
+            
             phone = request.POST.get('phone')
             occupation = request.POST.get('occupation')
             address = request.POST.get('sheia')
@@ -2090,10 +2090,8 @@ def update_parent(request, parent_id):
             parent_type = request.POST.get('type')
 
             # Perform form field validation
-            if not name:
-                messages.error(request, "Name field is required.")
-            elif not phone:
-                messages.error(request, "Phone Number field is required.")
+            if not phone:
+                messages.error(request, "phone field is required.")         
             elif not occupation:
                 messages.error(request, "Occupation field is required.")
             elif not address:
@@ -2112,7 +2110,7 @@ def update_parent(request, parent_id):
                 messages.error(request, "Relation field is required.")
             else:
                 # Update the parent record
-                parent.name = name
+                
                 parent.phone = phone
                 parent.occupation = occupation
                 parent.address = address
@@ -2142,7 +2140,7 @@ def update_parent(request, parent_id):
             'students': Students.objects.all(),
             'selected_student_ids': [student.id for student in parent.student.all()] if hasattr(parent, 'student') else []
         }
-        return render(request, 'hod_template/edit_parent.html', context)
+        return render(request, 'admin_template/edit_parent.html', context)
 
     except Parent.DoesNotExist:
         messages.error(request, "Parent not found.")
@@ -2175,13 +2173,14 @@ def save_parent(request):
 
             student = Students.objects.get(id=student_id)
 
+            # Create or update the CustomUser
             user, created = CustomUser.objects.get_or_create(
                 username=username,
                 defaults={
                     'email': email,
                     'first_name': first_name,
                     'last_name': last_name,
-                    'user_type': 8,
+                    'user_type': 3,
                 }
             )
 
@@ -2189,20 +2188,24 @@ def save_parent(request):
                 user.email = email
                 user.first_name = first_name
                 user.last_name = last_name
-                user.user_type = 8
-                user.set_password(password)
+                user.user_type = 3
+                user.password = password
                 user.save()
 
+            # Create or update the Parent
             parent, created = Parent.objects.get_or_create(
-                phone=phone,
-                occupation=occupation,
-                address=sheia,
-                street_address=street,
-                house_number=house,
-                national_id=national_id,
-                status=status,
-                gender=gender,
-                parent_type=parent_type
+                admin=user,  # Set the admin field to the user
+                defaults={
+                    'phone': phone,
+                    'occupation': occupation,
+                    'address': sheia,
+                    'street_address': street,
+                    'house_number': house,
+                    'national_id': national_id,
+                    'status': status,
+                    'gender': gender,
+                    'parent_type': parent_type,
+                }
             )
 
             if not created:
@@ -2217,9 +2220,7 @@ def save_parent(request):
                 parent.parent_type = parent_type
                 parent.save()
 
-            parent.admin = user
-            parent.save()
-
+            # Associate the parent with the student
             student.parent.add(parent)
 
             messages.success(request, "Parent information saved successfully")

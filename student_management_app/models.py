@@ -781,7 +781,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         elif instance.user_type == 7:  # SchoolCleaner
             SchoolCleaner.objects.create(admin=instance, address="", profile_pic="", gender="")
         elif instance.user_type == 8:  # Parent
-            Parent.objects.create(admin=instance, address="", profile_pic="", gender="")
+            Parent.objects.create(admin=instance, address="", gender="")
             
  
 @receiver(post_save, sender=CustomUser)
