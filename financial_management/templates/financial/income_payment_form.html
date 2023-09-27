@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "financial/base.html" %}
 
 {% block title %}
    Income Payment
@@ -36,6 +36,22 @@
                     <label for="amount_remaining">Amount Remaining:</label>
                     <input type="number" class="form-control" id="amount_remaining" name="amount_remaining" readonly>
                 </div>
+                <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

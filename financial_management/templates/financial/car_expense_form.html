@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'financial/base.html' %}
 
 {% block title %}
    Add Expense
@@ -33,6 +33,22 @@
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
+                    <div class="card-footer">
+                        <div class="form-row">
+                          <div>
+                            {% if messages %}
+                              <div class="col-12">
+                                {% for message in messages %}
+                                  {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                  {% elif message.tags == 'success' %}
+                                    <div class="alert alert-primary">{{ message }}</div>
+                                  {% endif %}
+                                {% endfor %}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
                     <button type="submit" class="btn btn-primary">Add Car Expense</button>
                 </form>
             </div>

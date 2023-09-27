@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
 
+from student_management_app.models import Staffs,StaffRoleAssignment
+
 class LoginCheckMiddleWare(MiddlewareMixin):
     
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -34,15 +36,28 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                  
                 # Staff (User Type 2)
                 elif user.user_type == "2":
-                    # Allow specific views and static pages
-                    if (modulename == "student_management_app.StaffView" or
-                        modulename == "student_management_app.views" or
-                        modulename == "django.views.static" or
-                        modulename == "library_management_app.views" or
-                        modulename == "exams.views"):
-                        pass
-                    else:
-                        return HttpResponseRedirect(reverse("staff_home"))
+                    staff = Staffs.objects.filter(admin=user).first()
+                    
+                    if staff:
+                        staff_assignment = StaffRoleAssignment.objects.filter(staff=staff).first()
+                        if staff_assignment and staff_assignment.role == "Accountant":
+                            if (modulename == "financial_management.views" or
+                                  modulename == "financial_management.Financial"):
+                                pass
+                            else:    
+                                return HttpResponseRedirect(reverse("financial_management:accountant_home"))
+                        else:                            
+                            # Allow specific views and static pages
+                            if (modulename == "student_management_app.StaffView" or
+                                modulename == "student_management_app.views" or
+                                modulename == "django.views.static" or
+                                modulename == "library_management_app.views" or
+                                modulename == "financial_management.views" or
+                                modulename == "financial_management.Financial" or
+                                modulename == "exams.views"):
+                                pass
+                            else:
+                                return HttpResponseRedirect(reverse("staff_home"))
                 
                 # Student (User Type 3)
                 elif user.user_type == "3":

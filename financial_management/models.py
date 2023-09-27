@@ -206,38 +206,37 @@ class FinancialSummary(models.Model):
 @receiver([post_save, post_delete], sender=CarExpense)
 @receiver([post_save, post_delete], sender=Expense)
 def update_financial_summary_expense(sender, instance, **kwargs):
-    # Calculate the total expenses based on the amounts in related models
-    total_expense = (
-        EquipmentPurchase.objects.aggregate(total=models.Sum('paid_amount'))['total'] +
-        StaffSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] +
-        DriverSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] +
-        SecuritySalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] +
-        CookerSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] +
-        CarExpense.objects.aggregate(total=models.Sum('paid_amount'))['total'] + 
-        Expense.objects.aggregate(total=models.Sum('paid_amount'))['total']
-    )
+    # Initialize total expenses to 0
+    total_expense = 0
+    
+    # Aggregate and add each expense type to the total
+    total_expense += EquipmentPurchase.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += StaffSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += DriverSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += SecuritySalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += CookerSalary.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += CarExpense.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
+    total_expense += Expense.objects.aggregate(total=models.Sum('paid_amount'))['total'] or 0
     
     # Update the FinancialSummary model
     financial_summary, created = FinancialSummary.objects.get_or_create(pk=1)
-    financial_summary.total_expense = total_expense or 0
-    financial_summary.save()        
+    financial_summary.total_expense = total_expense
+    financial_summary.save()      
     
 # Connect to the signal for updating the FinancialSummary when income records change
 @receiver([post_save, post_delete], sender=Contribution)
 @receiver([post_save, post_delete], sender=Income_Payment)
-
 def update_financial_summary_income(sender, instance, **kwargs):
     # Calculate the total income by aggregating the 'amount' field from income models
     total_income = (
-        Contribution.objects.aggregate(total_income=models.Sum('amount'))['amount_paid'] +
-        Income_Payment.objects.aggregate(total_income=models.Sum('amount'))['amount_paid'] 
-
+        Contribution.objects.aggregate(total_income=models.Sum('amount'))['total_income'] or 0 +
+        Income_Payment.objects.aggregate(total_income=models.Sum('amount'))['total_income'] or 0
     )
 
     # Update the FinancialSummary model
     financial_summary, created = FinancialSummary.objects.get_or_create(pk=1)
-    financial_summary.total_income = total_income or 0
-    financial_summary.save()    
+    financial_summary.total_income = total_income
+    financial_summary.save()
     
 class Notification(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

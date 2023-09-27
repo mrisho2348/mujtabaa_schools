@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'financial/base.html' %}
 
 {% block title %}
    Add Contribution
@@ -13,7 +13,7 @@
     <div class="card-body">
         <form method="post">
             {% csrf_token %}
-            <div class="form-group" {% url "add_contribution" %}>
+            <div class="form-group" {% url "financial_management:add_contribution" %}>
                 <label for="contributor_name">Contributor Name</label>
                 <input type="text" class="form-control" id="contributor_name" name="contributor_name" placeholder="Enter contributor name">
             </div>
@@ -37,6 +37,22 @@
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter description"></textarea>
             </div>
+            <div class="card-footer">
+                <div class="form-row">
+                  <div>
+                    {% if messages %}
+                      <div class="col-12">
+                        {% for message in messages %}
+                          {% if message.tags == 'error' %}
+                            <div class="alert alert-danger">{{ message }}</div>
+                          {% elif message.tags == 'success' %}
+                            <div class="alert alert-primary">{{ message }}</div>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

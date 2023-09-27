@@ -19,7 +19,7 @@
                 {% endif %}
             </div>
             <div class="info">
-                <a href="{% url 'student_profile' %}" class="d-block">{{ user.username }}</a>
+                <a href="{% url 'financial_management:staff_profile' %}" class="d-block">{{ user.username }}</a>
             </div>
         </div>
 
@@ -39,7 +39,7 @@
         </li>
         <li class="nav-item">
             {% url 'staff_sendfeedback' as staff_sendfeedback %}
-            <a href="{% url 'staff_sendfeedback' %}" class="nav-link {% if request.path == staff_sendfeedback %} active {% endif %}">
+            <a href="{% url 'financial_management:staff_sendfeedback' %}" class="nav-link {% if request.path == staff_sendfeedback %} active {% endif %}">
 
               <i class="nav-icon fas fa-graduation-cap"></i>
               <p>
@@ -50,7 +50,7 @@
         
           <li class="nav-item">
             {% url 'staff_apply_leave' as staff_apply_leave %}
-            <a href="{% url 'staff_apply_leave' %}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+            <a href="{% url 'financial_management:staff_apply_leave' %}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
 
               <i class="nav-icon fas fa-graduation-cap"></i>
               <p>
@@ -60,42 +60,42 @@
           </li>     
         <!-- Financial Section -->
         <li class="nav-item">
-            <a href="{% url 'generate_income_graph' %}"
+            <a href="{% url 'financial_management:generate_income_graph' %}"
                 class="nav-link {% if request.path == 'generate_income_graph' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Income Graph</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'generate_income_statement' %}"
+            <a href="{% url 'financial_management:generate_income_statement' %}"
                 class="nav-link {% if request.path == 'generate_income_statement' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Income Statement</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'generate_balance_sheet' %}"
+            <a href="{% url 'financial_management:generate_balance_sheet' %}"
                 class="nav-link {% if request.path == 'generate_balance_sheet' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Balance Sheet</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'analyze_income_data' %}"
+            <a href="{% url 'financial_management:analyze_income_data' %}"
                 class="nav-link {% if request.path == 'analyze_income_data' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Income Data Analysis</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'contribution_form' %}"
+            <a href="{% url 'financial_management:contribution_form' %}"
                 class="nav-link {% if request.path == 'contribution_form' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Contribution</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'add_expense' %}"
+            <a href="{% url 'financial_management:add_expense' %}"
                 class="nav-link {% if request.path == 'add_expense' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Expense</p>
@@ -105,28 +105,28 @@
 
         <!-- Salary Section -->
         <li class="nav-item">
-            <a href="{% url 'add_staff_salary' %}"
+            <a href="{% url 'financial_management:add_staff_salary' %}"
                 class="nav-link {% if request.path == 'add_staff_salary' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Staff Salary</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'staff_salary_list' %}"
+            <a href="{% url 'financial_management:staff_salary_list' %}"
                 class="nav-link {% if request.path == 'staff_salary_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Staff Salary List</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'add_driver_salary' %}"
+            <a href="{% url 'financial_management:add_driver_salary' %}"
                 class="nav-link {% if request.path == 'add_driver_salary' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Driver Salary</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'driver_salary_list' %}"
+            <a href="{% url 'financial_management:driver_salary_list' %}"
                 class="nav-link {% if request.path == 'driver_salary_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Driver Salary List</p>
@@ -136,14 +136,14 @@
 
         <!-- Security Salary Section -->
         <li class="nav-item">
-            <a href="{% url 'add_security_salary' %}"
+            <a href="{% url 'financial_management:add_security_salary' %}"
                 class="nav-link {% if request.path == 'add_security_salary' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Security Salary</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'security_salary_list' %}"
+            <a href="{% url 'financial_management:security_salary_list' %}"
                 class="nav-link {% if request.path == 'security_salary_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Security Salary List</p>
@@ -153,14 +153,14 @@
 
         <!-- Cooker Salary Section -->
         <li class="nav-item">
-            <a href="{% url 'add_cooker_salary' %}"
+            <a href="{% url 'financial_management:add_cooker_salary' %}"
                 class="nav-link {% if request.path == 'add_cooker_salary' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Cooker Salary</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'cooker_salary_list' %}"
+            <a href="{% url 'financial_management:cooker_salary_list' %}"
                 class="nav-link {% if request.path == 'cooker_salary_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Cooker Salary List</p>
@@ -170,14 +170,16 @@
 
         <!-- Car Expense Section -->
         <li class="nav-item">
-            <a href="{% url 'add_car_expense' %}"
+            <a href="#"
+            {% comment %} <a href="{% url 'financial_management:add_car_expense' %}" {% endcomment %}
                 class="nav-link {% if request.path == 'add_car_expense' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Car Expense</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'car_expense_list' %}"
+            <a href="#"
+            {% comment %} <a href="{% url 'financial_management:car_expense_list' %}" {% endcomment %}
                 class="nav-link {% if request.path == 'car_expense_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Car Expense List</p>
@@ -202,24 +204,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     ></script>
 
-    <script>
-      function updateExamsBadge() {
-          $.ajax({
-              url: "{% url 'exams:get_published_exam_count' %}",
-              method: "GET",
-              success: function (data) {
-                  const badge = $(".exams-badge-count");
-                  badge.text(data.count);
-                  if (data.count > 0) {
-                      badge.show();
-                  } else {
-                      badge.hide();
-                  }
-              },
-          });
-      }
-  
-      $(document).ready(function () {
-          updateExamsBadge();
-      });
-  </script>

@@ -1,5 +1,5 @@
 
-{% extends "base.html" %}
+{% extends "financial/base.html" %}
 
 {% block title %}
  Add Service Details
@@ -22,6 +22,22 @@
                     <label for="amount_required" class="form-label">Amount Required</label>
                     <input type="number" class="form-control" id="amount_required" name="amount_required" required>
                 </div>
+                <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
