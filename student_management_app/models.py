@@ -84,6 +84,19 @@ class Staffs(models.Model):
     subjects = models.ManyToManyField('Subject', related_name='staffs_subjects', blank=True)
     objects = models.Manager()
 
+class StaffRoleAssignment(models.Model):
+    staff = models.ForeignKey(Staffs, on_delete=models.CASCADE)  # Link to the staff/user
+    role = models.CharField(max_length=255)  # Role or position of the staff    
+    notes = models.TextField(blank=True, null=True)
+    assigned_date = models.DateTimeField(auto_now_add=True)    
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+    def __str__(self):
+        return f"{self.staff.username} - {self.role}"
+
+    class Meta:
+        verbose_name = "Staff Role Assignment"
+        verbose_name_plural = "Staff Role Assignments"
 class Subject(models.Model):
     id = models.AutoField(primary_key=True)
     school_segment = models.CharField(max_length=255, null=True, blank=True)

@@ -50,6 +50,7 @@ from student_management_app.models import (
     Result,
     StudentExamInfo,
     StudentPositionInfo,
+    StaffRoleAssignment,
 )
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
@@ -111,7 +112,82 @@ def admin_home(request):
     return render(request, "hod_template/home_content.html", context)
 
 
+def render_staff_role_assignment_form(request):
+    if request.method == 'POST':
+        try:
+            # Process the submitted form data
+            staff_id = request.POST.get('staff')
+            role = request.POST.get('role')
+            notes = request.POST.get('notes')
 
+            # Validate staff_id (ensure it's a valid staff member)
+            try:
+                staff_member = Staffs.objects.get(id=staff_id)
+            except Staffs.DoesNotExist:
+                staff_member = None
+
+            if not staff_member:
+                error_message = "Invalid staff member selected."
+                return render(request, 'hod_template/add_staff_role_assignment_form.html', {'error_message': error_message})
+
+            # Create a new StaffRoleAssignment instance and save it
+            staff_assignment = StaffRoleAssignment(
+                staff=staff_member,
+                role=role,
+                notes=notes,
+               
+            )
+            staff_assignment.save()
+
+            messages.success(request, 'Staff role assignment added successfully.')  # Success message
+            return redirect('staff_role_list')  # Redirect to a success page or any desired URL
+
+        except Exception as e:
+            messages.error(request, f'Error adding staff role assignment: {str(e)}')  # Error message
+
+    # Retrieve staff members from your database (adjust this query as needed)
+    staff_members = Staffs.objects.all()  # Replace 'Staffs' with your actual model
+
+    return render(request, 'hod_template/add_staff_role_assignment_form.html', {'staff_members': staff_members,'action':'add'})
+
+def staff_role_list(request):
+    staff_assignments = StaffRoleAssignment.objects.all()
+    return render(request, 'hod_template/manage_staff_role_list.html', {'staff_assignments': staff_assignments})
+
+def edit_staff_role(request, assignment_id):
+    assignment = get_object_or_404(StaffRoleAssignment, id=assignment_id)
+
+    if request.method == 'POST':
+        try:
+            # Retrieve the form data from the request
+            staff_id = request.POST.get('staff')
+            role = request.POST.get('role')
+            notes = request.POST.get('notes')
+
+            # Update the assignment with the new data
+            assignment.staff_id = staff_id
+            assignment.role = role
+            assignment.notes = notes
+            assignment.save()
+
+            messages.success(request, 'Staff role assignment updated successfully.')  # Success message
+            return redirect('staff_role_list')  # Redirect to a success page or any desired URL
+
+        except Exception as e:
+            messages.error(request, f'Error updating staff role assignment: {str(e)}')  # Error message
+
+    # Render the template for editing with the assignment data
+    return render(request, 'hod_template/add_staff_role_assignment_form.html', {'assignment': assignment, 'action': 'edit'})
+
+def delete_staff_role(request, assignment_id):
+    assignment = get_object_or_404(StaffRoleAssignment, id=assignment_id)
+
+    if request.method == 'POST':
+        # Handle the deletion here
+        assignment.delete()
+        return redirect('staff_role_list')  # Redirect to a success page or any desired URL after deletion
+
+    return redirect('staff_role_list') 
 
 def get_class_choices(request):
     segment = request.GET.get('segment')

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Cooker Salary
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Add Cooker Salary</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="cooker_member" class="form-label">Cooker Member</label>
+                    <select class="form-select" id="cooker_member" name="cooker_member" required>
+                        <option value="" disabled selected>Select Cooker Member</option>
+                        {% for cooker in cooker_members %}
+                        <option value="{{ cooker.id }}">{{ cooker.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="month" class="form-label">Month</label>
+                    <input type="date" class="form-control" id="month" name="month" required>
+                </div>
+                <div class="mb-3">
+                    <label for="paidAmount" class="form-label">Paid Amount</label>
+                    <input type="number" step="0.01" class="form-control" id="paidAmount" name="paid_amount" required>
+                </div>
+                <div class="mb-3">
+                    <label for="totalAmountRequired" class="form-label">Total Amount Required</label>
+                    <input type="number" step="0.01" class="form-control" id="totalAmountRequired" name="total_amount_required" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Cooker Salary</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock  main_content %}
+   
+
+

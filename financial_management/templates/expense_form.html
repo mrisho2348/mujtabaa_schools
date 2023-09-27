@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+   Add Expense
+{% endblock title %}
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Add Expense</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Electricity Bill">Electricity Bill</option>
+                        <option value="Water Bill">Water Bill</option>
+                        <option value="WiFi Bill">WiFi Bill</option>
+                        <option value="Advertising">Advertising</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="paidAmount" class="form-label">Paid Amount</label>
+                    <input type="number" step="0.01" class="form-control" id="paidAmount" name="paid_amount" required>
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Expense</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock main_content %}
+   
+

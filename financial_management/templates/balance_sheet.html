@@ -1,87 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Balance Sheet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .container {
-            display: flex;
-        }
-        .table-container {
-            flex: 1;
-            margin-right: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .chart-container {
-            flex: 1;
-        }
-    </style>
-</head>
-<body>
-    <h1>Balance Sheet</h1>
-    <div class="container">
-        <div class="table-container">
-            <table>
-                <tr>
-                    <th>Category</th>
-                    <th>Amount (USD)</th>
-                </tr>
-                <tr>
-                    <td>Assets</td>
-                    <td>${{ assets }}</td>
-                </tr>
-                <tr>
-                    <td>Liabilities</td>
-                    <td>${{ liabilities }}</td>
-                </tr>
-                <tr>
-                    <td>Equity</td>
-                    <td>${{ equity }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="chart-container">
-            <canvas id="balanceChart" width="400" height="400"></canvas>
-        </div>
-    </div>
+{% extends "base.html" %}
+{% block title %}
+   balance Sheet 
+{% endblock title %}
+{% block main_content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1 {
+        color: #333;
+    }
+    .container {
+        display: flex;
+    }
+    .table-container {
+        flex: 1;
+        margin-right: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .chart-container {
+        flex: 1;
+    }
+</style>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('balanceChart').getContext('2d');
-        var balanceChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Assets', 'Liabilities', 'Equity'],
-                datasets: [{
-                    data: [{{ assets }}, {{ liabilities }}, {{ equity }}],
-                    backgroundColor: ['#ff9999', '#99ff99', '#9999ff'],
-                }],
-            },
-            options: {
-                responsive: true,
-            }
-        });
-    </script>
-</body>
-</html>
+<h1>Balance Sheet</h1>
+<div class="container">
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Amount (USD)</th>
+            </tr>
+            <tr>
+                <td>Assets</td>
+                <td>${{ assets }}</td>
+            </tr>
+            <tr>
+                <td>Liabilities</td>
+                <td>${{ liabilities }}</td>
+            </tr>
+            <tr>
+                <td>Equity</td>
+                <td>${{ equity }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="chart-container">
+        <canvas id="balanceChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('balanceChart').getContext('2d');
+    var balanceChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Assets', 'Liabilities', 'Equity'],
+            datasets: [{
+                data: [{{ assets }}, {{ liabilities }}, {{ equity }}],
+                backgroundColor: ['#ff9999', '#99ff99', '#9999ff'],
+            }],
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>
+{% endblock main_content %}
+   
+

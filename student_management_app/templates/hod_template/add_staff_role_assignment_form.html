@@ -1,0 +1,74 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+     {% if action == 'add' %}
+        Assign Staff Role
+     {% else %}
+        Edit Staff Role
+     {% endif %}
+{% endblock page_title %}
+
+{% block main_content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">
+        {% if action == 'add' %}
+            Assign Staff Role
+        {% else %}
+            Edit Staff Role
+        {% endif %}
+      </h5>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% if action == 'edit' %}{% url 'edit_staff_role' assignment.id %}{% else %}{% url 'render_staff_role_assignment_form' %}{% endif %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="staff">Staff Member:</label>
+          <select class="form-control" id="staff" name="staff">
+            {% for staff_member in staff_members %}
+              <option value="{{ staff_member.id }}"
+              {% if action == 'edit' and staff_member.id == assignment.staff.id %}
+                selected
+              {% endif %}>
+              {{staff_member.admin.first_name}}  {{staff_member.admin.last_name}}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="role">Role/Position:</label>
+          <input type="text" class="form-control" id="role" name="role" required value="{% if action == 'edit' %}{{ assignment.role }}{% endif %}">
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes:</label>
+          <textarea class="form-control" id="notes" name="notes" rows="3">{% if action == 'edit' %}{{ assignment.notes }}{% endif %}</textarea>
+        </div>
+        <div class="card-footer">
+          <div class="form-row">
+            <div>
+              {% if messages %}
+                <div class="col-12">
+                  {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                      <div class="alert alert-danger">{{ message }}</div>
+                    {% elif message.tags == 'success' %}
+                      <div class="alert alert-primary">{{ message }}</div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        <button type="submit" class="btn btn-primary">
+          {% if action == 'add' %}
+            Assign Role
+          {% else %}
+            Update Role
+          {% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main_content %}

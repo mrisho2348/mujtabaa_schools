@@ -22,70 +22,31 @@ class Contribution(models.Model):
         return f"Contribution from {self.source} - {self.date}"
     
     
-class SchoolFee(models.Model):
-    student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    description = models.TextField()    
-    receipt_number = models.CharField(max_length=20, blank=True, null=True)    
-    due_date = models.DateField(blank=True, null=True)    
-    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_schoolfee_required = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    
-    @property
-    def remaining_payment(self):
-        # Calculate the remaining payment by subtracting the paid amount from the total amount required.
-        return self.total_schoolfee_required - self.amount
-    def __str__(self):
-        return f"School Fee for {self.student.username} - {self.date}"
-    class Meta:
-        ordering = ['-date']
 
-
-
-class BoardingFee(models.Model):
-    student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    description = models.TextField()    
-    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_amount_required = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+class ServiceDetails(models.Model):
+    service_name = models.CharField(max_length=100)
+    amount_required = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
-    
-    @property
-    def remaining_payment(self):
-        # Calculate the remaining payment by subtracting the paid amount from the total amount required.
-        return self.total_amount_required - self.amount
-    
     def __str__(self):
-        return f"Hostel Fee for {self.student.username} - {self.date}"
-
-    class Meta:
-        ordering = ['-date']
-        
-class FoodCharge(models.Model):
+        return self.service_name
+    
+class Income_Payment(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    description = models.TextField()    
-    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Track the amount remaining
-    total_amount_required = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Track total amount required
+    service_details = models.ForeignKey(ServiceDetails, on_delete=models.CASCADE)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_remaining = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
-    
+    def save(self, *args, **kwargs):
+        # Calculate the amount remaining
+        self.amount_remaining = self.service_details.amount_required - self.amount_paid
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Food Charge for {self.student.username} - {self.date}"
-
-    class Meta:
-        ordering = ['-date']
-
-    @property
-    def remaining_payment(self):
-        # Calculate the remaining payment by subtracting the paid amount from the total amount required.
-        return self.total_amount_required - self.paid_amount      
+        return f"{self.student.username} - {self.service_details.service_name}"    
     
     
 class EquipmentPurchase(models.Model):    
@@ -263,16 +224,14 @@ def update_financial_summary_expense(sender, instance, **kwargs):
     
 # Connect to the signal for updating the FinancialSummary when income records change
 @receiver([post_save, post_delete], sender=Contribution)
-@receiver([post_save, post_delete], sender=SchoolFee)
-@receiver([post_save, post_delete], sender=BoardingFee)
-@receiver([post_save, post_delete], sender=FoodCharge)
+@receiver([post_save, post_delete], sender=Income_Payment)
+
 def update_financial_summary_income(sender, instance, **kwargs):
     # Calculate the total income by aggregating the 'amount' field from income models
     total_income = (
-        Contribution.objects.aggregate(total_income=models.Sum('amount'))['total_income'] +
-        SchoolFee.objects.aggregate(total_income=models.Sum('amount'))['total_income'] +
-        BoardingFee.objects.aggregate(total_income=models.Sum('amount'))['total_income'] +
-        FoodCharge.objects.aggregate(total_income=models.Sum('amount'))['total_income']
+        Contribution.objects.aggregate(total_income=models.Sum('amount'))['amount_paid'] +
+        Income_Payment.objects.aggregate(total_income=models.Sum('amount'))['amount_paid'] 
+
     )
 
     # Update the FinancialSummary model
@@ -296,29 +255,13 @@ def create_contribution_notification(sender, instance, **kwargs):
     message = f"A new contribution of ${instance.amount} has been added."
     Notification.objects.create(user=user, message=message)      
     
-@receiver(post_save, sender=SchoolFee)
+@receiver(post_save, sender=Income_Payment)
 def create_school_fee_notification(sender, instance, created, **kwargs):
     if created:
         # Assuming there's a user associated with the student, replace 'instance.student.user' with the actual user field.
         user = instance.student.user
-        message = f"A new school fee payment of ${instance.amount} has been added."
+        message = f"A new school fee payment of ${instance.amount_paid} has been added."
         Notification.objects.create(user=user, message=message)
        
-@receiver(post_save, sender=BoardingFee)
-def create_boarding_fee_notification(sender, instance, created, **kwargs):
-    if created:
-        # Assuming there's a user associated with the student, replace 'instance.student.user' with the actual user field.
-        user = instance.student.user
-        message = f"A new boarding fee payment of ${instance.amount} has been added."
-        Notification.objects.create(user=user, message=message)        
-        
 
-
-@receiver(post_save, sender=FoodCharge)
-def create_food_charge_notification(sender, instance, created, **kwargs):
-    if created:
-        # Assuming there's a user associated with the student, replace 'instance.student.user' with the actual user field.
-        user = instance.student.user
-        message = f"A new food charge payment of ${instance.amount} has been added."
-        Notification.objects.create(user=user, message=message)
             

@@ -35,7 +35,10 @@ urlpatterns = [
     path('manage_driver', HodView.manage_driver, name='manage_driver'),
     path('view_driver_info/<int:driver_id>/', HodView.view_driver_info, name='view_driver_info'),
     path('update_driver_info/<int:driver_id>/', HodView.update_driver_info, name='update_driver_info'),
-    
+    path('staff_role_list/', HodView.staff_role_list, name='staff_role_list'),
+    path('render_staff_role_assignment_form/', HodView.render_staff_role_assignment_form, name='render_staff_role_assignment_form'),
+    path('delete_staff_role/<int:assignment_id>/', HodView.delete_staff_role, name='delete_staff_role'),
+    path('edit_staff_role/<int:assignment_id>/', HodView.edit_staff_role, name='edit_staff_role'),
       # Other URLs for your app...
 
     # URL for the view to add driver information

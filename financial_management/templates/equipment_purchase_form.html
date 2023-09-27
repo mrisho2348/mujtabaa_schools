@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Equipment Purchase
+{% endblock title %}
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Add Equipment Purchase</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" {% url "add_equipment_purchase" %}>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="equipmentName" class="form-label">Equipment Name</label>
+                    <input type="text" class="form-control" id="equipmentName" name="equipment_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="equipmentCost" class="form-label">Equipment Cost</label>
+                    <input type="number" step="0.01" class="form-control" id="equipmentCost" name="equipment_cost" required>
+                </div>
+                <div class="mb-3">
+                    <label for="purchasedBy" class="form-label">Purchased By</label>
+                    <input type="text" class="form-control" id="purchasedBy" name="purchased_by">
+                </div>
+                <div class="mb-3">
+                    <label for="purchaseDate" class="form-label">Purchase Date</label>
+                    <input type="date" class="form-control" id="purchaseDate" name="purchase_date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="paidAmount" class="form-label">Paid Amount</label>
+                    <input type="number" step="0.01" class="form-control" id="paidAmount" name="paid_amount" required>
+                </div>
+                <!-- The remaining amount will be calculated in the view -->
+                <button type="submit" class="btn btn-primary">Add Purchase</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock main_content %}
+  

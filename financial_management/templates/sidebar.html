@@ -1,0 +1,225 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="{% static 'dist/img/LogoNembo.jpg' %}" alt="mujtabaa Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">mujitabaa school </span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                {% if students.profile_pic %}
+                <img src="{{ students.profile_pic }}" class="img-circle elevation-2" alt="User Image">
+                {% else %}
+                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+                {% endif %}
+            </div>
+            <div class="info">
+                <a href="{% url 'student_profile' %}" class="d-block">{{ user.username }}</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+       <!-- Sidebar Menu -->
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+        data-accordion="false">
+
+        <!-- Home -->
+        <li class="nav-item">
+            <a href="{% url 'student_home' %}"
+                class="nav-link {% if request.path == 'student_home' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Home</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            {% url 'staff_sendfeedback' as staff_sendfeedback %}
+            <a href="{% url 'staff_sendfeedback' %}" class="nav-link {% if request.path == staff_sendfeedback %} active {% endif %}">
+
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                Send FeedBack
+              </p>
+            </a>
+          </li>        
+        
+          <li class="nav-item">
+            {% url 'staff_apply_leave' as staff_apply_leave %}
+            <a href="{% url 'staff_apply_leave' %}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                Apply for Leave
+              </p>
+            </a>
+          </li>     
+        <!-- Financial Section -->
+        <li class="nav-item">
+            <a href="{% url 'generate_income_graph' %}"
+                class="nav-link {% if request.path == 'generate_income_graph' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Income Graph</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'generate_income_statement' %}"
+                class="nav-link {% if request.path == 'generate_income_statement' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Income Statement</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'generate_balance_sheet' %}"
+                class="nav-link {% if request.path == 'generate_balance_sheet' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Balance Sheet</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'analyze_income_data' %}"
+                class="nav-link {% if request.path == 'analyze_income_data' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Income Data Analysis</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'contribution_form' %}"
+                class="nav-link {% if request.path == 'contribution_form' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Contribution</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'add_expense' %}"
+                class="nav-link {% if request.path == 'add_expense' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Expense</p>
+            </a>
+        </li>
+      
+
+        <!-- Salary Section -->
+        <li class="nav-item">
+            <a href="{% url 'add_staff_salary' %}"
+                class="nav-link {% if request.path == 'add_staff_salary' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Staff Salary</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'staff_salary_list' %}"
+                class="nav-link {% if request.path == 'staff_salary_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Staff Salary List</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'add_driver_salary' %}"
+                class="nav-link {% if request.path == 'add_driver_salary' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Driver Salary</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'driver_salary_list' %}"
+                class="nav-link {% if request.path == 'driver_salary_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Driver Salary List</p>
+            </a>
+        </li>
+     
+
+        <!-- Security Salary Section -->
+        <li class="nav-item">
+            <a href="{% url 'add_security_salary' %}"
+                class="nav-link {% if request.path == 'add_security_salary' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Security Salary</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'security_salary_list' %}"
+                class="nav-link {% if request.path == 'security_salary_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Security Salary List</p>
+            </a>
+        </li>
+      
+
+        <!-- Cooker Salary Section -->
+        <li class="nav-item">
+            <a href="{% url 'add_cooker_salary' %}"
+                class="nav-link {% if request.path == 'add_cooker_salary' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Cooker Salary</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'cooker_salary_list' %}"
+                class="nav-link {% if request.path == 'cooker_salary_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Cooker Salary List</p>
+            </a>
+        </li>
+      
+
+        <!-- Car Expense Section -->
+        <li class="nav-item">
+            <a href="{% url 'add_car_expense' %}"
+                class="nav-link {% if request.path == 'add_car_expense' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add Car Expense</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'car_expense_list' %}"
+                class="nav-link {% if request.path == 'car_expense_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Car Expense List</p>
+            </a>
+        </li>
+   
+    </ul>
+</nav>
+
+        
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+<!-- Bootstrap CSS links -->
+
+
+<!-- jQuery and Bootstrap JS scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script>
+      function updateExamsBadge() {
+          $.ajax({
+              url: "{% url 'exams:get_published_exam_count' %}",
+              method: "GET",
+              success: function (data) {
+                  const badge = $(".exams-badge-count");
+                  badge.text(data.count);
+                  if (data.count > 0) {
+                      badge.show();
+                  } else {
+                      badge.hide();
+                  }
+              },
+          });
+      }
+  
+      $(document).ready(function () {
+          updateExamsBadge();
+      });
+  </script>

@@ -3,6 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import render
 from django.urls import reverse
+from student_management_app.models import StaffRoleAssignment
 from student_management_app.emailBackEnd import EmailBackend
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
@@ -27,7 +28,11 @@ def DoLogin(request):
         return HttpResponseRedirect(reverse("admin_home"))
       
       elif user.user_type == "2":
-        return HttpResponseRedirect(reverse("staff_home"))
+        staff_assignment = StaffRoleAssignment.objects.filter(staff=user.staff_user).first()
+        if staff_assignment and staff_assignment.role == "accountant":
+          return HttpResponseRedirect(reverse("accountant_home"))  # Replace with your accountant home URL
+        else:          
+          return HttpResponseRedirect(reverse("staff_home"))
       
       elif user.user_type == "3":
         return HttpResponseRedirect(reverse("student_home"))

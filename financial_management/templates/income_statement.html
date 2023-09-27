@@ -1,69 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Income Statement</title>
-    <style>
-        /* Your existing styles here */
-    </style>
-    <!-- Include Chart.js from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <h1>Income Statement</h1>
-    <table>
-        <tr>
-            <th>Category</th>
-            <th>Amount (USD)</th>
-        </tr>
-        <tr>
-            <td>Total Income</td>
-            <td>${{ total_income }}</td>
-        </tr>
-        <tr>
-            <td>Total Expense</td>
-            <td>${{ total_expense }}</td>
-        </tr>
-        <tr class="total-row">
-            <td><strong>Net Income</strong></td>
-            <td class="net-income">${{ net_income }}</td>
-        </tr>
-    </table>
-    
-    <!-- Add a canvas element for the chart -->
-    <canvas id="incomeChart" width="400" height="200"></canvas>
+{% extends "base.html" %}
 
-    <script>
-        // JavaScript code for creating a chart
-        var ctx = document.getElementById('incomeChart').getContext('2d');
-        var incomeChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Total Income', 'Total Expense', 'Net Income'],
-                datasets: [{
-                    label: 'Amount (USD)',
-                    data: [{{ total_income }}, {{ total_expense }}, {{ net_income }}],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(0, 128, 0, 0.2)',  // Green for Net Income
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(0, 128, 0, 1)',  // Green for Net Income
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+{% block title %}
+  Income Statement
+{% endblock title %}
+{% block main_content %}
+<h1>Income Statement</h1>
+<table>
+    <tr>
+        <th>Category</th>
+        <th>Amount (USD)</th>
+    </tr>
+    <tr>
+        <td>Total Income</td>
+        <td>${{ total_income }}</td>
+    </tr>
+    <tr>
+        <td>Total Expense</td>
+        <td>${{ total_expense }}</td>
+    </tr>
+    <tr class="total-row">
+        <td><strong>Net Income</strong></td>
+        <td class="net-income">${{ net_income }}</td>
+    </tr>
+</table>
+
+<!-- Add a canvas element for the chart -->
+<canvas id="incomeChart" width="400" height="200"></canvas>
+
+<script>
+    // JavaScript code for creating a chart
+    var ctx = document.getElementById('incomeChart').getContext('2d');
+    var incomeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total Income', 'Total Expense', 'Net Income'],
+            datasets: [{
+                label: 'Amount (USD)',
+                data: [{{ total_income }}, {{ total_expense }}, {{ net_income }}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(0, 128, 0, 0.2)',  // Green for Net Income
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(0, 128, 0, 1)',  // Green for Net Income
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
-    </script>
-</body>
-</html>
+        }
+    });
+</script>
+{% endblock main_content %}
+    
+

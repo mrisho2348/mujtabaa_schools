@@ -1,76 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Income Data Analysis</title>
-    <!-- Include Chart.js from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <!-- Your HTML content for displaying analysis results -->
+{% extends "base.html" %}
 
-    <!-- Add a canvas element for the bar chart -->
-    <canvas id="incomeBarChart" width="400" height="200"></canvas>
+{% block title %}
+   Income Analysis
+{% endblock title %}
+{% block main_content %}
+   <!-- Display analysis results for service categories -->
+   <h2>Income Analysis by Service Categories</h2>
+   <ul>
+       {% for service_name, stats in service_stats.items %}
+           <li>{{ service_name }}:</li>
+           <ul>
+               <li>Total Paid: {{ stats.total_paid }}</li>
+               <li>Total Remaining: {{ stats.total_remaining }}</li>
+           </ul>
+       {% endfor %}
+   </ul>
 
-    <!-- Add a canvas element for the line chart -->
-    <canvas id="incomeLineChart" width="400" height="200"></canvas>
+   <!-- Display analysis results for contributions -->
+   <h2>Contribution Analysis</h2>
+   <p>Total Contributions: {{ contribution_stats.Contribution.total }}</p>
 
-    <script>
-        // JavaScript code for creating the bar chart
-        var ctxBar = document.getElementById('incomeBarChart').getContext('2d');
-        var incomeBarChart = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['School Fee', 'Boarding Fee', 'Food Charge', 'Contribution'],
-                datasets: [{
-                    label: 'Income Distribution',
-                    data: [{{ school_fee_analysis.average_fee }}, {{ boarding_fee_analysis.average_fee }}, {{ food_charge_analysis.average_charge }}, {{ contribution_analysis.total_contributions }}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+   <!-- Add a canvas element for the bar chart -->
+   <canvas id="incomeBarChart" width="400" height="200"></canvas>
 
-        // JavaScript code for creating the line chart
-        var ctxLine = document.getElementById('incomeLineChart').getContext('2d');
-        var incomeLineChart = new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5'],
-                datasets: [{
-                    label: 'Income Trend',
-                    data: [1000, 1500, 1200, 1800, 2000],
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+   <script>
+       // JavaScript code for creating the bar chart
+       var ctxBar = document.getElementById('incomeBarChart').getContext('2d');
+       var incomeBarChart = new Chart(ctxBar, {
+           type: 'bar',
+           data: {
+               labels: [{% for service_name, stats in service_stats.items %}'{{ service_name }}',{% endfor %}],
+               datasets: [{
+                   label: 'Income Distribution',
+                   data: [{% for service_name, stats in service_stats.items %}{{ stats.total_paid }},{% endfor %}],
+                   backgroundColor: [
+                       'rgba(255, 99, 132, 0.2)',
+                       'rgba(54, 162, 235, 0.2)',
+                       'rgba(255, 206, 86, 0.2)',
+                       'rgba(75, 192, 192, 0.2)',
+                   ],
+                   borderColor: [
+                       'rgba(255, 99, 132, 1)',
+                       'rgba(54, 162, 235, 1)',
+                       'rgba(255, 206, 86, 1)',
+                       'rgba(75, 192, 192, 1)',
+                   ],
+                   borderWidth: 1
+               }]
+           },
+           options: {
+               scales: {
+                   y: {
+                       beginAtZero: true
+                   }
+               }
+           }
+       });
+   </script>
+{% endblock main_content %}
+   
+
