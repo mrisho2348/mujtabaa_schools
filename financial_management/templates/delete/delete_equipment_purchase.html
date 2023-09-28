@@ -14,8 +14,8 @@ Delete Equipment Purchase
             <p>Are you sure you want to delete the equipment purchase record for "{{ equipment_purchase.equipment_name }}"?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="{% url 'equipment_purchase_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Cancel</button>
+                <a href="{% url 'financial_management:equipment_purchase_list' %}" class="btn btn-danger">Delete</a>
             </form>
         </div>
     </div>

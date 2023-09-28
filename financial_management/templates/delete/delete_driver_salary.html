@@ -14,8 +14,8 @@ Delete Driver Salary
             <p>Are you sure you want to delete the driver's salary record for {{ driver_salary.month }}?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="{% url 'driver_salary_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Cancel</button>
+                <a href="{% url 'financial_management:driver_salary_list' %}" class="btn btn-danger">Delete</a>
             </form>
         </div>
     </div>

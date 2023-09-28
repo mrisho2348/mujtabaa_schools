@@ -14,8 +14,8 @@
                 <p>Are you sure you want to delete the income payment for {{ income_payment.student.full_name }}?</p>
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    <a href="{% url 'income_payments_list' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-secondary">Cancel</button>
+                    <a href="{% url 'financial_management:income_payment_list' %}" class="btn btn-danger">Yes, Delete</a>
                 </form>
             </div>
         </div>

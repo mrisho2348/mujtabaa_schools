@@ -1,7 +1,7 @@
 # urls.py
 
 from django.urls import path
-from . import Financial,Delete,Update
+from . import Financial,Delete,Update,views
 
 urlpatterns = [
     # Other URL patterns
@@ -21,13 +21,14 @@ urlpatterns = [
     path('add_driver_salary/', Financial.add_driver_salary, name='add_driver_salary'),    
     path('add_security_salary/', Financial.add_security_salary, name='add_security_salary'),    
     path('add_cooker_salary/', Financial.add_cooker_salary, name='add_cooker_salary'),    
-    path('accountant_home', Financial.accountant_home, name='accountant_home'), 
-    path('staff_apply_leave', Financial.staff_apply_leave, name='staff_apply_leave'),  
-    path('staff_apply_leave_save', Financial.staff_apply_leave_save, name='staff_apply_leave_save'),  
-    path('staff_sendfeedback', Financial.staff_sendfeedback, name='staff_sendfeedback'),  
-    path('staff_sendfeedback_save', Financial.staff_sendfeedback_save, name='staff_sendfeedback_save'),  
-    path('staff_profile', Financial.staff_profile, name='staff_profile'),  
-    path('staff_profile_save', Financial.staff_profile_save, name='staff_profile_save'),
+    path('accountant_home', Financial.accountant_home, name='accountant_home'),
+     
+    path('staff_apply_leave', views.staff_apply_leave, name='staff_apply_leave'),  
+    path('staff_apply_leave_save', views.staff_apply_leave_save, name='staff_apply_leave_save'),  
+    path('staff_sendfeedback', views.staff_sendfeedback, name='staff_sendfeedback'),  
+    path('staff_sendfeedback_save', views.staff_sendfeedback_save, name='staff_sendfeedback_save'),  
+    path('staff_profile', views.staff_profile, name='staff_profile'),  
+    path('staff_profile_save', views.staff_profile_save, name='staff_profile_save'),
     
     path('contribution_list/', Financial.contribution_list, name='contribution_list'),
     path('equipment_purchase_list/', Financial.equipment_purchase_list, name='equipment_purchase_list'),

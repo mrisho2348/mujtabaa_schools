@@ -136,7 +136,7 @@ def edit_driver_salary(request, driver_salary_id):
             driver_salary.save()
 
             messages.success(request, 'Driver salary updated successfully.')
-            return redirect('driver_salary_list')
+            return redirect('financial_management:driver_salary_list')
         except Exception as e:
             messages.error(request, f'Error updating driver salary: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -234,12 +234,24 @@ def edit_security_salary(request, security_salary_id):
 
     if request.method == 'POST':
         # Process the form data for editing
-        security_salary.security_member = request.POST.get('security_member')
-        security_salary.month = request.POST.get('month')
-        security_salary.paid_amount = request.POST.get('paid_amount')
-        security_salary.total_amount_required = request.POST.get('total_amount_required')
-        security_salary.description = request.POST.get('description')
+        security_member_id = request.POST.get('security_member')
+        month = request.POST.get('month')
+        paid_amount = request.POST.get('paid_amount')
+        total_amount_required = request.POST.get('total_amount_required')
+        description = request.POST.get('description')
+
+        # Retrieve the SchoolSecurityPerson instance
+        security_member = SchoolSecurityPerson.objects.get(id=security_member_id)
+
+        # Update the SecuritySalary instance
+        security_salary.security_member = security_member
+        security_salary.month = month
+        security_salary.paid_amount = paid_amount
+        security_salary.total_amount_required = total_amount_required
+        security_salary.description = description
+
         security_salary.save()
+
         messages.success(request, 'Security salary updated successfully.')
         return redirect('financial_management:security_salary_list')
     else:

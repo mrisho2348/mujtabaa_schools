@@ -14,8 +14,8 @@ Delete Security Salary
             <p>Are you sure you want to delete the security salary record for "{{ security_salary.security_member }}"?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="{% url 'security_salary_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Cancel</button>
+                <a href="{% url 'financial_management:security_salary_list' %}" class="btn btn-secondary">Delete</a>
             </form>
         </div>
     </div>

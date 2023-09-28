@@ -28,8 +28,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         modulename == "library_management_app.views" or
                         modulename == "financial_management.Financial" or
                         modulename == "financial_management.Delete" or
-                        modulename == "financial_management.Update" or
-                        modulename == "financial_management.views" or
+                        modulename == "financial_management.Update" or                        
                         modulename == "exams.views"):
                         pass
                     # Allow access to Django admin main dashboard

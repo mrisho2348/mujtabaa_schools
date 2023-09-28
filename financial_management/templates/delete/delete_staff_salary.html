@@ -14,8 +14,8 @@ Delete Staff Salary
             <p>Are you sure you want to delete the staff salary record for "{{ staff_salary.staff_member }}"?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="{% url 'staff_salary_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Cancel</button>
+                <a href="{% url 'financial_management:staff_salary_list' %}" class="btn btn-danger">Delete</a>
             </form>
         </div>
     </div>

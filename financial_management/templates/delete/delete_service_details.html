@@ -14,8 +14,8 @@ Delete Service Detail
             <p>Are you sure you want to delete the service detail record for "{{ service_detail.service_name }}"?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="{% url 'service_detail_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Cancel</button>
+                <a href="{% url 'financial_management:service_details_list' %}" class="btn btn-danger">Delete</a>
             </form>
         </div>
     </div>
