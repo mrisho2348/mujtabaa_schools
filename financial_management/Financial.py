@@ -165,20 +165,21 @@ def analyze_income_data(request):
     for service in service_details:
         service_payments = Income_Payment.objects.filter(service_details=service)
         service_label = service.service_name
-        service_stats[service.service_name]  = service_payments.aggregate(
+        stats = service_payments.aggregate(
             total_paid=Sum('amount_paid'),
             total_remaining=Sum('amount_remaining')
         )
-        service_total_paid.append(service_stats['total_paid'] or 0)  # Default to 0 if None
-        service_total_remaining.append(service_stats['total_remaining'] or 0)  # Default to 0 if None
+        service_stats[service_label] = stats
+        service_total_paid.append(stats['total_paid'] or 0)  # Default to 0 if None
+        service_total_remaining.append(stats['total_remaining'] or 0)  # Default to 0 if None
         service_labels.append(service_label)
 
     # Analyze contribution data
-    contribution_stats['Contribution']  = contributions.aggregate(
+    contribution_stats['Contribution'] = contributions.aggregate(
         total=Sum('amount')
     )
-    contribution_total = contribution_stats['total'] or 0  # Default to 0 if None
-    print(service_stats)
+    contribution_total = contribution_stats['Contribution']['total'] or 0  # Default to 0 if None
+
     # Pass analysis results to the template
     context = {
         'service_labels': service_labels,

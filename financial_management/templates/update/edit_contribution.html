@@ -6,7 +6,7 @@
 
 {% block main_content %}
 
-<div class="card">
+<div class="container card">
     <div class="card-header">
         <h5 class="card-title">Edit Contribution</h5>
     </div>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <a href="{% url 'contribution_list' %}" class="btn btn-secondary">Cancel</a>
+                <a href="{% url 'financial_management:contribution_list' %}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </form>

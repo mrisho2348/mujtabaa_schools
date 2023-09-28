@@ -18,7 +18,7 @@ from student_management_app.models import (
                                            SchoolSecurityPerson,
                                            Cooker,
                                            Staffs,
-                                      
+                                            Students,
                                            )
 from django.contrib import messages  # Import messages for displaying notifications
 
@@ -37,7 +37,7 @@ def edit_cooker_salary(request, salary_id):
         salary.save()
 
         # Redirect to a success page or another appropriate page
-        return redirect('cooker_salary_list')  # Change to your salary list view
+        return redirect('financial_management:cooker_salary_list')  # Change to your salary list view
 
     # Render the edit form with the salary instance
     context = {'salary': salary}
@@ -56,7 +56,7 @@ def edit_car_expense(request, car_expense_id):
             car_expense.save()
             
             messages.success(request, 'Car expense updated successfully.')
-            return redirect('car_expense_list')
+            return redirect('financial_management:car_expense_list')
         except Exception as e:
             messages.error(request, f'Error updating car expense: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -83,7 +83,7 @@ def edit_contribution(request, contribution_id):
             contribution.save()
             
             messages.success(request, 'Contribution updated successfully.')
-            return redirect('contribution_list')
+            return redirect('financial_management:contribution_list')
         except Exception as e:
             messages.error(request, f'Error updating contribution: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -109,7 +109,7 @@ def edit_cooker_salary(request, cooker_salary_id):
             cooker_salary.save()
 
             messages.success(request, 'Cooker salary updated successfully.')
-            return redirect('cooker_salary_list')
+            return redirect('financial_management:cooker_salary_list')
         except Exception as e:
             messages.error(request, f'Error updating cooker salary: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -163,7 +163,7 @@ def edit_equipment_purchase(request, equipment_purchase_id):
             equipment_purchase.save()
 
             messages.success(request, 'Equipment purchase updated successfully.')
-            return redirect('equipment_purchase_list')
+            return redirect('financial_management:equipment_purchase_list')
         except Exception as e:
             messages.error(request, f'Error updating equipment purchase: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -188,7 +188,7 @@ def edit_expense(request, expense_id):
             expense.save()
 
             messages.success(request, 'Expense updated successfully.')
-            return redirect('expense_list')
+            return redirect('financial_management:expense_list')
         except Exception as e:
             messages.error(request, f'Error updating expense: {str(e)}')
             # You can log the exception for debugging purposes if needed
@@ -203,20 +203,28 @@ def edit_income_payment(request, income_payment_id):
     # Retrieve the Income_Payment object to edit
     income_payment = get_object_or_404(Income_Payment, id=income_payment_id)
 
+    # Retrieve all ServiceDetails
+    all_service_details = ServiceDetails.objects.all()
+
+    # Retrieve all Students
+    all_students = Students.objects.all()
+
     if request.method == 'POST':
         try:
-            # update Income_Payment fields based on the POST data
+            # Update Income_Payment fields based on the POST data
             income_payment.amount_paid = request.POST.get('amount_paid')
             income_payment.save()
 
             messages.success(request, 'Income payment updated successfully.')
-            return redirect('income_payment_list')
+            return redirect('financial_management:income_payment_list')
         except Exception as e:
             messages.error(request, f'Error updating income payment: {str(e)}')
             # You can log the exception for debugging purposes if needed
 
     context = {
         'income_payment': income_payment,
+        'all_service_details': all_service_details,
+        'all_students': all_students,
     }
     
     return render(request, 'update/edit_income_payment.html', context)
@@ -233,7 +241,7 @@ def edit_security_salary(request, security_salary_id):
         security_salary.description = request.POST.get('description')
         security_salary.save()
         messages.success(request, 'Security salary updated successfully.')
-        return redirect('security_salary_list')
+        return redirect('financial_management:security_salary_list')
     else:
         # Display the form for editing
         context = {
@@ -255,7 +263,7 @@ def edit_staff_salary(request, staff_salary_id):
         staff_salary.description = request.POST.get('description')
         staff_salary.save()
         messages.success(request, 'Staff salary updated successfully.')
-        return redirect('staff_salary_list')
+        return redirect('financial_management:staff_salary_list')
     else:
         # Display the form for editing
         context = {

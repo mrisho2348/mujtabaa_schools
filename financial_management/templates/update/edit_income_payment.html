@@ -20,12 +20,17 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="service_details">Service Details:</label>
-                    <select class="form-select" id="service_details" name="service_details" disabled>
-                        <option value="{{ income_payment.service_details.id }}">{{ income_payment.service_details.service_name }}</option>
-                        <!-- Add options for other service details here -->
-                    </select>
-                </div>
+                  <label for="service_details">Service Details:</label>
+                  <select class="form-select" id="service_details" name="service_details">
+                      <option value="">Select a service</option>  <!-- Add a default option -->
+                      {% for service_detail in all_service_details %}
+                          <option value="{{ service_detail.id }}"
+                              {% if selected_service_id == service_detail.id %} selected {% endif %}>
+                              {{ service_detail.service_name }}
+                          </option>
+                      {% endfor %}
+                  </select>
+              </div>
                 <div class="mb-3">
                     <label for="amount_paid">Amount Paid:</label>
                     <input type="number" class="form-control" id="amount_paid" name="amount_paid" value="{{ income_payment.amount_paid }}" required>
@@ -52,7 +57,7 @@
                     </div>
                 <!-- The remaining amount will be calculated in the view -->
                 <div class="form-group">
-                    <a href="{% url 'income_payment_list' %}" class="btn btn-secondary">Cancel</a>
+                    <a href="{% url 'financial_management:income_payment_list' %}" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
