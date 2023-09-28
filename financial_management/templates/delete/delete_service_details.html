@@ -1,0 +1,23 @@
+{% extends "financial/base.html" %}
+
+{% block title %}
+Delete Service Detail
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Delete Service Detail</h5>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the service detail record for "{{ service_detail.service_name }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'service_detail_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

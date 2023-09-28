@@ -3,44 +3,107 @@
 {% block title %}
   Income Statement
 {% endblock title %}
+
 {% block main_content %}
-<h1>Income Statement</h1>
-<table>
-    <tr>
-        <th>Category</th>
-        <th>Amount (USD)</th>
-    </tr>
-    <tr>
-        <td>Total Income</td>
-        <td>${{ total_income }}</td>
-    </tr>
-    <tr>
-        <td>Total Expense</td>
-        <td>${{ total_expense }}</td>
-    </tr>
-    <tr class="total-row">
-        <td><strong>Net Income</strong></td>
-        <td class="net-income">${{ net_income }}</td>
-    </tr>
-</table>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Income Statement</h1>
+    <div class="row">
+        <!-- Total Income Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Income</h5>
+                    <p class="card-text text-primary h4">{{ total_income }}/Tsh</p>
+                </div>
+            </div>
+        </div>
 
-<!-- Add a canvas element for the chart -->
-<canvas id="incomeChart" width="400" height="200"></canvas>
+        <!-- Total Expense Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Expense</h5>
+                    <p class="card-text text-danger h4">{{ total_expense }}/Tsh</p>
+                </div>
+            </div>
+        </div>
 
+        <!-- Net Income Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Net Income</h5>
+                    <p class="card-text text-success h4">{{ net_income }}/Tsh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Income Chart Card -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title text-center">Income Distribution</h5>
+            <div class="container">
+                <canvas id="incomePieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom CSS for Income Statement */
+    
+    /* Center align the container */
+    .container {
+        text-align: center;
+    }
+    
+    /* Add spacing between rows */
+    .row {
+        margin-top: 20px;
+    }
+    
+    /* Style for card titles */
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+    
+    /* Style for card text */
+    .card-text {
+        font-size: 1.5rem;
+    }
+
+    /* Style for total income card */
+    .text-primary {
+        color: #007bff;
+    }
+
+    /* Style for total expense card */
+    .text-danger {
+        color: #dc3545;
+    }
+
+    /* Style for net income card */
+    .text-success {
+        color: #28a745;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // JavaScript code for creating a chart
-    var ctx = document.getElementById('incomeChart').getContext('2d');
-    var incomeChart = new Chart(ctx, {
-        type: 'bar',
+    // JavaScript code for creating a pie chart
+    var ctx = document.getElementById('incomePieChart').getContext('2d');
+    var incomePieChart = new Chart(ctx, {
+        type: 'pie',
         data: {
             labels: ['Total Income', 'Total Expense', 'Net Income'],
             datasets: [{
-                label: 'Amount (USD)',
                 data: [{{ total_income }}, {{ total_expense }}, {{ net_income }}],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(0, 128, 0, 0.2)',  // Green for Net Income
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(0, 128, 0, 0.5)',  // Green for Net Income
                 ],
                 borderColor: [
                     'rgba(54, 162, 235, 1)',
@@ -51,14 +114,8 @@
             }]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+            responsive: true,
         }
     });
 </script>
 {% endblock main_content %}
-    
-

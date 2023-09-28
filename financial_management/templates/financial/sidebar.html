@@ -95,10 +95,52 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{% url 'financial_management:contribution_list' %}"
+                class="nav-link {% if request.path == 'contribution_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Manage Contribution</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{% url 'financial_management:add_expense' %}"
                 class="nav-link {% if request.path == 'add_expense' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Expense</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'financial_management:expense_list' %}"
+                class="nav-link {% if request.path == 'expense_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Manage Expense</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'financial_management:add_service_details' %}"
+                class="nav-link {% if request.path == 'add_service_details' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>add service details</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'financial_management:service_details_list' %}"
+                class="nav-link {% if request.path == 'service_details_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>manage service details</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'financial_management:income_payment_form' %}"
+                class="nav-link {% if request.path == 'income_payment_form' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Add student Payment record</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'financial_management:income_payment_list' %}"
+                class="nav-link {% if request.path == 'income_payment_list' %} active {% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>student Payment record</p>
             </a>
         </li>
       
@@ -170,16 +212,16 @@
 
         <!-- Car Expense Section -->
         <li class="nav-item">
-            <a href="#"
-            {% comment %} <a href="{% url 'financial_management:add_car_expense' %}" {% endcomment %}
+            
+            <a href="{% url 'financial_management:add_car_expense' %}"
                 class="nav-link {% if request.path == 'add_car_expense' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Add Car Expense</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="#"
-            {% comment %} <a href="{% url 'financial_management:car_expense_list' %}" {% endcomment %}
+          
+            <a href="{% url 'financial_management:car_expense_list' %}"
                 class="nav-link {% if request.path == 'car_expense_list' %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>Car Expense List</p>

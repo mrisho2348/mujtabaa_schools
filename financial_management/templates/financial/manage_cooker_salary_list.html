@@ -1,0 +1,64 @@
+{% extends 'financial/base.html' %}
+
+{% block page_title %}
+    Cooker Salary List
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_cooker_salary' %}">
+        <i class="fas fa-plus"></i> Add Cooker Salary
+    </a>
+{% endblock breadcrumb %}
+
+{% block main_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Cooker Salaries</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Cooker</th>
+                                    <th>Month</th>
+                                    <th>Paid Amount</th>
+                                    <th>Remaining Amount</th>
+                                    <th>Total Amount Required</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for salary in cooker_salaries %}
+                                    <tr>
+                                        <td>{{ salary.cooker_member.admin.first_name }} {{ salary.cooker_member.admin.last_name }}</td>
+                                        <td>{{ salary.month|date:"F Y" }}</td>
+                                        <td>${{ salary.paid_amount }}</td>
+                                        <td>${{ salary.remaining_payment }}</td>
+                                        <td>${{ salary.total_amount_required }}</td>
+                                        <td>{{ salary.description }}</td>
+                                        <td>
+                                            <a href="{% url 'financial_management:edit_cooker_salary' salary.id %}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit Salary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'financial_management:delete_cooker_salary' salary.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete Salary" onclick="return confirm('Are you sure you want to delete this salary record?');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="7">No cooker salaries found.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

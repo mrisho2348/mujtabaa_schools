@@ -26,6 +26,10 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         modulename == "student_management_app.views" or
                         modulename == "django.views.static" or
                         modulename == "library_management_app.views" or
+                        modulename == "financial_management.Financial" or
+                        modulename == "financial_management.Delete" or
+                        modulename == "financial_management.Update" or
+                        modulename == "financial_management.views" or
                         modulename == "exams.views"):
                         pass
                     # Allow access to Django admin main dashboard
@@ -42,6 +46,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         staff_assignment = StaffRoleAssignment.objects.filter(staff=staff).first()
                         if staff_assignment and staff_assignment.role == "Accountant":
                             if (modulename == "financial_management.views" or
+                                modulename == "student_management_app.views" or
                                   modulename == "financial_management.Financial"):
                                 pass
                             else:    

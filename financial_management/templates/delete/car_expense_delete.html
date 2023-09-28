@@ -1,0 +1,36 @@
+{% extends 'financial/base.html' %}
+
+{% block page_title %}
+    Confirm Deletion
+{% endblock page_title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Confirm Deletion</h5>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the following car expense?</p>
+            <dl class="row">
+                <dt class="col-sm-3">Expense Date:</dt>
+                <dd class="col-sm-9">{{ object.expense_date }}</dd>
+
+                <dt class="col-sm-3">Description:</dt>
+                <dd class="col-sm-9">{{ object.description }}</dd>
+
+                <dt class="col-sm-3">Paid Amount:</dt>
+                <dd class="col-sm-9">${{ object.paid_amount }}</dd>
+
+                <dt class="col-sm-3">Car:</dt>
+                <dd class="col-sm-9">{{ object.car.car_number }}</dd>
+            </dl>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'car_expense_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

@@ -1,42 +1,42 @@
-
-{% extends "financial/base.html" %}
+{% extends 'financial/base.html' %}
 
 {% block title %}
-   Add Staff Salary
+   Edit Driver Salary
 {% endblock title %}
+
 {% block main_content %}
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Add Staff Salary</h5>
+            <h5 class="card-title">Edit Driver Salary</h5>
         </div>
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="staff_member" class="form-label">Staff Member</label>
-                    <select class="form-select" id="staff_member" name="staff_member" required>
-                        <option value="" disabled selected>Select Staff Member</option>
-                        {% for staff_member in staff_members %}
-                        <option value="{{ staff_member.id }}">{{staff_member.admin.first_name}}  {{staff_member.admin.last_name}}</option>
+                    <label for="driver_member" class="form-label">Driver Member</label>
+                    <select class="form-select" id="driver_member" name="driver_member" required>
+                        <option value="" disabled>Select Driver Member</option>
+                        {% for driver in driver_members %}
+                        <option value="{{ driver.id }}">{{driver.admin.first_name}}  {{driver.admin.last_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="month" class="form-label">Month</label>
-                    <input type="date" class="form-control" id="month" name="month" required>
+                    <input type="date" class="form-control" id="month" name="month" value="{{ driver_salary.month }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="paidAmount" class="form-label">Paid Amount</label>
-                    <input type="number" step="0.01" class="form-control" id="paidAmount" name="paid_amount" required>
+                    <input type="number" step="0.01" class="form-control" id="paidAmount" name="paid_amount" value="{{ driver_salary.paid_amount }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="totalAmountRequired" class="form-label">Total Amount Required</label>
-                    <input type="number" step="0.01" class="form-control" id="totalAmountRequired" name="total_amount_required" required>
+                    <input type="number" step="0.01" class="form-control" id="totalAmountRequired" name="total_amount_required" value="{{ driver_salary.total_amount_required }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3">{{ driver_salary.description }}</textarea>
                 </div>
                 <div class="card-footer">
                     <div class="form-row">
@@ -54,12 +54,13 @@
                         {% endif %}
                       </div>
                     </div>
-                <button type="submit" class="btn btn-primary">Add Staff Salary</button>
+                </div>
+                <div class="form-group">
+                    <a href="{% url 'driver_salary_list' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
-
 {% endblock main_content %}
-   
-

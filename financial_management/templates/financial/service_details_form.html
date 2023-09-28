@@ -12,7 +12,7 @@
             <h5 class="card-title">Add Service Details</h5>
         </div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" action="{% url "financial_management:add_service_details" %}">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="service_name" class="form-label">Service Name</label>

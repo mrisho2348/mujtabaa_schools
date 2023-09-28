@@ -1,0 +1,32 @@
+{% extends "financial/base.html" %}
+
+{% block title %}
+    Edit Service Details
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Edit Service Details</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="service_name" class="form-label">Service Name</label>
+                    <input type="text" class="form-control" id="service_name" name="service_name" value="{{ service.service_name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="amount_required" class="form-label">Amount Required</label>
+                    <input type="number" class="form-control" id="amount_required" name="amount_required" value="{{ service.amount_required }}" required>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'service_details_view' service.id %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

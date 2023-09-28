@@ -1,0 +1,23 @@
+{% extends "financial/base.html" %}
+
+{% block title %}
+Delete Expense
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Delete Expense</h5>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the expense record for "{{ expense.category }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'expense_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

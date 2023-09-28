@@ -18,7 +18,7 @@ Add Cooker Salary
                     <select class="form-select" id="cooker_member" name="cooker_member" required>
                         <option value="" disabled selected>Select Cooker Member</option>
                         {% for cooker in cooker_members %}
-                        <option value="{{ cooker.id }}">{{ cooker.name }}</option>
+                        <option value="{{ cooker.id }}">{{cooker.admin.first_name}}  {{cooker.admin.last_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -59,7 +59,7 @@ Add Cooker Salary
         </div>
     </div>
 </div>
-{% endblock  main_content %}
+{% endblock main_content %}
    
 
 

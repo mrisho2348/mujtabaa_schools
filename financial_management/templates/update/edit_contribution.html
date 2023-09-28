@@ -1,42 +1,41 @@
 {% extends 'financial/base.html' %}
 
 {% block title %}
-   Add Contribution
+   Edit Contribution
 {% endblock title %}
 
 {% block main_content %}
 
-<div class="container card">
+<div class="card">
     <div class="card-header">
-        <h5 class="card-title">Add Contribution</h5>
+        <h5 class="card-title">Edit Contribution</h5>
     </div>
     <div class="card-body">
-        <form method="post" action="{% url "financial_management:add_contribution" %}">
+        <form method="post">
             {% csrf_token %}
-          
-            <div class="form-group" >
+            <div class="form-group">
                 <label for="contributor_name">Contributor Name</label>
-                <input type="text" class="form-control" id="contributor_name" name="contributor_name" placeholder="Enter contributor name">
+                <input type="text" class="form-control" id="contributor_name" name="contributor_name" value="{{ contribution.contributor_name }}" placeholder="Enter contributor name">
             </div>
             <div class="form-group">
                 <label for="organization">Organization</label>
-                <input type="text" class="form-control" id="organization" name="organization" placeholder="Enter organization">
+                <input type="text" class="form-control" id="organization" name="organization" value="{{ contribution.organization }}" placeholder="Enter organization">
             </div>
             <div class="form-group">
                 <label for="source">Source</label>
-                <input type="text" class="form-control" id="source" name="source" placeholder="Enter source">
+                <input type="text" class="form-control" id="source" name="source" value="{{ contribution.source }}" placeholder="Enter source">
             </div>
             <div class="form-group">
                 <label for="amount">Amount</label>
-                <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                <input type="text" class="form-control" id="amount" name="amount" value="{{ contribution.amount }}" placeholder="Enter amount">
             </div>
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" name="date">
+                <input type="date" class="form-control" id="date" name="date" value="{{ contribution.date }}">
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter description"></textarea>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter description">{{ contribution.description }}</textarea>
             </div>
             <div class="card-footer">
                 <div class="form-row">
@@ -54,7 +53,11 @@
                     {% endif %}
                   </div>
                 </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="form-group">
+                <a href="{% url 'contribution_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
         </form>
     </div>
 </div>

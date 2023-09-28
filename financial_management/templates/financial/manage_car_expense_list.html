@@ -1,0 +1,56 @@
+{% extends 'financial/base.html' %}
+
+{% block page_title %}
+    Car Expenses List
+{% endblock page_title %}
+
+{% block main_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">List of Car Expenses</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Expense Date</th>
+                                <th>Description</th>
+                                <th>Paid Amount</th>
+                                <th>Car</th>                              
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense in car_expenses %}
+                                <tr>
+                                    <td>{{ expense.expense_date }}</td>
+                                    <td>{{ expense.description }}</td>
+                                    <td>${{ expense.paid_amount }}</td>
+                                    <td>{{ expense.car.car_number }}</td>
+                                  
+                                    <td>
+                                     
+                                        <a href="{% url 'financial_management:edit_car_expense' expense.id %}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit Expense">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'financial_management:delete_car_expense' expense.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete Expense" onclick="return confirm('Are you sure you want to delete this expense?');">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7">No car expenses found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

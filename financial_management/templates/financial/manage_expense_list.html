@@ -1,0 +1,60 @@
+{% extends 'financial/base.html' %}
+
+{% block page_title %}
+    Expense List
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_expense' %}">
+        <i class="fas fa-plus"></i> Add Expense
+    </a>
+{% endblock breadcrumb %}
+
+{% block main_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Expenses</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Paid Amount</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for expense in expenses %}
+                                    <tr>
+                                        <td>{{ expense.get_category_display }}</td>
+                                        <td>${{ expense.paid_amount }}</td>
+                                        <td>{{ expense.date|date:"F d, Y" }}</td>
+                                        <td>{{ expense.description }}</td>
+                                        <td>
+                                            <a href="{% url 'financial_management:edit_expense' expense.id %}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit Expense">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'financial_management:delete_expense' expense.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete Expense" onclick="return confirm('Are you sure you want to delete this expense record?');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No expenses found.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

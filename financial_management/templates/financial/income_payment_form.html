@@ -10,32 +10,31 @@
             <h5 class="card-title">Income Payment</h5>
         </div>
         <div class="card-body">
-            <form method="POST" action="{% url 'save_income_payment' %}">
+            <form method="POST" action="{% url 'financial_management:save_income_payment' %}">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="student">Student:</label>
-                    <select class="form-select" id="student" name="student">
+                    <select class="form-select" id="student" name="student" required>
                         <option value="" disabled selected>Select Student</option>
                         {% for student in students %}
-                            <option value="{{ student.id }}">{{ student.username }}</option>
+                            <option value="{{ student.id }}">{{student.admin.first_name}}  {{student.admin.last_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="service_details">Service Details:</label>
-                    <select class="form-select" id="service_details" name="service_details">
-                        <option value="{{ service_details.id }}">{{ service_details.service_name }}</option>
-                        <!-- Add options for other service details here -->
-                    </select>
-                </div>
+                  <label for="service_details">Service Details:</label>
+                  <select class="form-select" id="service_details" name="service_details" required>
+                      <option value="" disabled selected>Select Service Details</option>
+                      {% for detail in service_details %}
+                          <option value="{{ detail.id }}">{{ detail.service_name }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
                 <div class="mb-3">
                     <label for="amount_paid">Amount Paid:</label>
                     <input type="number" class="form-control" id="amount_paid" name="amount_paid" required>
                 </div>
-                <div class="mb-3">
-                    <label for="amount_remaining">Amount Remaining:</label>
-                    <input type="number" class="form-control" id="amount_remaining" name="amount_remaining" readonly>
-                </div>
+          
                 <div class="card-footer">
                     <div class="form-row">
                       <div>

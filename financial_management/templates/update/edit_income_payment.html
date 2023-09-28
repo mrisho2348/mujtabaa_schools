@@ -1,0 +1,62 @@
+{% extends "financial/base.html" %}
+
+{% block title %}
+   Edit Income Payment
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Edit Income Payment</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="student">Student:</label>
+                    <select class="form-select" id="student" name="student" disabled>
+                        <option value="{{ income_payment.student.id }}">{{ income_payment.student.username }}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="service_details">Service Details:</label>
+                    <select class="form-select" id="service_details" name="service_details" disabled>
+                        <option value="{{ income_payment.service_details.id }}">{{ income_payment.service_details.service_name }}</option>
+                        <!-- Add options for other service details here -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="amount_paid">Amount Paid:</label>
+                    <input type="number" class="form-control" id="amount_paid" name="amount_paid" value="{{ income_payment.amount_paid }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="amount_remaining">Amount Remaining:</label>
+                    <input type="number" class="form-control" id="amount_remaining" name="amount_remaining" value="{{ income_payment.amount_remaining }}" readonly>
+                </div>
+                <div class="card-footer">
+                    <div class="form-row">
+                      <div>
+                        {% if messages %}
+                          <div class="col-12">
+                            {% for message in messages %}
+                              {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                              {% elif message.tags == 'success' %}
+                                <div class="alert alert-primary">{{ message }}</div>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                <!-- The remaining amount will be calculated in the view -->
+                <div class="form-group">
+                    <a href="{% url 'income_payment_list' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

@@ -12,6 +12,7 @@ from student_management_app.models import (Car,
 
 
 class Contribution(models.Model):
+    staff = models.ForeignKey(Staffs, on_delete=models.CASCADE,blank=True, null=True)
     contributor_name = models.CharField(max_length=50, blank=True, null=True) 
     organization = models.CharField(max_length=100, null=True, blank=True)
     source = models.CharField(max_length=100)
@@ -230,7 +231,7 @@ def update_financial_summary_income(sender, instance, **kwargs):
     # Calculate the total income by aggregating the 'amount' field from income models
     total_income = (
         Contribution.objects.aggregate(total_income=models.Sum('amount'))['total_income'] or 0 +
-        Income_Payment.objects.aggregate(total_income=models.Sum('amount'))['total_income'] or 0
+        Income_Payment.objects.aggregate(total_income=models.Sum('amount_paid'))['total_income'] or 0
     )
 
     # Update the FinancialSummary model
@@ -248,18 +249,22 @@ class Notification(models.Model):
         return f"Notification for {self.user.username}"  
     
 @receiver(post_save, sender=Contribution)
-def create_contribution_notification(sender, instance, **kwargs):
+def create_contribution_notification(sender, instance,created, **kwargs):
+    if created:
+        staff = instance.staff
+        user = staff.admin
     # Create a notification when a new contribution is added
-    user = instance.user  # Assuming there's a user associated with the contribution
-    message = f"A new contribution of ${instance.amount} has been added."
-    Notification.objects.create(user=user, message=message)      
+        # Assuming there's a user associated with the contribution
+        message = f"A new contribution of ${instance.amount} has been added."
+        Notification.objects.create(user=user, message=message)      
     
 @receiver(post_save, sender=Income_Payment)
 def create_school_fee_notification(sender, instance, created, **kwargs):
     if created:
-        # Assuming there's a user associated with the student, replace 'instance.student.user' with the actual user field.
-        user = instance.student.user
-        message = f"A new school fee payment of ${instance.amount_paid} has been added."
+        student = instance.student
+        service_details = instance.service_details
+        user = student.admin  # Assuming 'admin' is your one-to-one field to CustomUser
+        message = f"A new school fee payment of ${instance.amount_paid} has been added for {student} for the service {service_details.service_name}."
         Notification.objects.create(user=user, message=message)
        
 

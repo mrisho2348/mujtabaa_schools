@@ -1,0 +1,33 @@
+{% extends 'financial/base.html' %}
+
+{% block page_title %}
+    Delete Cooker Salary
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'cooker_salary_list' %}">
+        <i class="fas fa-list"></i> Back to Salary List
+    </a>
+{% endblock breadcrumb %}
+
+{% block main_content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Confirm Deletion</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Are you sure you want to delete the Cooker Salary record for {{ salary.staff_member.username }} - {{ salary.month|date:"F Y" }}?</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <a href="{% url 'cooker_salary_list' %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
