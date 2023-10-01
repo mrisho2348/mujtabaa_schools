@@ -27,6 +27,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         modulename == "django.views.static" or
                         modulename == "library_management_app.views" or
                         modulename == "financial_management.Financial" or
+                        modulename == "financial_management.Invoice" or
                         modulename == "financial_management.Delete" or
                         modulename == "financial_management.Update" or                        
                         modulename == "exams.views"):
@@ -46,6 +47,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         if staff_assignment and staff_assignment.role == "Accountant":
                             if (modulename == "financial_management.views" or
                                 modulename == "student_management_app.views" or
+                                modulename == "financial_management.Invoice" or
                                   modulename == "financial_management.Financial"):
                                 pass
                             else:    

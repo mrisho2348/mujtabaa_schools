@@ -47,7 +47,7 @@ class Income_Payment(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.student.username} - {self.service_details.service_name}"    
+        return f"{self.student.admin.first_name}  {self.student.admin.last_name} - {self.service_details.service_name}"    
     
     
 class EquipmentPurchase(models.Model):    
@@ -167,6 +167,24 @@ class CookerSalary(models.Model):
         return f"{self.staff_member.username} - {self.month.strftime('%B %Y')} Salary"
 
 
+class Invoice(models.Model):
+    student = models.ForeignKey(Students, on_delete=models.CASCADE, related_name='invoices')
+    service = models.ForeignKey(ServiceDetails, on_delete=models.CASCADE)
+    invoice_number = models.CharField(max_length=20, unique=True)
+    amount_required = models.DecimalField(max_digits=10, decimal_places=2)  # No need for a default here
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    amount_remaining = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    is_paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Calculate the remaining amount when saving
+        self.amount_remaining = self.amount_required - self.amount_paid
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Invoice {self.invoice_number} for {self.student.username} - {self.service.service_name}"
     
 class CarExpense(models.Model):
     expense_date = models.DateField()

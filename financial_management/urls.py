@@ -1,7 +1,7 @@
 # urls.py
 
 from django.urls import path
-from . import Financial,Delete,Update,views
+from . import Financial,Delete,Update,views,Invoice
 
 urlpatterns = [
     # Other URL patterns
@@ -62,5 +62,8 @@ urlpatterns = [
     path('edit_security_salary/<int:security_salary_id>/', Update.edit_security_salary, name='edit_security_salary'),
     path('edit_staff_salary/<int:salary_id>/', Update.edit_staff_salary, name='edit_staff_salary'),
     path('service_details/<int:service_id>/edit/', Update.edit_service_details, name='edit_service_details'),
+    
+    path('generate_invoice/<int:payment_id>/', Invoice.generate_invoice, name='generate_invoice'),
+    path('invoice_list/', Invoice.invoice_list, name='invoice_list'),
 
 ]

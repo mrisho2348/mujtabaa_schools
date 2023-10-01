@@ -157,13 +157,14 @@ AUTHENTICATION_BACKENDS = ['student_management_app.emailBackEnd.EmailBackend']
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mrishohamisi2348@gmail.com'
-EMAIL_HOST_PASSWORD = 'bdtvjjdagryvnqeb'
+EMAIL_HOST_USER = 'mrishohamisi1998@gmail.com'
+EMAIL_HOST_PASSWORD = 'rtnwirbujomgbjsh'
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 TWILIO_ACCOUNT_SID = 'AC6c75ccb7e00ed2c529b0821a72335932'
-TWILIO_AUTH_TOKEN = 'c2ee36e153a0cd68a6c84a8a8be38f9f'
+TWILIO_AUTH_TOKEN = '0a3ceaba8535b83069296e3a60ff76e8'
 TWILIO_PHONE_NUMBER = '+15103384231'
 
 

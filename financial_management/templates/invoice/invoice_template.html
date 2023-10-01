@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice</title>
+
+    <style>
+        /* Additional custom styles can be added here */
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .invoice-details table {
+            width: 100%;
+        }
+        .invoice-details th, .invoice-details td {
+            padding: 10px;
+        }
+        .invoice-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="invoice-header">
+            <h1 class="display-4">Invoice</h1>
+        </div>
+        <div class="invoice-details">
+            <table class="table">
+                <tr>
+                    <th>Student Name:</th>
+                    <td>{{ income_payment.student.admin.first_name }} {{ income_payment.student.admin.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Service Name:</th>
+                    <td>{{ income_payment.service_details.service_name }}</td>
+                </tr>
+                <tr>
+                    <th>Amount Paid:</th>
+                    <td>${{ income_payment.amount_paid }}</td>
+                </tr>
+                <tr>
+                    <th>Amount Required:</th>
+                    <td>${{ income_payment.service_details.amount_required }}</td>
+                </tr>
+                <tr>
+                    <th>Amount Remaining:</th>
+                    <td>${{ income_payment.amount_remaining }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="invoice-footer">
+            <p>Thank you for your payment.</p>
+        </div>
+    </div>
+</body>
+</html>
