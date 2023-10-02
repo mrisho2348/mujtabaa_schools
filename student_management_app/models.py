@@ -6,7 +6,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save,pre_save,post_delete
 from django.contrib.auth.models import BaseUserManager
 from decimal import Decimal
-
+from twilio.rest import Client
+from django.conf import settings
 # Create your models here.
 
 class SessionYearModel(models.Model):
@@ -196,7 +197,7 @@ class SchoolDriver(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.admin.first_name} {self.admin.last_name}"
 
 
 class SchoolDriverMedicalInfo(models.Model):
@@ -488,9 +489,44 @@ class Parent(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)       
     objects = models.Manager()    
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-    
-    
+        return f"{self.admin.first_name} {self.admin.last_name}"
+
+class Route(models.Model):
+    name = models.CharField(max_length=100)
+    students = models.ManyToManyField(Students, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)       
+    objects = models.Manager()   
+
+    def __str__(self):
+        return self.name    
+class TransportationRecord(models.Model):
+    car = models.ForeignKey('Car', on_delete=models.CASCADE)
+    route = models.ForeignKey(Route, on_delete=models.CASCADE)
+    date = models.DateField()
+    students = models.ManyToManyField(Students, blank=True)
+    departure_time = models.TimeField()
+    arrival_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)       
+    objects = models.Manager()   
+
+    def __str__(self):
+        return f"Record for {self.date} on {self.route} by {self.car}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Send notifications to parents when students are on the car
+        for student in self.students.all():
+            parent = student.parent  # Assuming you have a ForeignKey to the Parent model
+            if parent and parent.phone:  # Ensure the parent has a phone number
+                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+                message = client.messages.create(
+                    body=f"Your child is on the car for route {self.route} on {self.date}",
+                    from_=settings.TWILIO_PHONE_NUMBER,
+                    to=parent.phone
+                )    
     
          
 class Attendance(models.Model):

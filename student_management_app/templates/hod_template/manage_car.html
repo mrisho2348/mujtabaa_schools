@@ -1,0 +1,78 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+    Manage Cars
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_schoolcar_view' %}">
+        <i class="fas fa-plus"></i> Add Car
+    </a>
+{% endblock breadcrumb %}
+
+{% block main_content %}
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main content -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Car Details table -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Car Details</h3>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            {% if messages %}
+                            <div class="form-row">
+                              <div class="col-12">
+                                {% for message in messages %}
+                                  {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                  {% elif message.tags == 'success' %}
+                                    <div class="alert alert-primary">{{ message }}</div>
+                                  {% endif %}
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+                            <table class="table table-hover text-nowrap table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Year</th>
+                                        <th>License Plate</th>
+                                        <th>Color</th>
+                                        <th>Owner</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for car in cars %}
+                                        <tr>
+                                            <td>{{ car.make }}</td>
+                                            <td>{{ car.model }}</td>
+                                            <td>{{ car.year }}</td>
+                                            <td>{{ car.license_plate }}</td>
+                                            <td>{{ car.color }}</td>
+                                            <td>{{ car.owner }}</td>
+                                            <td>
+                                                <a href="{% url 'edit_car' car.id %}" class="btn btn-success" data-toggle="tooltip" title="Edit Car">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_car' car.id %}" class="btn btn-danger" data-toggle="tooltip" title="Delete Car">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+</div>
+{% endblock main_content %}

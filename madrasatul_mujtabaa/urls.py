@@ -89,7 +89,11 @@ urlpatterns = [
     path('view_cleaner_info/<int:cleaner_id>/', HodView.view_cleaner_info, name='view_cleaner_info'),
     path('add_schoolcleaner_info/', HodView.add_schoolcleaner_info_save, name='add_schoolcleaner_info'), 
     path('add_car_view/', HodView.add_car_save, name='add_car_view'),
+    
     path('add_schoolcar_view/', HodView.add_schoolcar_view, name='add_schoolcar_view'),
+    path('edit_car/<int:car_id>/', HodView.edit_car, name='edit_car'),
+    path('cars/', HodView.car_list, name='car_list'),
+    path('delete_car/<int:car_id>/', HodView.delete_car, name='delete_car'),
     path('add_schoolclassroom/', HodView.add_schoolclassroom, name='add_schoolclassroom'),    
     path('delete_classroom/<int:classroom_id>/', HodView.delete_classroom, name='delete_classroom'),
     path('classroom_detail/<int:classroom_id>/', HodView.classroom_detail, name='classroom_detail'),
@@ -98,6 +102,12 @@ urlpatterns = [
     path('api/update_classroom_status/<int:classroom_id>/', HodView.update_classroom_status, name='update_classroom_status'),
     path('manage_classroom/', HodView.manage_classroom, name='manage_classroom'),
     path('add_classroom_view/', HodView.add_classroom_save, name='add_classroom'),
+    
+    path('delete_route/<int:route_id>/', HodView.delete_route, name='delete_route'),
+    path('add_route/', HodView.add_route, name='add_route'),
+    path('route_list/', HodView.route_list, name='route_list'),
+    path('edit_or_add_route/', HodView.edit_or_add_route, name='edit_or_add_route'),
+    path('edit_or_add_route/<int:route_id>/', HodView.edit_or_add_route, name='edit_or_add_route'),
     # Add more URLs for other views if needed
     path('add_student', HodView.add_student, name='add_student'),   
     path('add_student_save', HodView.add_student_save, name='add_student_save'),    

@@ -27,7 +27,8 @@ from student_management_app.models import (
     Staffs,
     Students,
     Subject,
-    Parent,    
+    Parent, 
+    Route,   
     Qualifications,
     Skills,
     EmploymentHistory,
@@ -243,7 +244,8 @@ def add_schoolcleaner(request):
 def add_schoolclassroom(request):
     return render(request, 'hod_template/add_school_classroom.html')
 def add_schoolcar_view(request):
-    return render(request, 'hod_template/add_school_car.html')
+    drivers = SchoolDriver.objects.all()
+    return render(request, 'hod_template/add_school_car.html',{'drivers':drivers})
 
 
 def add_driver_info_save(request):
@@ -2248,7 +2250,7 @@ def save_parent(request):
                 return redirect("add_parents")
 
             student = Students.objects.get(id=student_id)
-
+            print(student)
             # Create or update the CustomUser
             user, created = CustomUser.objects.get_or_create(
                 username=username,
@@ -2256,7 +2258,7 @@ def save_parent(request):
                     'email': email,
                     'first_name': first_name,
                     'last_name': last_name,
-                    'user_type': 3,
+                    'user_type': 8,
                 }
             )
 
@@ -2297,7 +2299,7 @@ def save_parent(request):
                 parent.save()
 
             # Associate the parent with the student
-            student.parent.add(parent)
+            parent.student.add(student)
 
             messages.success(request, "Parent information saved successfully")
             return redirect("add_parents")
@@ -3388,3 +3390,163 @@ def students_summary(request, exam_type=None):
         'exam_type': exam_type,
     })
     
+def car_list(request):
+    # Retrieve a list of all cars from the database
+    cars = Car.objects.all()
+
+    # Define the context data to pass to the template
+    context = {
+        'cars': cars,  # Pass the list of cars to the template
+    }
+
+    # Render the template with the context data
+    return render(request, 'hod_template/manage_car.html', context)
+
+def edit_car(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+    drivers = SchoolDriver.objects.all()  # Retrieve all drivers
+
+    if request.method == "POST":
+        try:
+            # Get the data from the POST request
+            make = request.POST.get('make')
+            model = request.POST.get('model')
+            year = request.POST.get('year')
+            license_plate = request.POST.get('license_plate')
+            color = request.POST.get('color')
+            owner_id = request.POST.get('owner')
+
+            # Update the car object with the new data
+            car.make = make
+            car.model = model
+            car.year = year
+            car.license_plate = license_plate
+            car.color = color
+            car.owner_id = owner_id
+
+            car.save()
+
+            # Redirect to a success page or car list page with a success message
+            messages.success(request, "Car information updated successfully")
+            return redirect('car_list')
+
+        except Exception as e:
+            # Handle any exceptions and redirect with an error message
+            messages.error(request, f"Error updating car information: {str(e)}")
+            return redirect('edit_car', car_id=car_id)
+
+    context = {
+        'car': car,
+        'drivers': drivers,  # Include the drivers queryset in the context
+    }
+
+    return render(request, 'hod_template/edit_schoolcar.html', context)
+
+def delete_car(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+
+    try:
+        # Delete the car object
+        car.delete()
+
+        # Redirect to a success page or car list page with a success message
+        messages.success(request, "Car deleted successfully")
+        return redirect('car_list')
+
+    except Exception as e:
+        # Handle any exceptions and redirect with an error message
+        messages.error(request, f"Error deleting car: {str(e)}")
+        return redirect('car_list')  
+    
+
+def add_route(request):
+    if request.method == 'POST':
+        try:
+            name = request.POST.get('name')
+            student_ids = request.POST.getlist('students')  # Assuming 'students' is the name of the select input
+
+            # Create a new Route instance
+            route = Route(name=name)
+            route.save()
+
+            # Add students to the route
+            for student_id in student_ids:
+                student = Students.objects.get(id=student_id)
+                route.students.add(student)
+
+            # Redirect to a success page or route list with a success message
+            messages.success(request, "Route created successfully")
+            return redirect('route_list')  # Replace 'route_list' with your actual route name
+
+        except Exception as e:
+            # Handle any exceptions and redirect with an error message
+            messages.error(request, f"Error creating route: {str(e)}")
+            return redirect('add_route')  # Redirect back to the add route page with an error message
+
+    # Query all students to display in the select input
+    students = Students.objects.all()
+
+    context = {'students': students}
+    return render(request, 'hod_template/add_route.html', context)   
+
+def route_list(request):
+    routes = Route.objects.all()
+    context = {'routes': routes}
+    return render(request, 'hod_template/manage_route.html', context) 
+
+def edit_or_add_route(request, route_id=None):
+    # Check if route_id is provided, if not, it's an "Add Route" operation
+    if route_id is not None:
+        route = get_object_or_404(Route, pk=route_id)
+    else:
+        route = None
+
+    if request.method == 'POST':
+        try:
+            # Get the form data from POST request
+            route_name = request.POST.get('route_name')
+            student_ids = request.POST.getlist('students')  # Assuming 'students' is the name of the select input
+
+            if not route:
+                route = Route(name=route_name)
+                route.save()
+            else:
+                route.name = route_name
+                route.students.clear()
+
+            for student_id in student_ids:
+                student = Students.objects.get(id=student_id)
+                route.students.add(student)
+
+            messages.success(request, "Route information saved successfully")
+            return redirect('route_list')  # Redirect to the route list page upon success
+
+        except Exception as e:
+            messages.error(request, f"Error saving route information: {str(e)}")
+
+    # Query all students to display in the select input
+    students = Students.objects.all()  # You need to replace 'Student' with your actual student model
+
+    context = {
+        'route': route,
+        'students': students,
+    }
+
+    return render(request, 'hod_template/edit_route.html', context)
+
+def delete_route(request, route_id):
+    if request.method == 'POST':
+        # Get the route object to delete
+        route = get_object_or_404(Route, pk=route_id)
+        
+        # Delete the route
+        route.delete()
+
+        # Add a success message
+        messages.success(request, 'Route deleted successfully.')
+        
+        # Redirect to the route list
+        return redirect('route_list')  # Replace 'route_list' with your actual route name
+
+    # Handle GET request if needed, e.g., showing a confirmation page
+    return render(request, 'hod_template/delete_confirm_route.html', {'route_id': route_id})
