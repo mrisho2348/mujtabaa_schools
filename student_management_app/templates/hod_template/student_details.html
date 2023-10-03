@@ -110,7 +110,7 @@
     </div>
     <div class="card-body">
       {% if father %}
-      <p class="card-text">Fathers Name: {{ father.name }}</p>
+      <p class="card-text">Fathers Name: {{ father.admin.first_name }}  {{ father.admin.last_name }}</p>
       <p class="card-text">Fathers NIDA NUMBER: {{ father.national_id }}</p>
       <p class="card-text">Contact Number: {{ father.phone }}</p>
       <p class="card-text">Professional: {{ father.occupation }}</p>

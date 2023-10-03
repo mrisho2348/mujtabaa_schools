@@ -10,7 +10,7 @@
             Personal Information
         </div>
         <div class="card-body">
-            <h5 class="card-title">Name: {{ parent.name }}</h5>
+            <h5 class="card-title">Name: {{ parent.admin.first_name }} {{ parent.admin.last_name }}</h5>
             <p class="card-text">Phone Number: {{ parent.phone }}</p>
             <p class="card-text">Registration Date: {{ parent.created_at }}</p>
             <p class="card-text">Occupation: {{ parent.occupation }}</p>

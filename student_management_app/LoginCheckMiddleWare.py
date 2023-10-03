@@ -80,12 +80,12 @@ class LoginCheckMiddleWare(MiddlewareMixin):
             # SchoolDriver (User Type 4)
                 elif user.user_type == "4":
                     # Allow specific views and static pages
-                    if (modulename == "student_management_app.SchoolDriverView" or
+                    if (modulename == "student_management_app.DriverView" or
                         modulename == "student_management_app.views" or
                         modulename == "django.views.static"):
                         pass
                     else:
-                        return HttpResponseRedirect(reverse("school_driver_home"))
+                        return HttpResponseRedirect(reverse("driver_home"))
             
             # SchoolSecurityPerson (User Type 5)
                 elif user.user_type == "5":

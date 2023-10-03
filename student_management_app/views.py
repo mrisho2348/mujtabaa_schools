@@ -43,8 +43,11 @@ def DoLogin(request):
       elif user.user_type == "3":
         return HttpResponseRedirect(reverse("student_home"))
       
+      elif user.user_type == "4":
+        return HttpResponseRedirect(reverse("driver_home"))
+      
       else:
-        return HttpResponseRedirect(reverse("student_home"))
+        return HttpResponseRedirect(reverse("DoLogin"))
     
     else:
       messages.error(request,"Invalid Login Details")

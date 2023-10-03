@@ -27,11 +27,11 @@
                       {% csrf_token %}
                       <div class="form-group">
                         <label for="route_name">Route Name:</label>
-                        <input type="text" class="form-control" id="route_name" name="name">
+                        <input type="text" class="form-control" id="route_name" name="name" required>
                       </div>
                       <div class="form-group">
                         <label for="students">Students:</label>
-                        <select class="form-control" id="students" name="students" multiple>
+                        <select class="form-control" id="students" name="students" multiple required>
                             <!-- Populate the select options with available students -->
                             {% for student in students %}
                                 <option value="{{ student.id }}">{{ student.admin.first_name }} {{ student.admin.last_name }}</option>

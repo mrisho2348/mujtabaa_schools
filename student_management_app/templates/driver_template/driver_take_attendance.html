@@ -1,0 +1,130 @@
+{% extends 'driver_template/base_template.html' %}
+{% block page_title %}
+Take Transport Attendance
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Take Transport Attendance</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Route</label>
+                                <select class="form-control" name="route" id="route">
+                                    {% for route in routes %}
+                                        <option value="{{ route.id }}">{{ route.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.tags == 'error' %}
+                                            <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                        {% if message.tags == 'success' %}
+                                            <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary btn-block" id="fetch_student">Fetch Student</button>
+                        </div>
+                        <div id="student_data" class="card-footer">
+
+                        </div>
+                    </div> <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block customer_js %}
+<script>
+  $(document).ready(function(){
+    $("#fetch_student").click(function(){
+        var route = $("#route").val();
+
+        $.ajax({
+            url: '{% url 'get_students_by_route' %}',
+            type: 'POST',
+            data: { route: route },
+        })
+        .done(function(response){
+            console.log(response);
+            
+            var div_data = "<div class='form-group'><label>Transport Date : </label><input type='date' name='transport_date' id='transport_date' class='form-control'></div><div class='form-group'><div class='row'>";
+            for (var key in response) {
+                div_data += "<div class='col-lg-3'><div class='form-check'><input type='checkbox' checked='checked' name='student_data[]' value='" + response[key]['id'] + "'><label class='form-check-label'>" + response[key]['name'] + "</label></div></div>";
+            }
+            div_data += "</div></div>";
+            div_data += "<div class='form-group'>";
+            div_data += "<button id='save_transport_attendance' class='btn btn-success btn-block' type='button'>Save Transport Attendance Data</button>";
+            div_data += "</div>";
+
+            $("#student_data").html(div_data);
+
+        })
+        .fail(function(){
+            alert("Error in Fetching Students");
+        });
+    });
+
+    $(document).on("click", "#save_transport_attendance", function(){
+        $(this).attr("disabled", "disabled");
+        $(this).text("Saving Transport Attendance Data...");
+    
+        var student_data = $("input[name='student_data[]']").map(function(){
+            if($(this).is(":checked")) {
+                return {
+                    "id": $(this).val()
+                };
+            }
+        }).get();
+    
+        var transport_date = $("#transport_date").val();
+        var route_id = $("#route").val();
+    
+        var student_ids = student_data.map(function(student) {
+            return student.id;
+        });
+    
+        console.log(student_ids);
+    
+        $.ajax({
+            url: '{% url 'save_transport_attendance_data' %}',
+            type: 'POST',
+            data: {
+                student_ids: student_ids,
+                transport_date: transport_date,
+                route_id: route_id
+            },
+        })
+        .done(function(response){
+            console.log("Response received:", response);  // Debug: Print the response received from the server
+            if(response.status === "OK") {  // Check if 'status' is 'OK'
+                alert("Transport Attendance Saved");
+            } else {
+                alert("Error in Saving Data");
+            }
+            location.reload();
+        })
+        .fail(function(){
+            alert("Error in Saving Student Data");
+        });
+    });
+  });
+</script>
+{% endblock customer_js %}

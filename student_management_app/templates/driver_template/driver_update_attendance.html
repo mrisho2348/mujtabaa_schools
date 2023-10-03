@@ -1,0 +1,188 @@
+{% extends 'driver_template/base_template.html' %}
+{% block page_title %}
+Update Transportation Attendance
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Update Transportation Attendance</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Route</label>
+                  <select class="form-control" name="route" id="route">
+                      {% for route in routes %}
+                        <option value="{{ route.id }}">{{ route.name }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Transport Date</label>
+                  <select class="form-control" name="transport_date" id="transport_date">
+                      <option value="">Select a date</option>
+                  </select>
+              </div>
+                <div class="form-group">
+                  <button type="button" class="btn btn-primary btn-block" id="fetch_attendance">Fetch Attendance</button>
+                </div>
+                <div class="form-group" id="attendance_block" style="display: none;">
+                  <label>Attendance Status</label>
+                  <div id="student_data">
+                    <!-- Attendance data will be displayed here -->
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+
+              <div class="card-footer" id="save_data_block"  style="display: none;">
+                <button class="btn btn-block btn-primary" id="save_data">update Attendance Data</button>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block customer_js %}
+<script>
+  $(document).ready(function(){
+    // Fetch all distinct transport dates for the driver
+    $.ajax({
+      url: '{% url 'get_all_transport_dates' %}',
+      type: 'GET',
+  })
+  .done(function(response){     
+  
+      // Populate the "Transport Date" dropdown with the fetched dates
+      if (response.length > 0) {
+          for (var i = 0; i < response.length; i++) {
+              var date = response[i];
+              $("#transport_date").append($('<option>', {
+                  value: date,
+                  text: date,
+              }));
+          }
+      } else {
+          // Handle the case where no transport dates are available
+          $("#transport_date").append($('<option>', {
+              value: '',
+              text: 'No dates available',
+          }));
+      }
+  })
+  .fail(function(){
+      alert("Error in fetching transport dates");
+  });
+
+
+ // Event handler for "Fetch Attendance" button
+// Event handler for "Fetch Attendance" button
+$("#fetch_attendance").click(function(){
+  var route_id = $("#route").val();
+  var transport_date = $("#transport_date").val();
+
+  $.ajax({
+      url: '{% url 'get_transport_attendance_data' %}',
+      type: 'POST',
+      data: {
+          route_id: route_id,
+          transport_date: transport_date
+      },
+  })
+  .done(function(response){
+    console.log("Response data:", response);
+      
+      // No need to parse the response as it's already an array of objects
+      
+      if (response.length > 0) {
+          var html_data = "";
+
+          for (var i = 0; i < response.length; i++) {
+              var student = response[i];
+              var isChecked = student.status ? "checked" : "";
+
+              html_data += "<div class='form-check'>";
+              html_data += `<input type='checkbox' ${isChecked} name='student_data[]' value='${student.id}'>`;
+              html_data += "<label class='form-check-label'>" + student.name.join(' ') + " ";
+              html_data += student.status ? "<b>[Present]</b>" : "<b>[Absent]</b>";
+              html_data += "</label></div>";
+          }
+
+          $("#student_data").html(html_data);
+          $("#attendance_block").show();
+          $("#save_data_block").show();
+      } else {
+          $("#attendance_block").hide();
+          $("#save_data_block").hide();
+          alert("No attendance data found!");
+      }
+  })
+  .fail(function(){
+      alert("Error in fetching attendance");
+      $("#attendance_block").hide();
+      $("#save_data_block").hide();
+  });
+});
+
+
+
+
+    // Event handler for "Save Attendance Data" button
+    $("#save_data").click(function(){
+        $(this).attr("disabled", "disabled");
+        $(this).text("Saving Attendance Data...");
+        
+        var student_data = $("input[name='student_data[]']").map(function(){
+            if($(this).is(":checked")) {
+                return {
+                    "id": $(this).val(),
+                    "status": 1
+                };
+            } else {
+                return {
+                    "id": $(this).val(),
+                    "status": 0
+                };
+            }
+        }).get();
+        
+        var transport_date = $("#transport_date").val();
+        var route_id = $("#route").val();
+        
+        student_data = JSON.stringify(student_data);
+        
+        $.ajax({
+            url: '{% url 'update_transport_attendance_data' %}',
+            type: 'POST',
+            data: {
+                student_ids: student_data,
+                transport_date: transport_date,
+                route_id: route_id
+            },
+        })
+        .done(function(response){
+            if(response.status == "OK") {
+                alert("Attendance Saved");
+            } else {
+                alert("Error in Saving change  Data: " + response.error_message);
+            }
+            location.reload();
+        })
+        .fail(function(){
+            alert("Error in updating Student Data");
+        });
+    });
+});
+</script>
+
+{% endblock customer_js %}

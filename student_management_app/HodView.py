@@ -3483,11 +3483,11 @@ def add_route(request):
             messages.error(request, f"Error creating route: {str(e)}")
             return redirect('add_route')  # Redirect back to the add route page with an error message
 
-    # Query all students to display in the select input
-    students = Students.objects.all()
+    # Query students who are not associated with any route
+    students = Students.objects.filter(route__isnull=True)
 
     context = {'students': students}
-    return render(request, 'hod_template/add_route.html', context)   
+    return render(request, 'hod_template/add_route.html', context)
 
 def route_list(request):
     routes = Route.objects.all()

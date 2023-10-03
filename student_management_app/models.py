@@ -500,34 +500,28 @@ class Route(models.Model):
 
     def __str__(self):
         return self.name    
-class TransportationRecord(models.Model):
-    car = models.ForeignKey('Car', on_delete=models.CASCADE)
+class TransportationAttendance(models.Model):
+    id = models.AutoField(primary_key=True)
     route = models.ForeignKey(Route, on_delete=models.CASCADE)
     date = models.DateField()
-    students = models.ManyToManyField(Students, blank=True)
-    departure_time = models.TimeField()
-    arrival_time = models.TimeField()
+    driver = models.ForeignKey(SchoolDriver, on_delete=models.CASCADE,blank=True,null=True)  # Add this field
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)       
-    objects = models.Manager()   
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
     def __str__(self):
-        return f"Record for {self.date} on {self.route} by {self.car}"
+        return f"Transportation Attendance for {self.date} on {self.route} by {self.driver}"  
+class TransportationAttendanceReport(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Students, on_delete=models.CASCADE)
+    attendance = models.ForeignKey(TransportationAttendance, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        # Send notifications to parents when students are on the car
-        for student in self.students.all():
-            parent = student.parent  # Assuming you have a ForeignKey to the Parent model
-            if parent and parent.phone:  # Ensure the parent has a phone number
-                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-                message = client.messages.create(
-                    body=f"Your child is on the car for route {self.route} on {self.date}",
-                    from_=settings.TWILIO_PHONE_NUMBER,
-                    to=parent.phone
-                )    
-    
+    def __str__(self):
+        return f"Transportation Attendance Report for {self.student} on {self.attendance.date} - Status: {self.status}"
          
 class Attendance(models.Model):
     id = models.AutoField(primary_key=True)  

@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import include, path
 from madrasatul_mujtabaa import settings
-from student_management_app import StudentView, views,HodView,StaffView
+from student_management_app.DriverView import UpdateTransportAttendanceView
+from student_management_app import StudentView, views,HodView,StaffView,DriverView
 
 urlpatterns = [
     path('', views.ShowLogin, name='login'),
@@ -216,4 +217,21 @@ urlpatterns = [
     path('student_profile_save', StudentView.student_profile_save, name='student_profile_save'),    
     path('logout_user', views.logout_user, name='logout_user'),  # Move this line here
     
+    # driver url pattern
+    path('driver_home', DriverView.driver_home, name='driver_home'),  
+    path('driver_take_attendance', DriverView.driver_take_attendance, name='driver_take_attendance'),  
+    path('get-students-by-route', DriverView.get_students_by_route, name='get_students_by_route'),  
+    path('save-transport-attendance-data', DriverView.save_transport_attendance_data, name='save_transport_attendance_data'),  
+    path('get-transport-attendance-data', DriverView.get_transport_attendance_data, name='get_transport_attendance_data'),  
+    path('get_all_transport_dates/', DriverView.get_all_transport_dates, name='get_all_transport_dates'),
+    # path('get_student_attendance', DriverView.get_student_attendance, name='get_student_attendance'),  
+    path('driver_update_attendance', DriverView.driver_update_attendance, name='driver_update_attendance'),  
+    # path('save_updateattendance', DriverView.save_updateattendance, name='save_updateattendance'),  
+    path('driver_apply_leave', DriverView.driver_apply_leave, name='driver_apply_leave'),  
+    path('driver_apply_leave_save', DriverView.driver_apply_leave_save, name='driver_apply_leave_save'),  
+    path('driver_sendfeedback', DriverView.driver_sendfeedback, name='driver_sendfeedback'),  
+    path('driver_sendfeedback_save', DriverView.driver_sendfeedback_save, name='driver_sendfeedback_save'),  
+    path('driver_profile', DriverView.driver_profile, name='driver_profile'),  
+    path('driver_profile_save', DriverView.driver_profile_save, name='driver_profile_save'), 
+    path('update-transport-attendance/', UpdateTransportAttendanceView.as_view(), name='update_transport_attendance_data'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

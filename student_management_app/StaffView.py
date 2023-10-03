@@ -69,7 +69,7 @@ def staff_home(request):
         except Staffs.DoesNotExist:
             # Handle the case when the staff doesn't exist for the logged-in user
             # You can redirect them to a page or show an error message
-            return render(request, "staff_template/error.html")
+            return render(request, "hod_template/error.html")
     else:
         # Redirect the user to the login page
         return redirect("login")  # Replace "login" with the actual URL name of your login page
