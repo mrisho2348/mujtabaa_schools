@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, Case, When, F
+from django.db.models import Count, Case, When, F,IntegerField
 from django.db.models.functions import Coalesce
 from twilio.rest import Client
 from django.db import models
@@ -58,7 +58,7 @@ def driver_home(request):
                                 transportationattendancereport__status=True,
                                 then=1
                             ),
-                            output_field=models.IntegerField()
+                            output_field=IntegerField()
                         )
                     ),
                     0
@@ -70,18 +70,24 @@ def driver_home(request):
                                 transportationattendancereport__status=False,
                                 then=1
                             ),
-                            output_field=models.IntegerField()
+                            output_field=IntegerField()
                         )
                     ),
                     0
                 )
             )
 
+            # Fetch the total number of routes
+            total_routes = Route.objects.count()
+
             return render(request, "driver_template/driver_home.html", {
                 "driver": driver,
                 "attendance_count": attendance_count,
                 "route_student_counts": route_student_counts,
                 "route_attendance_counts": route_attendance_counts,
+                "total_routes": total_routes,  # Pass the total number of routes to the template
+                "total_present": sum(item['total_present'] for item in route_attendance_counts),
+                "total_absent": sum(item['total_absent'] for item in route_attendance_counts),
             })
         except SchoolDriver.DoesNotExist:
             # Handle the case when the driver doesn't exist for the logged-in user
@@ -96,15 +102,15 @@ def driver_home(request):
     
 def driver_sendfeedback(request):
     driver_obj = SchoolDriver.objects.get(admin=request.user.id)
-    feedback_data = FeedbackSchoolDriver.objects.filter(student_id=driver_obj)
-    return render(request,"driver_template/driver_feedback.html",{"feedback_data":feedback_data,"drivers":driver_obj})
+    feedback_data = FeedbackSchoolDriver.objects.filter(driver_id=driver_obj)    
+    return render(request,"driver_template/driver_feedback.html",{"feedback_data":feedback_data,"driver":driver_obj})
 
 def driver_sendfeedback_save(request):
     if request.method!= "POST":
         return HttpResponseRedirect(reverse("driver_sendfeedback"))
     
     else:
-       feedback_msg = request.POST.get("feedback_msg") 
+       feedback_msg = request.POST.get("feedback_msg")        
        driver_obj = SchoolDriver.objects.get(admin=request.user.id)
        try:           
           feedback_report = FeedbackSchoolDriver(driver_id=driver_obj,feedback=feedback_msg,feedback_reply="")
@@ -117,29 +123,30 @@ def driver_sendfeedback_save(request):
             return HttpResponseRedirect(reverse("driver_sendfeedback"))
 
 def   driver_apply_leave(request):
-    driver_obj = SchoolDriver.objects.get(admin=request.user.id)
-    driver_leave_report =LeaveReportSchoolDriver.objects.filter(driver_id=driver_obj)
-    return render(request,"driver_template/driver_leave_template.html",{"diver_leave_report":driver_leave_report,"drivers":driver_obj})
+    driver_obj = SchoolDriver.objects.get(admin=request.user.id)    
+    driver_leave_report =LeaveReportSchoolDriver.objects.filter(driver_id=driver_obj)    
+    return render(request,"driver_template/driver_leave_template.html",{"driver_leave_report":driver_leave_report,"driver":driver_obj})
 
 
 
 def driver_apply_leave_save(request):
     if request.method!= "POST":
-        return HttpResponseRedirect(reverse("student_apply_leave"))
+        return HttpResponseRedirect(reverse("driver_apply_leave"))
     
     else:
         leave_date = request.POST.get("leave_date")
-        leave_msg = request.POST.get("leave_msg")     
-        staff_obj = SchoolDriver.objects.get(admin=request.user.id)
+        leave_msg = request.POST.get("leave_msg")   
+         
+        driver_obj = SchoolDriver.objects.get(admin=request.user.id)
        
         try:            
-          leave_report =LeaveReportSchoolDriver(student_id=staff_obj,leave_date=leave_date,leave_message=leave_msg,leave_status=0)
+          leave_report =LeaveReportSchoolDriver(driver_id=driver_obj,leave_date=leave_date,leave_message=leave_msg,leave_status=0)
           leave_report.save()
-          messages.success(request,"Successfully  staff apply leave ")
+          messages.success(request,"Successfully  driver apply leave ")
           return HttpResponseRedirect(reverse("driver_apply_leave"))  
              
         except:
-            messages.error(request,"failed for staff to apply for leave")
+            messages.error(request,"failed for driver to apply for leave")
             return HttpResponseRedirect(reverse("driver_apply_leave"))
         
         
@@ -148,7 +155,8 @@ def driver_apply_leave_save(request):
 def  driver_profile(request):
     user = CustomUser.objects.get(id=request.user.id)
     drivers = SchoolDriver.objects.get(admin=user)
-    return render(request,"driver_template/driver_profile.html",{"user":user,"drivers":drivers}) 
+    print(drivers)
+    return render(request,"driver_template/driver_profile.html",{"user":user,"driver":drivers}) 
     
 @csrf_exempt
 def get_students_by_route(request):
@@ -276,11 +284,13 @@ def get_all_transport_dates(request):
     
 def driver_take_attendance(request):
     routes = Route.objects.all()   
-    return render(request,"driver_template/driver_take_attendance.html",{"routes":routes})    
+    driver = SchoolDriver.objects.get(admin=request.user)  # Assuming that the currently logged-in user is a driver
+    return render(request,"driver_template/driver_take_attendance.html",{"routes":routes,"driver":driver})    
 
 def driver_update_attendance(request):
     routes = Route.objects.all() 
-    return render(request,"driver_template/driver_update_attendance.html",{"routes":routes})
+    driver = SchoolDriver.objects.get(admin=request.user)  # Assuming that the currently logged-in user is a driver
+    return render(request,"driver_template/driver_update_attendance.html",{"routes":routes,"driver":driver})
 
 def driver_profile_save(request):
     if request.method!="POST":
@@ -310,10 +320,10 @@ def driver_profile_save(request):
             messages.error(request,"editing  of profile  failed")
             return HttpResponseRedirect(reverse("driver_profile"))
        
-@csrf_exempt        
-@method_decorator(login_required, name='dispatch')
-class UpdateTransportAttendanceView(View):
-    def post(self, request):
+@csrf_exempt
+@login_required
+def update_transport_attendance_data(request):
+    if request.method == 'POST':
         try:
             # Get the data from the POST request
             student_ids = request.POST.get('student_ids')
@@ -328,7 +338,7 @@ class UpdateTransportAttendanceView(View):
                 TransportationAttendance,
                 route__id=route_id,
                 date=transport_date,
-                driver=SchoolDriver.objects.get(admin=request.user) # Assuming the currently logged-in user is a driver
+                driver=SchoolDriver.objects.get(admin=request.user)  # Assuming the currently logged-in user is a driver
             )
 
             # Update attendance data
@@ -344,4 +354,15 @@ class UpdateTransportAttendanceView(View):
 
             return JsonResponse({"status": "OK"})
         except Exception as e:
-            return JsonResponse({"status": "Error", "error_message": str(e)})        
+            return JsonResponse({"status": "Error", "error_message": str(e)})
+
+    # If the request method is not POST, return an error response
+    return JsonResponse({"status": "Error", "error_message": "Invalid request method"})  
+
+def view_driver_details(request, driver_id):
+    driver = get_object_or_404(SchoolDriver.objects.select_related(
+        'admin', 'medical_info', 'license_info', 'contact_info',
+        'employment_info', 'vehicle_info'
+    ).prefetch_related('languages_spoken', 'references'), id=driver_id)   
+    context = {'driver': driver}
+    return render(request, 'driver_template/details_schooldriver.html', context)

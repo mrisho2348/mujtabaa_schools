@@ -58,20 +58,27 @@
                   </li>  
 
                 <li class="nav-item">
-                    <a href="{% url 'student_apply_leave' %}"
-                        class="nav-link {% if request.path == 'student_apply_leave' %} active {% endif %}">
+                  {% url 'driver_apply_leave' as driver_apply_leave %}
+                    <a href="{% url 'driver_apply_leave' %}" class="nav-link {% if request.path == driver_apply_leave %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>Apply for Leave</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{% url 'student_sendfeedback' %}"
-                        class="nav-link {% if request.path == 'student_sendfeedback' %} active {% endif %}">
+                  {% url 'driver_sendfeedback' as driver_sendfeedback %}
+                    <a href="{% url 'driver_sendfeedback' %}" class="nav-link {% if request.path == driver_sendfeedback%} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>Send FeedBack</p>
                     </a>
                 </li>              
+                <li class="nav-item">
+                  {% url 'view_driver_details' driver_id=driver.id as view_driver_details %}
+                  <a href="{% url 'view_driver_details' driver_id=driver.id %}" class="nav-link {% if request.path == view_driver_details %} active {% endif %}">
+                      <i class="fas fa-eye"></i>
+                      <p>My details</p>
+                  </a>
+              </li>           
 
               
 

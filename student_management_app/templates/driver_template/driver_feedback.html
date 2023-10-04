@@ -13,7 +13,7 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
           <!-- /.card-header -->
           <!-- form start -->
           <div class="card-body">
-            <form action="" {% url 'student_sendfeedback_save' %} method="POST">
+            <form action="{% url 'driver_sendfeedback_save' %}"  method="POST">
               {% csrf_token %}
               <div class="form-group">
                 <div>

@@ -334,7 +334,7 @@ class SchoolSecurityPerson(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.admin.first_name} {self.admin.last_name}"
 
 
 
@@ -366,7 +366,7 @@ class Cooker(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.admin.first_name} {self.admin.last_name}"
 
 class SchoolCleaner(models.Model):
     # Personal Information
@@ -396,7 +396,7 @@ class SchoolCleaner(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.admin.first_name} {self.admin.last_name}"
     
     
 
@@ -575,7 +575,7 @@ class LeaveReportSchoolDriver(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Leave Report for Driver: {self.driver_id.staff_id.user.first_name} {self.driver_id.staff_id.user.last_name}"
+        return f"Leave Report for Driver: {self.driver_id.admin.first_name} {self.driver_id.admin.last_name}"
     
     
 class LeaveReportSchoolSecurityPerson(models.Model):
@@ -590,7 +590,7 @@ class LeaveReportSchoolSecurityPerson(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Leave Report for Security Person: {self.security_person_id.staff_id.user.first_name} {self.security_person_id.staff_id.user.last_name}"
+        return f"Leave Report for Security Person: {self.security_person_id.admin.first_name} {self.security_person_id.admin.last_name}"
     
 class LeaveReportCooker(models.Model):
     id = models.AutoField(primary_key=True)
@@ -604,7 +604,7 @@ class LeaveReportCooker(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Leave Report for Cooker: {self.cooker_id.staff_id.user.first_name} {self.cooker_id.staff_id.user.last_name}"
+        return f"Leave Report for Cooker: {self.cooker_id.admin.first_name} {self.cooker_id.admin.last_name}"
     
     
 class LeaveReportSchoolCleaner(models.Model):
@@ -619,7 +619,7 @@ class LeaveReportSchoolCleaner(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Leave Report for Cleaner: {self.cleaner_id.staff_id.user.first_name} {self.cleaner_id.staff_id.user.last_name}"
+        return f"Leave Report for Cleaner: {self.cleaner_id.admin.first_name} {self.cleaner_id.admin.last_name}"
     
     
 class LeaveReportParent(models.Model):
@@ -634,7 +634,7 @@ class LeaveReportParent(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Leave Report for Parent: {self.parent_id.user.first_name} {self.parent_id.user.last_name}"
+        return f"Leave Report for Parent: {self.parent_id.admin.first_name} {self.parent_id.admin.last_name}"
 
      
 class FeedBackStudent(models.Model):
@@ -667,7 +667,7 @@ class FeedbackSchoolDriver(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Feedback for Driver: {self.driver_id.staff_id.user.first_name} {self.driver_id.staff_id.user.last_name}"
+        return f"Feedback for Driver: {self.driver_id.admin.first_name} {self.driver_id.admin.last_name}"
     
 class FeedbackSchoolSecurityPerson(models.Model):
     id = models.AutoField(primary_key=True)
@@ -680,7 +680,7 @@ class FeedbackSchoolSecurityPerson(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Feedback for Security Person: {self.security_person_id.staff_id.user.first_name} {self.security_person_id.staff_id.user.last_name}"
+        return f"Feedback for Security Person: {self.security_person_id.admin.first_name} {self.security_person_id.admin.last_name}"
     
 class FeedbackCooker(models.Model):
     id = models.AutoField(primary_key=True)
@@ -693,7 +693,7 @@ class FeedbackCooker(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Feedback for Cooker: {self.cooker_id.staff_id.user.first_name} {self.cooker_id.staff_id.user.last_name}"
+        return f"Feedback for Cooker: {self.cooker_id.admin.first_name} {self.cooker_id.admin.last_name}"
     
     
 class FeedbackSchoolCleaner(models.Model):
@@ -707,7 +707,7 @@ class FeedbackSchoolCleaner(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Feedback for Cleaner: {self.cleaner_id.staff_id.user.first_name} {self.cleaner_id.staff_id.user.last_name}"
+        return f"Feedback for Cleaner: {self.cleaner_id.admin.first_name} {self.cleaner_id.admin.last_name}"
     
 class FeedbackParent(models.Model):
     id = models.AutoField(primary_key=True)
@@ -720,7 +720,7 @@ class FeedbackParent(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Feedback for Parent: {self.parent_id.user.first_name} {self.parent_id.user.last_name}"
+        return f"Feedback for Parent: {self.parent_id.admin.first_name} {self.parent_id.admin.last_name}"
      
 class NotificationStudent(models.Model):
      id = models.AutoField(primary_key=True)     
@@ -741,7 +741,7 @@ class NotificationSchoolDriver(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Notification for Driver: {self.driver_id.staff_id.user.first_name} {self.driver_id.staff_id.user.last_name}"
+        return f"Notification for Driver: {self.driver_id.admin.first_name} {self.driver_id.admin.last_name}"
 
 class NotificationSchoolSecurityPerson(models.Model):
     id = models.AutoField(primary_key=True)
@@ -753,7 +753,7 @@ class NotificationSchoolSecurityPerson(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Notification for Security Person: {self.security_person_id.staff_id.user.first_name} {self.security_person_id.staff_id.user.last_name}"
+        return f"Notification for Security Person: {self.security_person_id.admin.first_name} {self.security_person_id.admin.last_name}"
     
     
 class NotificationCooker(models.Model):
@@ -766,7 +766,7 @@ class NotificationCooker(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Notification for Cooker: {self.cooker_id.staff_id.user.first_name} {self.cooker_id.staff_id.user.last_name}"
+        return f"Notification for Cooker: {self.cooker_id.admin.first_name} {self.cooker_id.admin.last_name}"
     
     
 class NotificationSchoolCleaner(models.Model):
@@ -779,7 +779,7 @@ class NotificationSchoolCleaner(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Notification for Cleaner: {self.cleaner_id.staff_id.user.first_name} {self.cleaner_id.staff_id.user.last_name}"
+        return f"Notification for Cleaner: {self.cleaner_id.admin.first_name} {self.cleaner_id.admin.last_name}"
     
     
 class NotificationParent(models.Model):
@@ -792,7 +792,7 @@ class NotificationParent(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Notification for Parent: {self.parent_id.user.first_name} {self.parent_id.user.last_name}"
+        return f"Notification for Parent: {self.parent_id.admin.first_name} {self.parent_id.admin.last_name}"
        
      
 class NotificationStaff(models.Model):

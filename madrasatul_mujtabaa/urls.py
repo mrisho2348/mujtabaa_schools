@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import include, path
 from madrasatul_mujtabaa import settings
-from student_management_app.DriverView import UpdateTransportAttendanceView
 from student_management_app import StudentView, views,HodView,StaffView,DriverView
 
 urlpatterns = [
@@ -233,5 +232,6 @@ urlpatterns = [
     path('driver_sendfeedback_save', DriverView.driver_sendfeedback_save, name='driver_sendfeedback_save'),  
     path('driver_profile', DriverView.driver_profile, name='driver_profile'),  
     path('driver_profile_save', DriverView.driver_profile_save, name='driver_profile_save'), 
-    path('update-transport-attendance/', UpdateTransportAttendanceView.as_view(), name='update_transport_attendance_data'),
+    path('update-transport-attendance/', DriverView.update_transport_attendance_data, name='update_transport_attendance_data'),
+    path('view_driver_details/<int:driver_id>/', DriverView.view_driver_details, name='view_driver_details'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

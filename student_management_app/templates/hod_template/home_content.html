@@ -1,454 +1,667 @@
- 
 {% extends 'hod_template/base_template.html' %}
 {% block page_title %}
-HOME
+ADMIN HOME
 {% endblock page_title %}
 {% block main_content %}
-{% load static %}
 <section class="content">
     <div class="container-fluid">
+        <!-- First Row -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ staff_count }}</h3>
+                        <p>Total Staff</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ subject_count }}</h3>
+                        <p>Total Subjects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ student_count }}</h3>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ classroom_count }}</h3>
+                        <p>Total Classrooms</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-chalkboard"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Second Row -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{ security_count }}</h3>
+                        <p>Total Security Staff</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ cooker_count }}</h3>
+                        <p>Total Cookers</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ driver_count }}</h3>
+                        <p>Total Drivers</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ cleaner_count }}</h3>
+                        <p>Total Cleaners</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>{{ parent_count }}</h3>
+                    <p>Total Parents</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h3>{{ route_count }}</h3>
+                    <p>Total Routes</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-route"></i>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+          <!-- First Row -->
+          <div class="col-lg-6">
+              <!-- BAR CHART for Route Student Counts -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Number of Students in Each Route</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart5" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+          </div>
+      
+          <div class="col-lg-6">
+              <!-- BAR CHART for Staff Attendance Counts -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Number of Attendance Taken by Each Staff</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart6" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+          </div>
+      </div>
+      <!-- Second Row -->
       <div class="row">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>{{ student_count }}</h3>
-              <p>TOTAL STUDENT IN OUR SCHOOL</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <a href="{% url 'manage_student' %}#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          <div class="col-lg-6">
+              <!-- BAR CHART for Driver Transport Attendance Counts -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Number of Transport Attendance Taken by Each Driver</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart7" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h3>{{ staff_count }}</h3>
-              <p>TOTAL Staffs</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-user-tie"></i>
-            </div>
-            <a href="{% url 'manage_staff' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      
+          <div class="col-lg-6">
+              <!-- BAR CHART for Driver Leaves -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Driver Leaves Vs Attendance</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart8" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>{{ course_count }}</h3>
-              <p>TOTAL COURSE</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-book"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+      <!-- Third Row -->
+      <div class="row">
+          <div class="col-lg-6">
+              <!-- BAR CHART -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Staff Leaves Vs Attendance</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>{{ subject_count }}</h3>
-              <p>TOTAL SUBJECTS</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-book-open"></i>
-            </div>
-            <a href="{% url 'manage_subject' %}" class="small-box-footer">&nbsp<i class="fas fa-arrow-circle-right"></i></a>
+      
+          <div class="col-lg-6">
+              <!-- BAR CHART -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Students Leaves Vs Attendance</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
           </div>
-        </div>
-        <!-- ./col -->
+      </div>
+      <!-- Fourth Row -->
+      <div class="row">
+          <div class="col-lg-12">
+              <!-- BAR CHART -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Total transport attendance on each route</h3>
+                      <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="chart">
+                          <canvas id="barChart10" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+          </div>
       </div>
       
-      <div class="row">
-        <div class="col-lg-6">
-          <!-- PIE CHART -->
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">STUDENTS AND STAFF CHARTS</h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <div class="col-lg-6">
-    
-            <!-- DONUT CHART -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">TOTAL SUBJECT IN EACH COURSE</h3>
 
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+        <!-- Third Row - Add more small boxes or sections as needed -->
+    </div>
+</section>
+{% endblock main_content %}
 
-        </div>
-      </div>
+{% block customer_js %}
+<script>
+  // Get the canvas element
+  var ctx = document.getElementById('barChart5').getContext('2d');
+  var routeNames = [
+    {% for route in route_student_counts %}
+        "{{ route.name }}",
+    {% endfor %}
+];
 
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">TOTAL STUDENTS IN EACH COURSE</h3>
 
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-              </div>
-            </div>
-            <div class="card-body">
-              <canvas id="donutChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-            <!-- /.card-body -->
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">TOTAL STUDENTS IN EACH SUBJECTS</h3>
+var studentCounts = [
+    {% for route in route_student_counts %}
+        {{ route.total_students }},
+    {% endfor %}
+];
 
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-              </div>
-            </div>
-            <div class="card-body">
-              <canvas id="donutChart4" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-            <!-- /.card-body -->
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-            
-            <!-- BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Staff Leaves Vs Attendance</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-            
-            <!-- BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Students Leaves Vs Attendance</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
-      </div>
-    </div><!-- /.container-fluid -->
-  </section>
-
-  {% endblock main_content %}
-
-  {% block customer_js %}
-  <script>
-    $(document).ready(function(){
-
+  // Define the data for the chart
+  var data = {
+      labels: routeNames, // Replace with your route names
+      datasets: [{
+          label: 'Number of Students',
+          data: studentCounts, // Replace with your actual student counts for each route
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 1
+      }]
+  };
   
-      
-      var pieData        = {
-        labels: [
-        'STUDENTS', 
-        'STAFFS'              
-          
-        ],
-        datasets: [
-          {
-            data: [{{student_count}},{{staff_count}}],
-            backgroundColor : ['#f56954', '#00a65a']
+  // Define chart options
+  var options = {
+      scales: {
+          y: {
+              beginAtZero: true
           }
-        ]
       }
-
-
-
-
-
-
-          // Get context with jQuery - using jQuery's .get() method.
-  var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-  var pieData        = pieData;
-  var pieOptions     = {
-    maintainAspectRatio : false,
-    responsive : true,
-  }
-  //Create pie or douhnut chart
-  // You can switch between pie and douhnut using the method below.
-  var pieChart = new Chart(pieChartCanvas, {
-    type: 'pie',
-    data: pieData,
-    options: pieOptions      
-  })
-
-
-  //TOTAL SUBJECT IN EACH COURSE
-    //-------------
-    //- DONUT CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var course_name_list = {{course_name_list |safe}}
-    var subject_count_list = {{subject_count_list}}
-    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-    var donutData        = {
-      labels: course_name_list ,
-      datasets: [
-        {
-          data: subject_count_list,
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','#f56799', '#00999a', '#f39678', '#00caaa', '#3c8444', '#d2d999'],
-        }
-      ]
-    }
-    var donutOptions     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var donutChart = new Chart(donutChartCanvas, {
-      type: 'doughnut',
-      data: donutData,
-      options: donutOptions      
-    })
-
-  //TOTAL STUDENTS IN EACH COURSE
-    //-------------
-    //- DONUT CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var course_name_list = {{course_name_list |safe}}
-    var student_count_in_course_list = {{student_count_in_course_list}}
-    var donutChartCanvas2 = $('#donutChart2').get(0).getContext('2d')
-    var donutData2        = {
-      labels: course_name_list ,
-      datasets: [
-        {
-          data: student_count_in_course_list,
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','#f56799', '#00999a', '#f39678', '#00caaa', '#3c8444', '#d2d999'],
-        }
-      ]
-    }
-    var donutOptions2     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var donutChart2 = new Chart(donutChartCanvas2, {
-      type: 'doughnut',
-      data: donutData2,
-      options: donutOptions2      
-    })
-
-  //TOTAL STUDENTS IN EACH SUBJECTS
-    //-------------
-    //- DONUT CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var subject_list = {{subject_list |safe}}
-    var student_count_in_subject_list = {{student_count_in_subject_list}}
-    var donutChartCanvas4 = $('#donutChart4').get(0).getContext('2d')
-    var donutData4        = {
-      labels: subject_list ,
-      datasets: [
-        {
-          data: student_count_in_subject_list,
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','#f56799', '#00999a', '#f39678', '#00caaa', '#3c8444', '#d2d999','#004d40','#b9f6ca','#311b92','#263238','#ff3d00','#dd2c00','#263238','#1a237e'],
-        }
-      ]
-    }
-    var donutOptions4     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var donutChart4 = new Chart(donutChartCanvas4, {
-      type: 'doughnut',
-      data: donutData4,
-      options: donutOptions4     
-    });
-
-
-    //staff leave and Attendance
-
-       //-------------
-    //- BAR CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    
-    var attendance_absent_staff_list = {{attendance_absent_staff_list}}
-    var attendance_present_staff_list = {{attendance_present_staff_list}}
-    var staff_name_list = {{staff_name_list |safe}}
-
-    var areaChartData = {
-      labels  :staff_name_list,
-      datasets: [
-        {
-          label               : 'ATTENDANCE',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : attendance_present_staff_list
-        },
-        {
-          label               : 'LEAVES',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : attendance_absent_staff_list
-        },
-      ]
-    }
-
-    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    var barChartData = jQuery.extend(true, {}, areaChartData)
-    var temp0 = areaChartData.datasets[0]
-    var temp1 = areaChartData.datasets[1]
-    barChartData.datasets[0] = temp1
-    barChartData.datasets[1] = temp0
-
-    var barChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false,
-      datasetFill             : false
-    }
-
-    var barChart = new Chart(barChartCanvas, {
-      type: 'bar', 
-      data: barChartData,
-      options: barChartOptions
-    })
-
-    //students leave and Attendance
-
-       //-------------
-    //- BAR CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    
-    var attendance_absent_student_list = {{attendance_absent_student_list}}
-    var attendance_present_student_list = {{attendance_present_student_list}}
-    var student_name_list = {{student_name_list |safe}}
-
-    var areaChartData2 = {
-      labels  :student_name_list,
-      datasets: [
-        {
-          label               : 'ATTENDANCE',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : attendance_present_student_list
-        },
-        {
-          label               : 'LEAVES',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : attendance_absent_student_list
-        },
-      ]
-    }
-
-    var barChartCanvas2 = $('#barChart2').get(0).getContext('2d')
-    var barChartData2 = jQuery.extend(true, {}, areaChartData2)
-    var temp02 = areaChartData2.datasets[0]
-    var temp12 = areaChartData2.datasets[1]
-    barChartData2.datasets[0] = temp12
-    barChartData2.datasets[1] = temp02
-
-    var barChartOptions2 = {
-      responsive              : true,
-      maintainAspectRatio     : false,
-      datasetFill             : false
-    }
-
-    var barChart2 = new Chart(barChartCanvas2, {
-      type: 'bar', 
-      data: barChartData2,
-      options: barChartOptions2
-    })
-
-
-
+  };
   
-
-    });
+  // Create the bar chart
+  var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: options
+  });
   </script>
+
+  <script>
+    // Get the canvas element
+    var ctx = document.getElementById('barChart6').getContext('2d');
+    
+    // Replace the placeholder staff names with your actual staff names from Django context
+    var staffNames = [
+        {% for staff in staff_attendance_counts %}
+            "{{ staff.admin__username }}",
+        {% endfor %}
+    ];
+    
+    // Replace the placeholder attendance counts with your actual attendance counts from Django context
+    var attendanceCounts = [
+        {% for staff in staff_attendance_counts %}
+            {{ staff.attendance_count }},
+        {% endfor %}
+    ];
+    
+    // Define the data for the chart
+    var data = {
+        labels: staffNames,
+        datasets: [{
+            label: 'Number of Attendance Taken',
+            data: attendanceCounts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+    
+    // Define chart options
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+    
+    // Create the bar chart
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
+    </script>
+
+    <script>
+      // Get the canvas element
+      var ctx = document.getElementById('barChart7').getContext('2d');
+      
+      // Replace the placeholder driver names with your actual driver names from Django context
+      var driverNames = [
+          {% for driver in driver_attendance_counts %}
+              "{{ driver.admin__username }}",
+          {% endfor %}
+      ];
+      
+      // Replace the placeholder attendance counts with your actual attendance counts from Django context
+      var attendanceCounts = [
+          {% for driver in driver_attendance_counts %}
+              {{ driver.attendance_count }},
+          {% endfor %}
+      ];
+      
+      // Define the data for the chart
+      var data = {
+          labels: driverNames,
+          datasets: [{
+              label: 'Number of Transport Attendance Taken',
+              data: attendanceCounts,
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+          }]
+      };
+      
+      // Define chart options
+      var options = {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      };
+      
+      // Create the bar chart
+      var myBarChart = new Chart(ctx, {
+          type: 'bar',
+          data: data,
+          options: options
+      });
+      </script>
+
+
+
+      <script>
+        // Get the canvas element
+        var ctx = document.getElementById('barChart8').getContext('2d');
+        
+        // Replace the placeholder driver names with your actual driver names from Django context
+        var driverNames = [
+            {% for driver in driver_leave_counts %}
+                "{{ driver.driver_id__admin__username }}",
+            {% endfor %}
+        ];
+        
+        // Replace the placeholder leave counts with your actual leave counts from Django context
+        var leaveCounts = [
+            {% for driver in driver_leave_counts %}
+                {{ driver.leave_count }},
+            {% endfor %}
+        ];
+        
+        // Define the data for the chart
+        var data = {
+            labels: driverNames,
+            datasets: [{
+                label: 'Driver Leaves',
+                data: leaveCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        };
+        
+        // Define chart options
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+        
+        // Create the bar chart
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+    
+      
+    <script>
+      // Get the canvas element
+      var ctx = document.getElementById('barChart').getContext('2d');
+      
+      // Extract staff usernames and leave counts from the Django context
+      var staffUsernames = [
+          {% for staff in staff_leave_counts %}
+              "{{ staff.admin__username }}",
+          {% endfor %}
+      ];
+  
+      var staffLeaveCounts = [
+          {% for staff in staff_leave_counts %}
+              {{ staff.leave_count }},
+          {% endfor %}
+      ];
+  
+      // Define labels for the chart
+      var labels = staffUsernames;
+      
+      // Define the data for the chart
+      var data = {
+          labels: labels,
+          datasets: [{
+              label: 'Staff Leaves',
+              data: staffLeaveCounts,
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+          }]
+      };
+      
+      // Define chart options
+      var options = {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      };
+      
+      // Create the bar chart
+      var myBarChart = new Chart(ctx, {
+          type: 'bar',
+          data: data,
+          options: options
+      });
+  </script>  
+   
+  <script>
+    // Get the canvas element
+    var ctx = document.getElementById('barChart2').getContext('2d');
+    
+    // Extract student usernames and leave counts from the Django context
+    var studentUsernames = [
+        {% for student in student_leave_counts %}
+            "{{ student.student_id__username }}",
+        {% endfor %}
+    ];
+
+    var studentLeaveCounts = [
+        {% for student in student_leave_counts %}
+            {{ student.leave_count }},
+        {% endfor %}
+    ];
+
+    // Define labels for the chart
+    var labels = studentUsernames;
+    
+    // Define the data for the chart
+    var data = {
+        labels: labels,
+        datasets: [{
+            label: 'Student Leaves',
+            data: studentLeaveCounts,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+    
+    // Define chart options
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+    
+    // Create the bar chart
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
+</script>
+   
+<script>
+  // Get the canvas element
+  var ctx = document.getElementById('barChart10').getContext('2d');
+  
+  // Replace the placeholder labels with actual route names
+  var routeNames = [
+      {% for route in route_transport_attendance_counts %}
+          "{{ route.name }}",
+      {% endfor %}
+  ];
+  
+  // Replace the placeholder attendance counts with actual data
+  var attendanceCounts = [
+      {% for route in route_transport_attendance_counts %}
+          {{ route.total_transport_attendance }},
+      {% endfor %}
+  ];
+  
+  // Define the data for the chart
+  var data = {
+      labels: routeNames,
+      datasets: [{
+          label: 'Total Transport Attendance',
+          data: attendanceCounts,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)', // You can customize the color
+          borderColor: 'rgba(75, 192, 192, 1)', // You can customize the color
+          borderWidth: 1
+      }]
+  };
+  
+  // Define chart options
+  var options = {
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+  };
+  
+  // Create the bar chart
+  var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: options
+  });
+</script>
 {% endblock customer_js %}

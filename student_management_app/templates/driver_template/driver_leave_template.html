@@ -16,7 +16,7 @@ Leave report and apply
               <!-- /.card-header -->
               <!-- form start -->
                 <div class="card-body">
-                    <form action="{% url 'student_apply_leave_save' %}" method="POST">
+                    <form action="{% url 'driver_apply_leave_save' %}" method="POST">
                       {% csrf_token %}
                    <div class="form-group">
                     <label>Leave Date</label>
@@ -62,7 +62,7 @@ Leave report and apply
                     <th>Leave Messages</th>
                     <th>Leave status</th>
                   </tr>
-                  {% for row in student_leave_report %}
+                  {% for row in driver_leave_report %}
                   <tr>
                     <td>{{row.id}}</td>
                     <td>{{row.leave_date}}</td>
@@ -90,5 +90,8 @@ Leave report and apply
       </div>
     </section>
     <!-- /.content -->
+    <script>
+      console.log(driver_leave_report)
+    </script>
 {% endblock main_content %}
 

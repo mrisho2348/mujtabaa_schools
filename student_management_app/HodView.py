@@ -21,6 +21,7 @@ from student_management_app.models import (
     CustomUser,
     FeedBackStaff,
     FeedBackStudent,
+    LeaveReportSchoolDriver,
     LeaveReportStaffs,
     LeaveReportStudent,
     SessionYearModel,
@@ -53,6 +54,7 @@ from student_management_app.models import (
     StudentPositionInfo,
     StaffRoleAssignment,
 )
+from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
@@ -72,42 +74,84 @@ from PIL import Image
 
 
 def admin_home(request):
+    # Count the number of staff, subjects, and students
     staff_count = Staffs.objects.all().count()
     subject_count = Subject.objects.all().count()
     student_count = Students.objects.all().count()
 
-    subject_all = Subject.objects.all()
-    subject_list = [subject.subject_name for subject in subject_all]
+    # Count the number of each type of staff
+    security_count = SchoolSecurityPerson.objects.all().count()
+    cooker_count = Cooker.objects.all().count()
+    driver_count = SchoolDriver.objects.all().count()
 
-    staff_all = Staffs.objects.all()
-    attendance_absent_staff_list = []
-    staff_name_list = []
-    for staff in staff_all:
-        leaves = LeaveReportStaffs.objects.filter(staff_id=staff.id, leave_status=1).count()
-        attendance_absent_staff_list.append(leaves)
-        staff_name_list.append(staff.admin.username)
+    # Count the number of routes
+    route_count = Route.objects.all().count()
 
-    student_all = Students.objects.all()
-    attendance_present_student_list = []
-    attendance_absent_student_list = []
-    student_name_list = []
-    for student in student_all:
-        attendance = AttendanceReport.objects.filter(student_id=student.id, status=True).count()
-        absent = AttendanceReport.objects.filter(student_id=student.id, status=False).count()
-        leaves = LeaveReportStudent.objects.filter(student_id=student.id, leave_status=1).count()
-        attendance_present_student_list.append(attendance)
-        attendance_absent_student_list.append(leaves + absent)
-        student_name_list.append(student.admin.username)
+    # Count the number of students on each route
+    route_student_counts = Route.objects.annotate(
+        total_students=Count('students')
+    ).values('name', 'total_students')
+
+    # Count the number of transport attendance taken by each driver
+    driver_attendance_counts = SchoolDriver.objects.annotate(
+        attendance_count=Count('transportationattendance')
+    ).values('admin__username', 'attendance_count')
+
+    staff_attendance_counts = Staffs.objects.annotate(
+        attendance_count=Count('subjects__attendance__attendancereport')
+    ).values('admin__username', 'attendance_count')
+
+
+    # Count the number of students in each subject
+    subject_student_counts = Subject.objects.annotate(
+        total_students=Count('students')
+    ).values('subject_name', 'total_students')
+
+    # Count the number of leave taken by each driver, staff, and student
+       # Count the number of leave reports for each driver
+    # Count the number of leave reports for each driver
+    driver_leave_counts = LeaveReportSchoolDriver.objects.values('driver_id__admin__username').annotate(
+    leave_count=Count('driver_id')
+    )
+    
+    # Count the number of leave reports for each staff member
+    staff_leave_counts = Staffs.objects.annotate(
+          leave_count=Count('leavereportstaffs')
+     ).values('admin__username', 'leave_count')
+   # Count the number of leave reports for each student
+    student_leave_counts = Students.objects.annotate(
+    leave_count=Count('leavereportstudent')
+).values('admin__username', 'leave_count')
+
+    # Count the number of classrooms, cleaners, and parents
+    classroom_count = Classroom.objects.all().count()
+    cleaner_count = SchoolCleaner.objects.all().count()
+    parent_count = Parent.objects.all().count()
+
+    # Count the total transport attendance route-wise
+    route_transport_attendance_counts = Route.objects.annotate(
+        total_transport_attendance=Count('transportationattendance__transportationattendancereport')
+    ).values('name', 'total_transport_attendance')
 
     context = {
         "staff_count": staff_count,
         "subject_count": subject_count,
-        "subject_list": subject_list,
-        "attendance_absent_staff_list": attendance_absent_staff_list,
-        "staff_name_list": staff_name_list,
-        "attendance_present_student_list": attendance_present_student_list,
-        "attendance_absent_student_list": attendance_absent_student_list,
         "student_count": student_count,
+        "security_count": security_count,
+        "cooker_count": cooker_count,
+        "driver_count": driver_count,
+        "route_count": route_count,
+        "route_student_counts": route_student_counts,
+        "driver_attendance_counts": driver_attendance_counts,
+        "staff_attendance_counts": staff_attendance_counts,
+        "subject_student_counts": subject_student_counts,
+        "driver_leave_counts": driver_leave_counts,
+        "staff_leave_counts": staff_leave_counts,
+        "student_leave_counts": student_leave_counts,
+        "classroom_count": classroom_count,
+        "cleaner_count": cleaner_count,
+        "parent_count": parent_count,
+        "route_transport_attendance_counts": route_transport_attendance_counts,
     }
 
     return render(request, "hod_template/home_content.html", context)
