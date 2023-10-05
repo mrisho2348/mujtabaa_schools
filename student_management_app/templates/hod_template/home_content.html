@@ -141,7 +141,7 @@ ADMIN HOME
           <!-- First Row -->
           <div class="col-lg-6">
               <!-- BAR CHART for Route Student Counts -->
-              <div class="card card-success">
+              <div class="card card-primary">
                   <div class="card-header">
                       <h3 class="card-title">Number of Students in Each Route</h3>
                       <div class="card-tools">
@@ -165,7 +165,7 @@ ADMIN HOME
       
           <div class="col-lg-6">
               <!-- BAR CHART for Staff Attendance Counts -->
-              <div class="card card-success">
+              <div class="card card-secondary">
                   <div class="card-header">
                       <h3 class="card-title">Number of Attendance Taken by Each Staff</h3>
                       <div class="card-tools">
@@ -191,7 +191,7 @@ ADMIN HOME
       <div class="row">
           <div class="col-lg-6">
               <!-- BAR CHART for Driver Transport Attendance Counts -->
-              <div class="card card-success">
+              <div class="card card-gray-dark">
                   <div class="card-header">
                       <h3 class="card-title">Number of Transport Attendance Taken by Each Driver</h3>
                       <div class="card-tools">
@@ -215,7 +215,7 @@ ADMIN HOME
       
           <div class="col-lg-6">
               <!-- BAR CHART for Driver Leaves -->
-              <div class="card card-success">
+              <div class="card card-blue">
                   <div class="card-header">
                       <h3 class="card-title">Driver Leaves Vs Attendance</h3>
                       <div class="card-tools">
@@ -241,7 +241,7 @@ ADMIN HOME
       <div class="row">
           <div class="col-lg-6">
               <!-- BAR CHART -->
-              <div class="card card-success">
+              <div class="card card-lightblue">
                   <div class="card-header">
                       <h3 class="card-title">Staff Leaves Vs Attendance</h3>
                       <div class="card-tools">
@@ -265,7 +265,7 @@ ADMIN HOME
       
           <div class="col-lg-6">
               <!-- BAR CHART -->
-              <div class="card card-success">
+              <div class="card card-danger">
                   <div class="card-header">
                       <h3 class="card-title">Students Leaves Vs Attendance</h3>
                       <div class="card-tools">
@@ -316,7 +316,7 @@ ADMIN HOME
       
 
         <!-- Third Row - Add more small boxes or sections as needed -->
-    </div>
+
 </section>
 {% endblock main_content %}
 
@@ -344,10 +344,10 @@ var studentCounts = [
           label: 'Number of Students',
           data: studentCounts, // Replace with your actual student counts for each route
           backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
+              '#113388',
+              '#993388',
+              '#113322',
+              '#119988',
           ],
           borderColor: [
               'rgba(255, 99, 132, 1)',
@@ -400,7 +400,57 @@ var studentCounts = [
         datasets: [{
             label: 'Number of Attendance Taken',
             data: attendanceCounts,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            backgroundColor: [
+            '#113388',
+            '#993366',
+            '#113377',
+            '#119933',
+            '#113344',
+            '#993355',
+            '#113322',
+            '#119911',
+            '#113399',
+            '#991188',
+            '#112222',
+            '#113388',
+            '#114488',
+            '#995588',
+            '#116622',
+            '#117788',
+            '#118888',
+            '#999988',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#553322',
+            '#669988',
+            '#773388',
+            '#883388',
+            '#993322',
+            '#123456',
+            '#789101',
+            '#121314',
+            '#151617',
+            '#181920',
+            '#212223',
+            '#242526',
+            '#272829',
+            '#303132',
+            '#333435',
+            '#363738',
+            '#394041',
+            '#424344',
+            '#454647',
+            '#484849',
+            '#505122',
+            '#569966',
+            ],
+          
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
         }]
@@ -447,7 +497,56 @@ var studentCounts = [
           datasets: [{
               label: 'Number of Transport Attendance Taken',
               data: attendanceCounts,
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              backgroundColor: [
+              '#113388',
+              '#993366',
+              '#113377',
+              '#119933',
+              '#113344',
+              '#993355',
+              '#113322',
+              '#119911',
+              '#113399',
+              '#991188',
+              '#112222',
+              '#113388',
+              '#114488',
+              '#995588',
+              '#116622',
+              '#117788',
+              '#118888',
+              '#999988',
+              '#113322',
+              '#229988',
+              '#333388',
+              '#443388',
+              '#113322',
+              '#229988',
+              '#333388',
+              '#443388',
+              '#553322',
+              '#669988',
+              '#773388',
+              '#883388',
+              '#993322',
+              '#123456',
+              '#789101',
+              '#121314',
+              '#151617',
+              '#181920',
+              '#212223',
+              '#242526',
+              '#272829',
+              '#303132',
+              '#333435',
+              '#363738',
+              '#394041',
+              '#424344',
+              '#454647',
+              '#484849',
+              '#505122',
+              '#569966',
+              ],
               borderColor: 'rgba(255, 99, 132, 1)',
               borderWidth: 1
           }]
@@ -496,7 +595,56 @@ var studentCounts = [
             datasets: [{
                 label: 'Driver Leaves',
                 data: leaveCounts,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                backgroundColor: [
+                '#113388',
+                '#993366',
+                '#113377',
+                '#119933',
+                '#113344',
+                '#993355',
+                '#113322',
+                '#119911',
+                '#113399',
+                '#991188',
+                '#112222',
+                '#113388',
+                '#114488',
+                '#995588',
+                '#116622',
+                '#117788',
+                '#118888',
+                '#999988',
+                '#113322',
+                '#229988',
+                '#333388',
+                '#443388',
+                '#113322',
+                '#229988',
+                '#333388',
+                '#443388',
+                '#553322',
+                '#669988',
+                '#773388',
+                '#883388',
+                '#993322',
+                '#123456',
+                '#789101',
+                '#121314',
+                '#151617',
+                '#181920',
+                '#212223',
+                '#242526',
+                '#272829',
+                '#303132',
+                '#333435',
+                '#363738',
+                '#394041',
+                '#424344',
+                '#454647',
+                '#484849',
+                '#505122',
+                '#569966',
+                ],
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             }]
@@ -546,7 +694,56 @@ var studentCounts = [
           datasets: [{
               label: 'Staff Leaves',
               data: staffLeaveCounts,
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              backgroundColor: [
+              '#113388',
+              '#993366',
+              '#113377',
+              '#119933',
+              '#113344',
+              '#993355',
+              '#113322',
+              '#119911',
+              '#113399',
+              '#991188',
+              '#112222',
+              '#113388',
+              '#114488',
+              '#995588',
+              '#116622',
+              '#117788',
+              '#118888',
+              '#999988',
+              '#113322',
+              '#229988',
+              '#333388',
+              '#443388',
+              '#113322',
+              '#229988',
+              '#333388',
+              '#443388',
+              '#553322',
+              '#669988',
+              '#773388',
+              '#883388',
+              '#993322',
+              '#123456',
+              '#789101',
+              '#121314',
+              '#151617',
+              '#181920',
+              '#212223',
+              '#242526',
+              '#272829',
+              '#303132',
+              '#333435',
+              '#363738',
+              '#394041',
+              '#424344',
+              '#454647',
+              '#484849',
+              '#505122',
+              '#569966',
+              ],
               borderColor: 'rgba(255, 99, 132, 1)',
               borderWidth: 1
           }]
@@ -595,7 +792,56 @@ var studentCounts = [
         datasets: [{
             label: 'Student Leaves',
             data: studentLeaveCounts,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            backgroundColor: [
+            '#113388',
+            '#993366',
+            '#113377',
+            '#119933',
+            '#113344',
+            '#993355',
+            '#113322',
+            '#119911',
+            '#113399',
+            '#991188',
+            '#112222',
+            '#113388',
+            '#114488',
+            '#995588',
+            '#116622',
+            '#117788',
+            '#118888',
+            '#999988',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#553322',
+            '#669988',
+            '#773388',
+            '#883388',
+            '#993322',
+            '#123456',
+            '#789101',
+            '#121314',
+            '#151617',
+            '#181920',
+            '#212223',
+            '#242526',
+            '#272829',
+            '#303132',
+            '#333435',
+            '#363738',
+            '#394041',
+            '#424344',
+            '#454647',
+            '#484849',
+            '#505122',
+            '#569966',
+            ],
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1
         }]
@@ -642,7 +888,56 @@ var studentCounts = [
       datasets: [{
           label: 'Total Transport Attendance',
           data: attendanceCounts,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)', // You can customize the color
+            backgroundColor: [
+            '#113388',
+            '#993366',
+            '#113377',
+            '#119933',
+            '#113344',
+            '#993355',
+            '#113322',
+            '#119911',
+            '#113399',
+            '#991188',
+            '#112222',
+            '#113388',
+            '#114488',
+            '#995588',
+            '#116622',
+            '#117788',
+            '#118888',
+            '#999988',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#113322',
+            '#229988',
+            '#333388',
+            '#443388',
+            '#553322',
+            '#669988',
+            '#773388',
+            '#883388',
+            '#993322',
+            '#123456',
+            '#789101',
+            '#121314',
+            '#151617',
+            '#181920',
+            '#212223',
+            '#242526',
+            '#272829',
+            '#303132',
+            '#333435',
+            '#363738',
+            '#394041',
+            '#424344',
+            '#454647',
+            '#484849',
+            '#505122',
+            '#569966',
+            ], // You can customize the color
           borderColor: 'rgba(75, 192, 192, 1)', // You can customize the color
           borderWidth: 1
       }]

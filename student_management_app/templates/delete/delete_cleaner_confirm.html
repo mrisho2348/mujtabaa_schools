@@ -1,0 +1,22 @@
+{% extends "hod_template/base_template.html" %}
+{% block title %}
+   Delete Cleaner
+{% endblock title %}
+
+{% block main_content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Delete Cleaner</h5>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the cleaner "{{ cleaner }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'manage_cleaner' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

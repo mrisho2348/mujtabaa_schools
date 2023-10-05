@@ -5,20 +5,26 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from financial_management.models import Invoice
 from student_management_app.models import (
     Attendance,
     AttendanceReport,  
     CustomUser,
     FeedBackStudent,
     LeaveReportStudent,
+    Parent,
+    Route,
     Students, 
     Subject,
     ExamType,
     Result,
     StudentExamInfo,
     StudentPositionInfo,
+    TransportationAttendance,
+    TransportationAttendanceReport,
 )
 from student_management_app.templatetags.custom_filters import strftime
 
@@ -212,6 +218,7 @@ def student_subject_wise_result(request, exam_type):
     context = {
         'student': student,
         'results': results,
+        "students": student,
         'exam_type': exam_type,
         'position': position,  # Add position to the context
         'division': division,  # Add position to the context
@@ -222,4 +229,94 @@ def student_subject_wise_result(request, exam_type):
     return render(request, 'student_template/subject_wise_results.html', context)
 
 
+def single_student_details(request):
+    students =Students.objects.get(admin=request.user.id)
+    parents = Parent.objects.filter(student=students)
+    selected_subjects = students.subjects.all()
+    father = None
+    mother = None
+    male_guardian = None
+    female_guardian = None
+    male_sponsor = None
+    female_sponsor = None
+
+    for parent in parents:
+        if parent.parent_type == 'parent':
+            if parent.gender == 'male':
+                father = parent
+            elif parent.gender == 'female':
+                mother = parent
+        elif parent.parent_type == 'guardian':
+            if parent.gender == 'male':
+                male_guardian = parent
+            elif parent.gender == 'female':
+                female_guardian = parent
+        elif parent.parent_type == 'sponsor':
+            if parent.gender == 'male':
+                male_sponsor = parent
+            elif parent.gender == 'female':
+                female_sponsor = parent
+
+    context = {
+        'students': students,
+        'father': father,
+        'mother': mother,
+        'male_guardian': male_guardian,
+        'female_guardian': female_guardian,
+        'male_sponsor': male_sponsor,
+        'female_sponsor': female_sponsor,
+        'selected_subjects':selected_subjects,
+    }
+
+    return render(request, "student_template/student_details.html", context)
+
+@login_required
+def student_invoice_list(request):
+    # Retrieve the list of invoices for the logged-in student
+    student = Students.objects.get(admin=request.user.id) # Assuming you have a OneToOneField to link User to Students
+    invoices = Invoice.objects.filter(student=student)
+
+    context = {'invoices': invoices, "students": student}
+    return render(request, 'student_template/invoice_list.html', context)
     
+    
+
+ 
+
+def student_transport_attendance_post(request):
+    route_id = request.POST.get("route")
+    start_date = request.POST.get("start_date")
+    end_date = request.POST.get("end_date")
+    
+    start_date_parse = datetime.strptime(start_date, "%Y-%m-%d").date()
+    end_date_parse = datetime.strptime(end_date, "%Y-%m-%d").date()
+    
+    route_obj = Route.objects.get(id=route_id)
+    user_obj = CustomUser.objects.get(id=request.user.id)
+    student_obj = Students.objects.get(admin=user_obj)
+    
+    attendance = TransportationAttendance.objects.filter(
+        date__range=(start_date_parse, end_date_parse),
+        route=route_obj
+    )
+    
+    attendance_reports = TransportationAttendanceReport.objects.filter(
+        attendance__in=attendance,
+        student=student_obj
+    )
+    
+    for attendance_report in attendance_reports:
+        print(
+            "Date: " + str(attendance_report.attendance.date),
+            "Status: " + str(attendance_report.status)
+        )
+        
+    return render(request, "student_template/student_transport_attendance_data.html", {
+        "attendance_reports": attendance_reports,
+        "students": student_obj,
+    })
+    
+def student_view_transport_attendance(request):
+    student = Students.objects.get(admin=request.user)  # Use request.user directly
+    routes = student.routes.all()  # Access the related routes
+    return render(request, "student_template/student_view_transport_attendance.html", {"routes": routes, "students": student})

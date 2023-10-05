@@ -493,7 +493,7 @@ class Parent(models.Model):
 
 class Route(models.Model):
     name = models.CharField(max_length=100)
-    students = models.ManyToManyField(Students, blank=True)
+    students = models.ManyToManyField(Students, blank=True, related_name='routes')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)       
     objects = models.Manager()   

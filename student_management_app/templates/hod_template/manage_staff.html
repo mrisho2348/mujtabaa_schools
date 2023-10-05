@@ -6,9 +6,7 @@
     <a class="btn btn-primary" href="{% url 'addstaff' %}">
         <i class="fas fa-plus"></i> New staff
     </a>
-    <a class="btn btn-primary" href="#">
-        <i class="fas fa-upload"></i> Upload staffs
-    </a>
+  
 {% endblock breadcrumb %}
 {% block main_content %}
 <div class="table-responsive">
@@ -29,7 +27,20 @@
  
     </div>
 </div>
-
+<div class="form-row">
+  <div>
+      {% if messages %}
+          <div class="col-12">
+              {% for message in messages %}
+                  {% if message.tags == 'error' %}
+                      <div class="alert alert-danger">{{ message }}</div>
+                  {% elif message.tags == 'success' %}
+                      <div class="alert alert-primary">{{ message }}</div>
+                  {% endif %}
+              {% endfor %}
+          </div>
+      {% endif %}
+  </div>
     <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm">
       <thead>
         <tr>
@@ -70,9 +81,9 @@
                 <a href="{% url 'edit_staff' staff_id=staff.id %}" data-toggle="tooltip" title="Edit Staff">
                     <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>
                 </a>
-                <a href="#" data-toggle="tooltip" title="Delete Staff" onclick="if(confirm('Are you sure to delete this student?') === false) event.preventDefault()">
-                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                </a>
+                <a href="{% url 'delete_staff' staff_id=staff.id %}" class="btn btn-danger btn-delete" data-toggle="tooltip" title="Delete staff" onclick="return confirm('Are you sure you want to delete this staff record?');">
+                  <i class="fas fa-trash"></i>
+              </a>
             </td>
             </tr>
             {% endfor %}

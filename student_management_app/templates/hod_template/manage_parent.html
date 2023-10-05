@@ -6,9 +6,7 @@
     <a class="btn btn-primary" href="{% url 'add_parents' %}">
         <i class="fas fa-plus"></i> New parents
     </a>
-    <a class="btn btn-primary" href="#">
-        <i class="fas fa-upload"></i> Upload parents
-    </a>
+   
 {% endblock breadcrumb %}
 {% block main_content %}
 <div class="table-responsive">
@@ -24,21 +22,24 @@
             </div>
         </form>
         <p>Show <strong>{{ page_obj.paginator.per_page }}</strong> Entries</p>
-    </div>
-        <div class="col-md-6 ml-5">
-            <form method="GET" action="{% url 'student-list' %}">
-                <div class="input-group mb-3">                
-                    <input type="text" name="search" class="form-control" placeholder="Search by registration number" aria-label="Search" aria-describedby="search-btn">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-primary" type="submit" id="search-btn">Search</button>
-                  </div>
-                </div>
-            </form>
-        </div>
+    </div>      
  
     </div>
 </div>
-
+<div class="form-row">
+    <div>
+        {% if messages %}
+            <div class="col-12">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-primary">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
     <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm">
         <thead>
             <tr>
@@ -67,10 +68,9 @@
                     <a href="{% url 'edit_parents' parent_id=parents.id  %}">
                         <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>
                     </a>
-                    <a href="#">
-                        <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Are you sure to delete this student?') === false) event.preventDefault()"><i class="fa fa-trash"></i></button>
+                    <a href="{% url 'delete_parent' parent_id=parents.id  %}" class="btn btn-danger" data-toggle="tooltip" title="Delete parent">
+                        <i class="fas fa-trash-alt"></i>
                     </a>
-                </td>
             </tr>
             {% endfor %}
         </tbody>

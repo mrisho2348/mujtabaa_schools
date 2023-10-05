@@ -25,7 +25,7 @@ from .models import  (Contribution,
                       CarExpense,
                      
                       )
-from student_management_app.models import (Car,
+from student_management_app.models import (Car, Classroom, Parent, Route, SchoolCleaner,
                                            Students,
                                            SchoolDriver,
                                            SchoolSecurityPerson,
@@ -46,7 +46,13 @@ def accountant_home(request):
 
     subject_all = Subject.objects.all()
     subject_list = [subject.subject_name for subject in subject_all]
-
+    security_count = SchoolSecurityPerson.objects.all().count()
+    cooker_count = Cooker.objects.all().count()
+    driver_count = SchoolDriver.objects.all().count()
+    route_count = Route.objects.all().count()
+    classroom_count = Classroom.objects.all().count()
+    cleaner_count = SchoolCleaner.objects.all().count()
+    parent_count = Parent.objects.all().count()
     staff_all = Staffs.objects.all()
     attendance_absent_staff_list = []
     staff_name_list = []
@@ -70,7 +76,14 @@ def accountant_home(request):
     context = {
         "staff_count": staff_count,
         "subject_count": subject_count,
-        "subject_list": subject_list,
+        "subject_list": subject_list,   
+        "security_count": security_count,
+        "cooker_count": cooker_count,
+        "driver_count": driver_count,
+        "route_count": route_count,
+        "classroom_count": classroom_count,
+        "cleaner_count": cleaner_count,
+        "parent_count": parent_count,
         "attendance_absent_staff_list": attendance_absent_staff_list,
         "staff_name_list": staff_name_list,
         "attendance_present_student_list": attendance_present_student_list,

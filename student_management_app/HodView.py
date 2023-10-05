@@ -3594,3 +3594,15 @@ def delete_route(request, route_id):
 
     # Handle GET request if needed, e.g., showing a confirmation page
     return render(request, 'hod_template/delete_confirm_route.html', {'route_id': route_id})
+
+def activate_cleaner(request, cleaner_id):
+    cleaner = get_object_or_404(SchoolCleaner, id=cleaner_id)
+    cleaner.is_active = True
+    cleaner.save()
+    return JsonResponse({'success': True})
+
+def deactivate_cleaner(request, cleaner_id):
+    cleaner = get_object_or_404(SchoolCleaner, id=cleaner_id)
+    cleaner.is_active = False
+    cleaner.save()
+    return JsonResponse({'success': True})

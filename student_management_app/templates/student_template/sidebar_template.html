@@ -24,149 +24,181 @@
         </div>
 
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+  <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+      data-accordion="false">
 
-                <li class="nav-item">
-                    <a href="{% url 'student_home' %}"
-                        class="nav-link {% if request.path == 'student_home' %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>Home</p>
-                    </a>
-                </li>
+      <!-- Home -->
+      <li class="nav-item">
+          <a href="{% url 'student_home' %}"
+              class="nav-link {% if request.path == 'student_home' %} active {% endif %}">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+          </a>
+      </li>
 
-                <li class="nav-item">
-                    <a href="{% url 'student_view_attendance' %}"
-                        class="nav-link {% if request.path == 'student_view_attendance' %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>View Attendance</p>
-                    </a>
-                </li>
+      <!-- View Attendance -->
+      <li class="nav-item">
+          <a href="{% url 'student_view_attendance' %}"
+              class="nav-link {% if request.path == 'student_view_attendance' %} active {% endif %}">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+              <p>View Attendance</p>
+          </a>
+      </li>
+      <li class="nav-item">
+          <a href="{% url 'student_view_transport_attendance' %}"
+              class="nav-link {% if request.path == 'student_view_transport_attendance' %} active {% endif %}">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+              <p>Transport Attendance</p>
+          </a>
+      </li>
 
-                <li class="nav-item">
-                    <a href="{% url 'student_apply_leave' %}"
-                        class="nav-link {% if request.path == 'student_apply_leave' %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>Apply for Leave</p>
-                    </a>
-                </li>
+      <!-- Apply for Leave -->
+      <li class="nav-item">
+          <a href="{% url 'student_apply_leave' %}"
+              class="nav-link {% if request.path == 'student_apply_leave' %} active {% endif %}">
+              <i class="nav-icon fas fa-file"></i>
+              <p>Apply for Leave</p>
+          </a>
+      </li>
 
-                <li class="nav-item">
-                    <a href="{% url 'student_sendfeedback' %}"
-                        class="nav-link {% if request.path == 'student_sendfeedback' %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>Send FeedBack</p>
-                    </a>
-                </li>
-                <li class="nav-header">Results management</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+      <!-- Send Feedback -->
+      <li class="nav-item">
+          <a href="{% url 'student_sendfeedback' %}"
+              class="nav-link {% if request.path == 'student_sendfeedback' %} active {% endif %}">
+              <i class="nav-icon fas fa-comment"></i>
+              <p>Send Feedback</p>
+          </a>
+      </li>
+
+      <!-- Results Management -->
+      <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                  RESULTS
+                  <i class="fas fa-angle-left right"></i>
+              </p>
+          </a>
+          <ul class="nav nav-treeview">
+              <!-- Necta Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Necta' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
                       <i class="nav-icon fas fa-graduation-cap"></i>
-                      <p>
-                        RESULTS
-                        <i class="fas fa-angle-left right"></i>
+                      <p>Necta Results</p>
+                  </a>
+              </li>
+
+              <!-- Mork Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Mork' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Mork Results</p>
+                  </a>
+              </li>
+
+              <!-- Terminal Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Terminal Exam' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Terminal Results</p>
+                  </a>
+              </li>
+
+              <!-- Mid Term Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Mid-Term Exam' %}"
+                      class="nav-link {% if request.path == assign_results %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Mid Term Results</p>
+                  </a>
+              </li>
+
+              <!-- Homework Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Homework' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Homework</p>
+                  </a>
+              </li>
+
+              <!-- Quiz Results -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Quiz' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Quiz Results</p>
+                  </a>
+              </li>
+
+              <!-- Assignments -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Assignment' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Assignments</p>
+                  </a>
+              </li>
+
+              <!-- Class Work -->
+              <li class="nav-item">
+                  <a href="{% url 'student_subject_wise_result' exam_type='Classwork' %}"
+                      class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Class Work</p>
+                  </a>
+              </li>
+
+              <!-- Online Exam -->
+              <li class="nav-item exams-badge">
+                  <a href="{% url 'exams:view_exams_and_result' %}" class="nav-link">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Online Exam
+                          <span class="right badge badge-danger exams-badge-count"></span>
                       </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'  exam_type='Necta'   as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Necta' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-graduation-cap"></i>
-                          <p>
-                            Necta results
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'  exam_type='Mork'   as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Mork' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fas fa-user"></i>
-                          <p>
-                            Mork results
-                            <i class="right"></i>
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'  exam_type='Terminal Exam'    as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Terminal Exam' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Terminal results
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'assign_results'   exam_type='Mid-Term Exam'   as assign_results  %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Mid-Term Exam' %}" class="nav-link  {% if request.path == assign_results %}active{% endif %} " >
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Mid Term Results
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'   exam_type='Homework'    as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Homework' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Home works
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'   exam_type='Quiz'   as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result' exam_type='Quiz' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Quiz results
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result'  exam_type='Assignment'  as student_subject_wise_result %}
-                        <a href="{% url 'student_subject_wise_result'  exam_type='Assignment' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Assignemnts
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        {% url 'student_subject_wise_result' exam_type='Classwork' as student_subject_wise_result %}              
-                      
-                        <a href="{% url 'student_subject_wise_result'  exam_type='Classwork' %}" class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
-                          <i class="nav-icon fas fa-user"></i>
-                          <p>
-                            Class work
-                          </p>
-                        </a>
-                      </li>
-                      <li class="nav-item exams-badge">
-                        <a href="{% url 'exams:view_exams_and_result' %}" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>Online exam
-                                <span class="right badge badge-danger exams-badge-count"></span>
-                            </p>
-                        </a>
-                    </li>
-              
-                      <li class="nav-item exams-badge">
-                        <a href="{% url 'exams:results' %}" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>Online Exam Results
-                               
-                            </p>
-                        </a>
-                    </li>
-                    </ul>
-                  </li>
+                  </a>
+              </li>
 
-              
+              <!-- Online Exam Results -->
+              <li class="nav-item exams-badge">
+                  <a href="{% url 'exams:results' %}" class="nav-link">
+                      <i class="nav-icon fas fa-graduation-cap"></i>
+                      <p>Online Exam Results</p>
+                  </a>
+              </li>
+          </ul>
+      </li>
 
-            </ul>
-        </nav>
+      <!-- Details -->
+      <li class="nav-header">Details</li>
+
+      <!-- Details Page -->
+      <li class="nav-item exams-badge">
+          <a href="{% url 'single_student_details' %}" class="nav-link">
+              <i class="nav-icon fas fa-info"></i>
+              <p>Details</p>
+          </a>
+      </li>
+
+      <!-- My Invoice -->
+      <li class="nav-item exams-badge">
+          <a href="{% url 'student_invoice_list' %}" class="nav-link">
+              <i class="nav-icon fas fa-file-invoice-dollar"></i>
+              <p>My Invoice</p>
+          </a>
+      </li>
+  </ul>
+</nav>
+<!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
+</aside>
+
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

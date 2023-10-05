@@ -1,0 +1,49 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block page_title %}
+    Invoice List
+{% endblock page_title %}
+
+{% block main_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Invoices</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Service</th>
+                                    <th>Amount Paid</th>
+                                    <th>Amount Required</th>
+                                    <th>Amount Remaining</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for invoice in invoices %}
+                                    <tr>
+                                        <td>{{ invoice.student.admin.first_name }} {{ invoice.student.admin.last_name }}</td>
+                                        <td>{{ invoice.service.service_name }}</td>
+                                        <td>${{ invoice.amount_paid }}</td>
+                                        <td>${{ invoice.amount_required }}</td>
+                                        <td>${{ invoice.amount_remaining }}</td>
+                                        <td>{% if invoice.is_paid %}Paid{% else %}Not Paid{% endif %}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6">No invoices found.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

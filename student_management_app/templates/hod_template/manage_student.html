@@ -8,9 +8,7 @@
     <a class="btn btn-primary" href="{% url 'add_student' %}">
         <i class="fas fa-plus"></i> New student
     </a>
-    <a class="btn btn-primary" href="#">
-        <i class="fas fa-upload"></i> Upload students
-    </a>
+
 {% endblock breadcrumb %}
 {% load static %}
 {% block main_content %}
@@ -64,7 +62,20 @@
         </div>
     </div>
 </div>
-
+<div class="form-row">
+    <div>
+        {% if messages %}
+            <div class="col-12">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-primary">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm">
     <thead>
         <tr>
@@ -99,8 +110,8 @@
                 <a href="{% url 'edit_student' student_id=student.admin.id  %}">
                     <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>
                 </a>
-                <a href="#">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Are you sure to delete this student?') === false) event.preventDefault()"><i class="fa fa-trash"></i></button>
+                <a href="{% url 'delete_student' student_id=student.id   %}" class="btn btn-danger" data-toggle="tooltip" title="Delete student">
+                    <i class="fas fa-trash-alt"></i>
                 </a>
             </td>
         </tr>

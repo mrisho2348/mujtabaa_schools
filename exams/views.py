@@ -540,7 +540,7 @@ def get_published_exam_count(request):
 
     if student_group:
         count = Exam_Model.objects.filter(is_published=True, group=student_group).count()
-        print(count)
+        
     else:
         count = 0
 

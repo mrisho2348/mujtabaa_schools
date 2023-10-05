@@ -6,9 +6,7 @@
     <a class="btn btn-primary" href="{% url 'add_schoolclassroom' %}">
         <i class="fas fa-plus"></i> New classroom
     </a>
-    <a class="btn btn-primary" href="#">
-        <i class="fas fa-upload"></i> Upload classroom
-    </a>
+   
 {% endblock breadcrumb %}
 {% block main_content %}
     {% load static %}
@@ -27,6 +25,20 @@
                                         <h3 class="card-title">classroom Details</h3>
                                     </div>
                                     <div class="card-body table-responsive p-0">
+                                        <div class="form-row">
+                                            <div>
+                                                {% if messages %}
+                                                    <div class="col-12">
+                                                        {% for message in messages %}
+                                                            {% if message.tags == 'error' %}
+                                                                <div class="alert alert-danger">{{ message }}</div>
+                                                            {% elif message.tags == 'success' %}
+                                                                <div class="alert alert-primary">{{ message }}</div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         <table class="table table-hover text-nowrap table-bordered table-striped table-sm">
                                             <thead>
                                                 <tr>

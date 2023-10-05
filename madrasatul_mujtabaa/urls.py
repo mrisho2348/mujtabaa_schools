@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import include, path
 from madrasatul_mujtabaa import settings
-from student_management_app import StudentView, views,HodView,StaffView,DriverView
+from student_management_app import StudentView, views,HodView,StaffView,DriverView,Delete
 
 urlpatterns = [
     path('', views.ShowLogin, name='login'),
@@ -63,7 +63,7 @@ urlpatterns = [
     # URL for the view to add driver vehicle information
     path('add_driver_vehicle_info/<int:driver_id>/', HodView.add_driver_vehicle_info, name='add_driver_vehicle_info'),
 
-    # URL for the view to add driver languages spoken
+    # URL for the view to add driver languages spokenDelete
     path('add_driver_languages/<int:driver_id>/', HodView.add_driver_languages, name='add_driver_languages'),
 
     # URL for the view to add driver references
@@ -77,7 +77,7 @@ urlpatterns = [
     path('add_schoolcleaner/', HodView.add_schoolcleaner, name='add_schoolcleaner'),
     path('add_staff_save', HodView.add_staff_save, name='add_staff_save'),   
     path('add_security_person_info_save/', HodView.add_security_person_info_save, name='add_security_person_info_save'),
-    path('manage_security/', HodView.manage_security, name='manage_security'),
+    
     path('view_security_info/<int:security_id>/', HodView.view_security_info, name='view_security_info'),
     path('update_security_info/<int:security_id>/', HodView.update_security_info, name='update_security_info'),
     path('update_security_info_save/<int:security_id>/', HodView.update_security_info_save, name='update_security_info_save'),
@@ -178,6 +178,9 @@ urlpatterns = [
     path('exam-types/edit/<int:exam_type_id>/', HodView.exam_type_form, name='exam-type-form'),
     path('exam-types/', HodView.exam_type_form, name='exam-type-form'),
     path('exam-types-list/', HodView.exam_type_list, name='exam_type_list'),
+    # activation
+    path('activate_cleaner/<int:cleaner_id>/', HodView.activate_cleaner, name='activate_cleaner'),
+    path('deactivate_cleaner/<int:cleaner_id>/', HodView.deactivate_cleaner, name='deactivate_cleaner'),
     # staff url paths  
     path('staff_home', StaffView.staff_home, name='staff_home'),  
     path('staff_take_attendance', StaffView.staff_take_attendance, name='staff_take_attendance'),  
@@ -213,7 +216,11 @@ urlpatterns = [
     path('student_sendfeedback', StudentView.student_sendfeedback, name='student_sendfeedback'),  
     path('student_sendfeedback_save', StudentView.student_sendfeedback_save, name='student_sendfeedback_save'),    
     path('student_profile', StudentView.student_profile, name='student_profile'),    
-    path('student_profile_save', StudentView.student_profile_save, name='student_profile_save'),    
+    path('student_profile_save', StudentView.student_profile_save, name='student_profile_save'), 
+    path('single_student_details', StudentView.single_student_details, name='single_student_details'),   
+    path('student_invoice_list', StudentView.student_invoice_list, name='student_invoice_list'), 
+    path('student_transport_attendance_post/', StudentView.student_transport_attendance_post, name='student_transport_attendance_post'),  
+    path('student_view_transport_attendance/', StudentView.student_view_transport_attendance, name='student_view_transport_attendance'),  
     path('logout_user', views.logout_user, name='logout_user'),  # Move this line here
     
     # driver url pattern
@@ -234,4 +241,20 @@ urlpatterns = [
     path('driver_profile_save', DriverView.driver_profile_save, name='driver_profile_save'), 
     path('update-transport-attendance/', DriverView.update_transport_attendance_data, name='update_transport_attendance_data'),
     path('view_driver_details/<int:driver_id>/', DriverView.view_driver_details, name='view_driver_details'),
+    
+    # delete
+    path('delete_cleaner/<int:cleaner_id>/', Delete.delete_cleaner, name='delete_cleaner'),
+    path('delete_car/<int:car_id>/', Delete.delete_car, name='delete_car'),
+    path('delete_classroom/<int:classroom_id>/', Delete.delete_classroom, name='delete_classroom'),
+    path('delete_parent/<int:parent_id>/', Delete.delete_parent, name='delete_parent'),    
+    path('delete_cooker/<int:cooker_id>/', Delete.delete_cooker, name='delete_cooker'),
+    path('delete_driver/<int:driver_id>/', Delete.delete_driver, name='delete_driver'),
+    path('delete_security/<int:security_id>/', Delete.delete_security, name='delete_security'),
+    path('delete_session/<int:session_id>/', Delete.delete_session, name='delete_session'),
+    path('delete_staff/<int:staff_id>/', Delete.delete_staff, name='delete_staff'),
+    path('delete_student/<int:student_id>/', Delete.delete_student, name='delete_student'),
+    path('delete_subject/<int:subject_id>/', Delete.delete_subject, name='delete_subject'),
+
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

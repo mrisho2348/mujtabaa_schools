@@ -24,6 +24,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                     # Allow specific views and static pages
                     if (modulename == "student_management_app.HodView" or
                         modulename == "student_management_app.views" or
+                        modulename == "student_management_app.Delete" or
                         modulename == "django.views.static" or
                         modulename == "library_management_app.views" or
                         modulename == "financial_management.Financial" or

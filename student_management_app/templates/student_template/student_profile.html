@@ -1,15 +1,10 @@
  
 {% extends 'student_template/base_template.html' %}
-{% block page_title %}
-       Edit Profile   
-{% endblock page_title %}
+
 {% block main_content %}
 {% load static %}
 <section class="content">
  <div class="container-fluid">
-    <h2>Edit Profile</h2>
-    <hr>
-
     <div class="row">
         <div class="col-md-6">
             <form action="{% url 'student_profile_save' %}" method="POST">
