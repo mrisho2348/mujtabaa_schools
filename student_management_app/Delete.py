@@ -1,42 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from student_management_app.models import (
-    Attendance,
-    AttendanceReport,
-    CustomUser,
-    FeedBackStaff,
-    FeedBackStudent,
-    LeaveReportSchoolDriver,
-    LeaveReportStaffs,
-    LeaveReportStudent,
+ 
     SessionYearModel,
     Staffs,
     Students,
     Subject,
     Parent, 
-    Route,   
-    Qualifications,
-    Skills,
-    EmploymentHistory,
-    References,
+
     SchoolDriver,
-    SchoolDriverMedicalInfo,
-    SchoolDriverLicenseInfo,
-    SchoolDriverContact,
-    SchoolDriverEmergencyContact,
-    SchoolDriverEmployment,
-    SchoolDriverVehicle,
-    SchoolDriverLanguage,
-    SchoolDriverReference,
+
     Car,
     SchoolSecurityPerson,
     Cooker,
     SchoolCleaner,
     Classroom,
-    ExamType,
-    Result,
-    StudentExamInfo,
-    StudentPositionInfo,
-    StaffRoleAssignment,
+  
 )
 from django.contrib import messages
 

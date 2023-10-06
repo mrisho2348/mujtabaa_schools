@@ -111,6 +111,24 @@
                       </p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    {% url 'student_feedback_message' as student_feedback_message %}
+                    <a href="{% url 'student_feedback_message' %}" class="nav-link {% if request.path == student_leave_view %}active{% endif %}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                        student Feedback
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'student_leave_view' as student_leave_view %}
+                    <a href="{% url 'student_leave_view' %}" class="nav-link {% if request.path == student_leave_view %}active{% endif %}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                        student Leave
+                      </p>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li class="nav-item has-treeview">
@@ -208,6 +226,24 @@
                       <i class="nav-icon fa fa-user"></i>
                       <p>
                         CLeaners
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'driver_feedback_message' as driver_feedback_message %}
+                    <a href="{% url 'driver_feedback_message' %}" class="nav-link {% if request.path == driver_feedback_message %}active{% endif %}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                        Driver Feedback
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'driver_leave_view' as driver_leave_view %}
+                    <a href="{% url 'driver_leave_view' %}" class="nav-link {% if request.path == driver_leave_view %}active{% endif %}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                        Driver Leave
                       </p>
                     </a>
                   </li>
@@ -462,6 +498,15 @@
                       <i class="nav-icon fas fa-bars"></i>
                       <p>
                         View Attendance
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'admin_view_transport_attendance' as admin_view_transport_attendance %}
+                    <a href="{% url 'admin_view_transport_attendance' %}" class="nav-link  {% if request.path == admin_view_transport_attendance %}active{% endif %}">
+                      <i class="nav-icon fas fa-bars"></i>
+                      <p>
+                        Transport Attendance
                       </p>
                     </a>
                   </li>

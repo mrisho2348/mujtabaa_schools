@@ -3,21 +3,19 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import serializers
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Case, When, F,IntegerField
 from django.db.models.functions import Coalesce
-from twilio.rest import Client
-from django.db import models
-from django.views import View
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import DateField
 from django.db.models.functions import Cast
 from django.contrib.auth.decorators import login_required
-from datetime import date  # Import date from datetime module
+from datetime import date
+
+from financial_management.models import DriverSalary  # Import date from datetime module
 
 from .models import (  
     CustomUser,
@@ -32,7 +30,7 @@ from .models import (
    
     )
 
-
+@login_required
 def driver_home(request):
     if request.user.is_authenticated:
         try:
@@ -100,11 +98,14 @@ def driver_home(request):
         # Redirect the user to the login page
         return redirect("login")  # Replace "login" with the actual URL name of your login page view
     
+@login_required    
 def driver_sendfeedback(request):
     driver_obj = SchoolDriver.objects.get(admin=request.user.id)
     feedback_data = FeedbackSchoolDriver.objects.filter(driver_id=driver_obj)    
     return render(request,"driver_template/driver_feedback.html",{"feedback_data":feedback_data,"driver":driver_obj})
 
+
+@login_required
 def driver_sendfeedback_save(request):
     if request.method!= "POST":
         return HttpResponseRedirect(reverse("driver_sendfeedback"))
@@ -121,14 +122,16 @@ def driver_sendfeedback_save(request):
        except:
             messages.error(request,"feedback failed to be sent")
             return HttpResponseRedirect(reverse("driver_sendfeedback"))
-
+        
+        
+@login_required
 def   driver_apply_leave(request):
     driver_obj = SchoolDriver.objects.get(admin=request.user.id)    
     driver_leave_report =LeaveReportSchoolDriver.objects.filter(driver_id=driver_obj)    
     return render(request,"driver_template/driver_leave_template.html",{"driver_leave_report":driver_leave_report,"driver":driver_obj})
 
 
-
+@login_required
 def driver_apply_leave_save(request):
     if request.method!= "POST":
         return HttpResponseRedirect(reverse("driver_apply_leave"))
@@ -151,7 +154,7 @@ def driver_apply_leave_save(request):
         
         
 
-
+@login_required
 def  driver_profile(request):
     user = CustomUser.objects.get(id=request.user.id)
     drivers = SchoolDriver.objects.get(admin=user)
@@ -159,6 +162,7 @@ def  driver_profile(request):
     return render(request,"driver_template/driver_profile.html",{"user":user,"driver":drivers}) 
     
 @csrf_exempt
+@login_required
 def get_students_by_route(request):
     if request.method == 'POST':
         route_id = request.POST.get('route')
@@ -174,6 +178,7 @@ def get_students_by_route(request):
     return JsonResponse([], safe=False)
 
 @csrf_exempt
+@login_required
 def save_transport_attendance_data(request):
     if request.method == 'POST':
         try:
@@ -262,7 +267,7 @@ def get_transport_attendance_data(request):
     # If the request method is not POST, return an error response
     return JsonResponse({"status": "Error", "error_message": "Invalid request method"})
         
-      
+@login_required      
 def get_all_transport_dates(request):
     if request.method == 'GET':
         # Query to fetch distinct transport dates
@@ -282,16 +287,19 @@ def get_all_transport_dates(request):
 
     # Handle other HTTP methods or invalid requests gracefully
     
+@login_required    
 def driver_take_attendance(request):
     routes = Route.objects.all()   
     driver = SchoolDriver.objects.get(admin=request.user)  # Assuming that the currently logged-in user is a driver
-    return render(request,"driver_template/driver_take_attendance.html",{"routes":routes,"driver":driver})    
-
+    return render(request,"driver_template/driver_take_attendance.html",{"routes":routes,"driver":driver})  
+  
+@login_required
 def driver_update_attendance(request):
     routes = Route.objects.all() 
     driver = SchoolDriver.objects.get(admin=request.user)  # Assuming that the currently logged-in user is a driver
     return render(request,"driver_template/driver_update_attendance.html",{"routes":routes,"driver":driver})
 
+@login_required
 def driver_profile_save(request):
     if request.method!="POST":
         return HttpResponseRedirect(reverse("driver_profile"))
@@ -359,6 +367,7 @@ def update_transport_attendance_data(request):
     # If the request method is not POST, return an error response
     return JsonResponse({"status": "Error", "error_message": "Invalid request method"})  
 
+@login_required
 def view_driver_details(request, driver_id):
     driver = get_object_or_404(SchoolDriver.objects.select_related(
         'admin', 'medical_info', 'license_info', 'contact_info',
@@ -366,3 +375,9 @@ def view_driver_details(request, driver_id):
     ).prefetch_related('languages_spoken', 'references'), id=driver_id)   
     context = {'driver': driver}
     return render(request, 'driver_template/details_schooldriver.html', context)
+
+def driver_salary(request):
+    # Retrieve and display the list of staff salaries for the logged-in staff
+    driver_salaries = DriverSalary.objects.filter(driver_member__admin=request.user)
+    context = {'driver_salaries': driver_salaries}
+    return render(request, 'driver_template/manage_driver_salary_list.html', context)

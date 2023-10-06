@@ -1,0 +1,135 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+View Transportation Attendance
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">View Transportation Attendance</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <div class="card-body">
+            <div class="form-group">
+              <label>Route</label>
+              <select class="form-control" name="route" id="route">
+                {% for route in routes %}
+                <option value="{{ route.id }}">{{ route.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+                <label>Transport Date</label>
+                <select class="form-control" name="transport_date" id="transport_date">
+                  <option value="">Select Transport Date</option>
+                </select>
+              </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary btn-block" id="fetch_transport_attendance">Fetch Attendance</button>
+            </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer" id="attendance_block" style="display: none;">
+            <label>Transportation Attendance Report</label>
+            <div id="transport_attendance_data"></div>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+{% block customer_js %}
+<script>
+  $(document).ready(function () {
+
+
+
+ // Event listener for route selection change
+ $("#route").change(function () {
+    var route_id = $(this).val();
+
+    // Fetch available transport dates for the selected route
+    $.ajax({
+      url: "{% url 'admin_get_transport_dates' %}",
+      type: "POST",
+      data: {
+        route_id: route_id
+      },
+      success: function (response) {
+        var json_data = JSON.parse(response);
+        console.log(json_data);
+
+        var selectElement = $("#transport_date");
+        selectElement.empty(); // Clear existing options
+
+        // Add the default "Select Transport Date" option
+        selectElement.append("<option value=''>Select Transport Date</option>");
+
+        // Add the retrieved transport dates as options
+        for (var key in json_data) {
+          selectElement.append("<option value='" + json_data[key]["date"] + "'>" + json_data[key]["date"] + "</option>");
+        }
+      },
+      error: function () {
+        alert("Error in fetching transport dates");
+      }
+    });
+  });
+
+
+    $("#fetch_transport_attendance").click(function () {
+      var route_id = $("#route").val();
+      var transport_date = $("#transport_date").val();
+
+      $.ajax({
+        url: "{% url 'admin_get_transport_attendance' %}",
+        type: "POST",
+        data: {
+          route_id: route_id,
+          transport_date: transport_date
+        },
+        success: function (response) {
+          var json_data = JSON.parse(response);
+          console.log(json_data);
+
+          var div_data = "<div class='form-group'><div class='card card-success'><div class='card-header'>";
+          div_data += "Transportation Attendance on " + transport_date + " for Route: " + $("#route option:selected").text();
+          div_data += "</div><div class='card-body'>";
+
+          div_data += "<table class='table table-bordered'><thead><tr><th>Student</th><th>Status</th></tr></thead><tbody>";
+
+          for (var key in json_data) {
+            div_data += "<tr>";
+            div_data += "<td>" + json_data[key]['name'] + "</td>";
+
+            if (json_data[key]["status"]) {
+              div_data += "<td>Present</td>";
+            } else {
+              div_data += "<td>Absent</td>";
+            }
+
+            div_data += "</tr>";
+          }
+
+          div_data += "</tbody></table></div></div></div>";
+
+          $("#transport_attendance_data").html(div_data);
+          $("#attendance_block").show();
+        },
+        error: function () {
+          alert("Error in Fetching Transportation Attendance");
+        }
+      });
+    });
+  });
+</script>
+{% endblock customer_js %}

@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,14 +8,19 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from financial_management.models import StaffSalary
 
 from student_management_app.models import (
     Attendance,
     AttendanceReport,
     CustomUser,
+    EmploymentHistory,
     FeedBackStaff,
     LeaveReportStaffs,
+    Qualifications,
+    References,
     SessionYearModel,
+    Skills,
     Staffs, 
     Students, 
     Subject,
@@ -86,31 +91,34 @@ def staff_take_attendance(request):
 def get_students(request):
     subject_id = request.POST.get("subject")
     session_year_id = request.POST.get("session_year")
- 
+    current_class = request.POST.get("current_class")  # Add this line
+
     try:
-        subject = Subject.objects.get(id=subject_id)
-        session_year = SessionYearModel.objects.get(id=session_year_id)
-        print(session_year.session_start_year)
-        print(subject.subject_name)
-        # Get all students associated with the subject and session year
-        students = Students.objects.filter(subjects=subject, session_year=session_year)
-        
+        subject = get_object_or_404(Subject, id=subject_id)
+        session_year = get_object_or_404(SessionYearModel, id=session_year_id)
+
+        # Get all students associated with the subject, session year, and current class
+        students = Students.objects.filter(
+            subjects=subject,
+            session_year=session_year,
+            current_class=current_class  # Filter by the current class
+        )
+
         list_data = []
 
         for student in students:
-            print(student)
             data_small = {
                 "id": student.admin.id,
                 "name": student.admin.first_name + " " + student.admin.last_name
             }
             list_data.append(data_small)
-            print(list_data)
 
         return JsonResponse(list_data, safe=False)
-    except Subject.DoesNotExist:
-        return JsonResponse({"error": "Subject not found."}, status=404)
-    except SessionYearModel.DoesNotExist:
-        return JsonResponse({"error": "Session year not found."}, status=404)
+
+    except Http404:
+        return JsonResponse({"error": "Subject or session year not found."}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
     
     
     
@@ -168,9 +176,15 @@ def get_attendance_date(request):
  
 @csrf_exempt
 def get_student_attendance(request):  
-    attendance_date=request.POST.get("attendance_date_id")     
+    attendance_date=request.POST.get("attendance_date_id") 
+    current_class = request.POST.get("current_class") 
+    students = Students.objects.filter(current_class=current_class)
     attendance_date_id=Attendance.objects.get(id=attendance_date)
-    attendance_data =AttendanceReport.objects.filter(attendance_id=attendance_date_id)   
+    attendance_data = AttendanceReport.objects.filter(
+            attendance_id=attendance_date_id,
+            student_id__in=students
+        )
+         
     
     list_data=[]
 
@@ -204,7 +218,8 @@ def save_updateattendance(request):
 def staff_sendfeedback(request):
     staff_obj = Staffs.objects.get(admin=request.user.id)
     feedback_data = FeedBackStaff.objects.filter(staff_id=staff_obj)
-    return render(request,"staff_template/staff_feedback.html",{"feedback_data":feedback_data})
+    staff = Staffs.objects.get(admin=request.user.id)
+    return render(request,"staff_template/staff_feedback.html",{"feedback_data":feedback_data,'staff':staff,})
 
 def staff_sendfeedback_save(request):
     if request.method!= "POST":
@@ -226,7 +241,8 @@ def staff_sendfeedback_save(request):
 def   staff_apply_leave(request):
     staff_obj = Staffs.objects.get(admin=request.user.id)
     staff_leave_report = LeaveReportStaffs.objects.filter(staff_id=staff_obj)
-    return render(request,"staff_template/staff_leave_template.html",{"staff_leave_report":staff_leave_report})
+    staff = Staffs.objects.get(admin=request.user.id)
+    return render(request,"staff_template/staff_leave_template.html",{"staff_leave_report":staff_leave_report, 'staff':staff,})
 
 
 
@@ -287,6 +303,7 @@ def staff_profile_save(request):
 
 
 def assign_results_save(request):
+    staff = Staffs.objects.get(admin=request.user.id)
     if request.method == 'POST':
         try:
             student_id = request.POST.get('student_id')
@@ -339,7 +356,8 @@ def assign_results_save(request):
 
     context = {
         'students': students,
-        'exam_types': exam_types
+        'exam_types': exam_types,
+        'staff':staff,
     }
 
     return render(request, 'staff_template/upload_results.html', context)
@@ -347,6 +365,7 @@ def assign_results_save(request):
 
 def student_details(request, student_id, exam_type_id):
     # Retrieve the exam type and student based on their IDs
+    staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, id=exam_type_id)
     student = get_object_or_404(Students, id=student_id)
     
@@ -358,10 +377,12 @@ def student_details(request, student_id, exam_type_id):
         'student': student,
         'subjects': staff_subjects,
         'exam_type': exam_type,
+        'staff':staff,
     })
     
 def students_summary_staff(request, exam_type=None):
     # Fetch secondary students
+    staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, name=exam_type)
     form_i_students = Students.objects.filter(current_class='Form I')
     form_ii_students = Students.objects.filter(current_class='Form II')
@@ -440,6 +461,7 @@ def students_summary_staff(request, exam_type=None):
 
     
     return render(request, 'staff_template/students_summary.html', {
+         'staff':staff,
         'total_form_i_students': total_form_i_students,
         'total_form_2_students': total_form_2_students,
         'total_form_3_students': total_form_3_students,
@@ -490,18 +512,21 @@ def students_summary_staff(request, exam_type=None):
     
 def form_i_students(request, exam_type_id, current_class):
     # Fetch Form I students
+    staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, id=exam_type_id)
     students = Students.objects.filter(current_class=current_class)
     return render(request, 'staff_template/form_i_students_template.html', {
         'students': students,
         'current_class': current_class,
         'exam_type': exam_type,
+        'staff':staff,
         
     })        
     
 
 @login_required  # Add the login_required decorator to ensure the user is logged in
 def subject_wise_results(request, student_id, exam_type_id):
+    staff = Staffs.objects.get(admin=request.user.id)
     # Get the student based on the provided student_id
     student = Students.objects.get(id=student_id)  # Replace 'Students' with your actual student model
 
@@ -514,6 +539,7 @@ def subject_wise_results(request, student_id, exam_type_id):
     context = {
         'student': student,
         'results': results,
+         'staff':staff,
         'staff_subjects': staff_subjects,  # Pass the staff's subjects to the template
         'exam_type_id': exam_type_id,
     }
@@ -525,7 +551,7 @@ def update_students_results(request, result_id, student_id, exam_type_id):
     # Retrieve the exam type and student based on their IDs
     exam_type = get_object_or_404(ExamType, id=exam_type_id)
     student = get_object_or_404(Students, id=student_id)
-
+    staff = Staffs.objects.get(admin=request.user.id)
     # Retrieve the currently logged-in staff
     current_staff = Staffs.objects.get(admin=request.user.id)
 
@@ -539,11 +565,13 @@ def update_students_results(request, result_id, student_id, exam_type_id):
         'student': student,
         'subjects': staff_subjects,
         'exam_type': exam_type,
+         'staff':staff,
         'existing_result': existing_result,  # Pass the existing result to the template
     })
     
 def assign_results(request, student_id, exam_type_id):
     # Retrieve the exam type and student based on their IDs
+    staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, id=exam_type_id)
     student = get_object_or_404(Students, id=student_id)
 
@@ -560,6 +588,31 @@ def assign_results(request, student_id, exam_type_id):
         'student': student,
         'subjects': staff_subjects,
         'exam_type': exam_type,
+        'staff':staff,
         
     })
             
+def staff_detail(request):
+    staff = Staffs.objects.get(admin=request.user.id)
+    # Fetch additional staff-related data    
+    skills = Skills.objects.filter(staff_id=staff).first()
+    employment_history = EmploymentHistory.objects.filter(staff_id=staff)  # Use ForeignKey's filter here
+    qualifications = Qualifications.objects.filter(staff_id=staff)
+    references = References.objects.filter(staff_id=staff)
+
+    context = {
+        'staff': staff,
+        'skills': skills,
+        'employment_history': employment_history,
+        'qualifications': qualifications,
+        'references': references,
+    }
+
+    return render(request, "staff_template/staff_details.html", context)            
+
+def staff_salary(request):
+    # Retrieve and display the list of staff salaries for the logged-in staff
+    staff = Staffs.objects.get(admin=request.user.id)
+    staff_salaries = StaffSalary.objects.filter(staff_member__admin=request.user)
+    context = {'staff_salaries': staff_salaries,'staff':staff}
+    return render(request, 'staff_template/manage_staff_salary_list.html', context)

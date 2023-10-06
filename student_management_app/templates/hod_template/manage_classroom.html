@@ -62,12 +62,24 @@
                                                         <td>{{ course.building }}</td>
                                                         <td>{{ course.description }}</td>
                                                         <td>
-                                                            {% if course.is_active %}
-                                                                <span class="badge bg-success">Active</span>
-                                                            {% else %}
-                                                                <span class="badge bg-danger">Inactive</span>
-                                                            {% endif %}
+                                                            <form method="POST" action="{% url 'update_classroom_status' %}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="user_id" value="{{ classroom.id }}">
+                                                                <input type="hidden" name="is_active" value="{% if classroom.is_active %}1{% else %}0{% endif %}">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    data-toggle="switchbutton"
+                                                                    data-size="xs"
+                                                                    data-onlabel="Active"
+                                                                    data-offlabel="Inactive"
+                                                                    data-offstyle="danger"
+                                                                    data-onstyle="success"
+                                                                    {% if classroom.is_active %}checked{% endif %}
+                                                                    onchange="submitForm(this)"
+                                                                >
+                                                            </form>
                                                         </td>
+                                                        
                                                         <td>
                                                             <a href="{% url 'update_classroom' classroom_id=course.id %}" class="btn btn-success" data-toggle="tooltip" title="Edit classroom">
                                                                 <i class="fas fa-edit"></i>
@@ -94,48 +106,11 @@
         </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Add the following script inside the <head> or at the bottom of the template -->
     <script>
-        // JavaScript code for activating/deactivating classrooms
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all status badges
-            const statusBadges = document.querySelectorAll('.badge');
-            function getCookie(name) {
-                const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-                return cookieValue ? cookieValue.pop() : '';
-            }
-            // Add event listener to each badge
-            statusBadges.forEach(function (badge) {
-                badge.addEventListener('click', function () {
-                    const isActive = badge.classList.contains('bg-success');
-                    const classroomId = badge.parentNode.parentNode.getAttribute('data-classroom-id');
-                    const apiUrl = `/api/update_classroom_status/${classroomId}/`;
-
-                    // Call the API endpoint to update the classroom status
-                    fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken'), // Replace 'getCookie' with a function to retrieve the CSRF token from the cookies
-                        },
-                        body: JSON.stringify({
-                            is_active: !isActive,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the badge style to reflect the new status
-                        badge.classList.toggle('bg-success', !isActive);
-                        badge.classList.toggle('bg-danger', isActive);
-                        badge.textContent = !isActive ? 'Inactive' : 'Active';
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Handle the error or display an error message to the user
-                    });
-                });
-            });
-        });
+        function submitForm(checkbox) {
+            checkbox.form.submit();
+        }
     </script>
+ 
 
 {% endblock main_content %}

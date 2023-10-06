@@ -70,10 +70,22 @@
                                                             {% endif %}
                                                         </td>
                                                         <td>
-                                                            <span class="status-badge {% if cleaner.is_active %}bg-success{% else %}bg-danger{% endif %}"
-                                                                  data-cleaner-id="{{ cleaner.id }}">
-                                                                {% if cleaner.is_active %}Active{% else %}Inactive{% endif %}
-                                                            </span>
+                                                            <form method="POST" action="{% url 'update_cleaner_status' %}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="user_id" value="{{ cleaner.admin.id }}">
+                                                                <input type="hidden" name="is_active" value="{% if cleaner.admin.is_active %}1{% else %}0{% endif %}">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    data-toggle="switchbutton"
+                                                                    data-size="xs"
+                                                                    data-onlabel="Active"
+                                                                    data-offlabel="Inactive"
+                                                                    data-offstyle="danger"
+                                                                    data-onstyle="success"
+                                                                    {% if cleaner.admin.is_active %}checked{% endif %}
+                                                                    onchange="submitForm(this)"
+                                                                >
+                                                            </form>
                                                         </td>
                                                         <td>
                                                             <a href="{% url 'update_cleaner_info' cleaner_id=cleaner.id %}" class="btn btn-success" data-toggle="tooltip" title="Edit Cleaner">
@@ -102,7 +114,11 @@
         </div><!-- /.container-fluid -->
     </section>
 
-
+    <script>
+        function submitForm(checkbox) {
+            checkbox.form.submit();
+        }
+    </script>
    
     {% endblock main_content %}
 

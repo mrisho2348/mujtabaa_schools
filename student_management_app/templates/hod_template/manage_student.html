@@ -86,6 +86,7 @@
             <th>Gender</th>
             <th>Picture</th>
             <th>REGISTRATION DATE</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -103,6 +104,26 @@
             <td><p>No profile picture</p></td>
           {% endif %}
             <td>{{ student.admin.date_joined }}</td>
+            <td>
+                <form method="POST" action="{% url 'update_student_status' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ student.admin.id }}">
+                    <input type="hidden" name="is_active" value="{% if student.admin.is_active %}1{% else %}0{% endif %}">
+                    <input
+                        type="checkbox"
+                        data-toggle="switchbutton"
+                        data-size="xs"
+                        data-onlabel="Active"
+                        data-offlabel="Inactive"
+                        data-offstyle="danger"
+                        data-onstyle="success"
+                        {% if student.admin.is_active %}checked{% endif %}
+                        onchange="submitForm(this)"
+                    >
+                </form>
+            </td>
+            
+            
             <td class="text-center">
                 <a href="{% url 'single_student_detail' student_id=student.id  %}">
                     <button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>
@@ -147,61 +168,9 @@
 </div>
 {% endif %}
 
-<script src="{% static 'plugins/jquery/jquery-3.6.0.min.js' %}"></script>
 <script>
-    $(document).ready(function() {
-        // Submit the form on filter button click
-        $('#filter-btn').click(function() {
-            $('#filter-form').submit();
-        });
-    
-        // Handle form submission and AJAX request
-        $('#filter-form').submit(function(e) {
-            e.preventDefault();
-            var currentClass = $('#current-class-select').val();
-            var selectedClassName = $('#current-class-select option:selected').text();
-    
-            // Update the heading text
-            $('#page-title').text("All " + selectedClassName + " Registered Students");
-    
-            // Perform AJAX request and update the student table
-            $.ajax({
-                url: "{% url 'manage_student' %}",
-                data: {current_class: currentClass},
-                dataType: 'json',
-                success: function(response) {
-                    var students = response.students;
-                    var tableBody = $('#student-table-body');
-                    tableBody.empty();
-                    for (var i = 0; i < students.length; i++) {
-                        var student = students[i];
-                        var row = '<tr>' +
-                            '<td>' + student.id + '</td>' +
-                            '<td>' + student.admin.first_name + ' ' + student.admin.last_name + '</td>' +
-                            '<td>' + student.school_segment + '</td>' +
-                            '<td>' + student.current_class + '</td>' +
-                            '<td>' + student.gender + '</td>' +
-                            '<td>' + student.admin.date_joined + '</td>' +
-                            '<td class="text-center">' +
-                            '<a href="/single_student_detail/' + encodeURIComponent(student.admin.id) + '/">' +
-                            '<button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>' +
-                            '</a>' +
-                            '<a href="/edit_student/' + encodeURIComponent(student.admin.id) + '/">' +
-                            '<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>' +
-                            '</a>' +
-                            '<a href="#">' +
-                            '<button type="button" class="btn btn-danger btn-sm" onclick="if(confirm(\'Are you sure to delete this student?\') === false) event.preventDefault()"><i class="fa fa-trash"></i></button>' +
-                            '</a>' +
-                            '</td>' +
-                            '</tr>';
-                        tableBody.append(row);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    });
+    function submitForm(checkbox) {
+        checkbox.form.submit();
+    }
 </script>
 {% endblock main_content %}

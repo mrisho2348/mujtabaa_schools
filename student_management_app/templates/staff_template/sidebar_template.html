@@ -78,7 +78,8 @@
                 Send FeedBack
               </p>
             </a>
-          </li>        
+          </li>       
+   
         
           <li class="nav-item">
             {% url 'staff_apply_leave' as staff_apply_leave %}
@@ -89,7 +90,27 @@
                 Apply for Leave
               </p>
             </a>
+          </li>   
+          <li class="nav-item">
+            {% url 'staff_detail' as staff_detail %}
+            <a href="{% url 'staff_detail' %}" class="nav-link {% if request.path == staff_detail %} active {% endif %}">
+
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                My details
+              </p>
+            </a>
           </li>        
+          <li class="nav-item">
+            {% url 'staff_salary' as staff_salary %}
+            <a href="{% url 'staff_salary' %}" class="nav-link {% if request.path == staff_salary %} active {% endif %}">
+
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                My salary
+              </p>
+            </a>
+          </li>          
         
         
           <li class="nav-header">Results</li>

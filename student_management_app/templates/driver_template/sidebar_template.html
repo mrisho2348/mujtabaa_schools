@@ -79,6 +79,13 @@
                       <p>My details</p>
                   </a>
               </li>           
+                <li class="nav-item">
+                  {% url 'driver_salary'  as driver_salary %}
+                  <a href="{% url 'driver_salary'  %}" class="nav-link {% if request.path == driver_salary %} active {% endif %}">
+                      <i class="fas fa-eye"></i>
+                      <p>My Salary</p>
+                  </a>
+              </li>           
 
               
 

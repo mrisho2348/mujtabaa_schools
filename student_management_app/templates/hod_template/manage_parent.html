@@ -49,6 +49,7 @@
                 <th>Address</th>
                 <th>Gender</th>
                 <th>Parent type</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -61,6 +62,26 @@
                 <td>{{parents.address}}</td>
                 <td>{{parents.gender}}</td>
                 <td>{{parents.parent_type}}</td>
+                <td>
+                    <form method="POST" action="{% url 'update_parent_status' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ parents.admin.id }}">
+                        <input type="hidden" name="is_active" value="{% if parents.admin.is_active %}1{% else %}0{% endif %}">
+                        <input
+                            type="checkbox"
+                            data-toggle="switchbutton"
+                            data-size="xs"
+                            data-onlabel="Active"
+                            data-offlabel="Inactive"
+                            data-offstyle="danger"
+                            data-onstyle="success"
+                            {% if parents.admin.is_active %}checked{% endif %}
+                            onchange="submitForm(this)"
+                        >
+                    </form>
+                </td>
+                
+                
                 <td class="text-center">
                     <a href="{% url 'single_parent_detail' parent_id=parents.id  %}">
                         <button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>
@@ -107,4 +128,10 @@
         </ul>
     </div>
     {% endif %}
+
+    <script>
+        function submitForm(checkbox) {
+            checkbox.form.submit();
+        }
+    </script>
 {% endblock main_content %}

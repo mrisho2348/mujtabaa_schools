@@ -70,10 +70,25 @@
                                                             {% endif %}
                                                         </td>
                                                         <td>
-                                                            <span class="status-badge {% if driver.is_active %}bg-success{% else %}bg-danger{% endif %}">
-                                                                {% if driver.is_active %}Active{% else %}Inactive{% endif %}
-                                                            </span>
+                                                            <form method="POST" action="{% url 'update_user_status' %}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="user_id" value="{{ driver.admin.id }}">
+                                                                <input type="hidden" name="is_active" value="{% if driver.admin.is_active %}1{% else %}0{% endif %}">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    data-toggle="switchbutton"
+                                                                    data-size="xs"
+                                                                    data-onlabel="Active"
+                                                                    data-offlabel="Inactive"
+                                                                    data-offstyle="danger"
+                                                                    data-onstyle="success"
+                                                                    {% if driver.admin.is_active %}checked{% endif %}
+                                                                    onchange="submitForm(this)"
+                                                                >
+                                                            </form>
                                                         </td>
+                                                        
+                                                        
                                                         <td>
                                                             <a href="{% url 'update_driver_info' driver_id=driver.id %}" class="btn btn-success" data-toggle="tooltip" title="Edit driver">
                                                                 <i class="fas fa-edit"></i>
@@ -100,113 +115,12 @@
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
-    <!-- Add the following script inside the <head> or at the bottom of the template -->
     <script>
-        // JavaScript code for activating/deactivating drivers and delete confirmation
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all status badges
-            const statusBadges = document.querySelectorAll('.status-badge');
-            function getdriver(name) {
-                const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-                return driverValue ? driverValue.pop() : '';
-            }
-            // Add event listener to each badge for status update
-            statusBadges.forEach(function (badge) {
-                badge.addEventListener('click', function () {
-                    const isActive = badge.classList.contains('bg-success');
-                    const cookerId = badge.parentNode.parentNode.getAttribute('data-driver-id');
-                    const apiUrl = `/api/update_driver_status/${driverId}/`;
-
-                    // Call the API endpoint to update the driver status
-                    fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getdriver('csrftoken'), // Replace 'getdriver' with a function to retrieve the CSRF token from the cookies
-                        },
-                        body: JSON.stringify({
-                            is_active: !isActive,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the badge style to reflect the new status
-                        badge.classList.toggle('bg-success', !isActive);
-                        badge.classList.toggle('bg-danger', isActive);
-                        badge.textContent = !isActive ? 'Active' : 'Inactive';
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Handle the error or display an error message to the user
-                    });
-                });
-            });
-
-            // Add event listener to each delete button for delete confirmation
-            const deleteButtons = document.querySelectorAll('.btn-delete');
-            deleteButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    const driverId = button.getAttribute('data-driver-id');
-                    // Show the Bootstrap modal form for delete confirmation
-                    $('#deleteModal').modal('show');
-                    // Set the driverId as a value in the delete confirmation form
-                    $('#deletedriverId').val(driverId);
-                });
-            });
-
-            // Handle the delete confirmation form submission
-            $('#deleteForm').submit(function (event) {
-                event.preventDefault();
-                const driverId = $('#deletedriverId').val();
-                const apiUrl = `/api/delete_driverr/${driverId}/`;
-
-                // Call the API endpoint to delete the driver
-                fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'), // Replace 'getdriver' with a function to retrieve the CSRF token from the cookies
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Handle the success response, if needed
-                    // For example, you can redirect to the driver list page after deletion:
-                    window.location.href = '{% url "manage_driver" %}';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle the error or display an error message to the user
-                });
-            });
-        });
+        function submitForm(checkbox) {
+            checkbox.form.submit();
+        }
     </script>
-
-    <!-- Bootstrap modal for delete confirmation -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this cooker?
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="deleteCookerId" name="cooker_id" value="">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+  
     {% endblock main_content %}
 
 

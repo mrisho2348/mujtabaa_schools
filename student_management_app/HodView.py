@@ -21,6 +21,7 @@ from student_management_app.models import (
     CustomUser,
     FeedBackStaff,
     FeedBackStudent,
+    FeedbackSchoolDriver,
     LeaveReportSchoolDriver,
     LeaveReportStaffs,
     LeaveReportStudent,
@@ -53,7 +54,10 @@ from student_management_app.models import (
     StudentExamInfo,
     StudentPositionInfo,
     StaffRoleAssignment,
+    TransportationAttendance,
+    TransportationAttendanceReport,
 )
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
@@ -72,7 +76,7 @@ from PIL import Image
 
 
 
-
+@login_required
 def admin_home(request):
     # Count the number of staff, subjects, and students
     staff_count = Staffs.objects.all().count()
@@ -156,7 +160,7 @@ def admin_home(request):
 
     return render(request, "hod_template/home_content.html", context)
 
-
+@login_required
 def render_staff_role_assignment_form(request):
     if request.method == 'POST':
         try:
@@ -195,10 +199,12 @@ def render_staff_role_assignment_form(request):
 
     return render(request, 'hod_template/add_staff_role_assignment_form.html', {'staff_members': staff_members,'action':'add'})
 
+@login_required
 def staff_role_list(request):
     staff_assignments = StaffRoleAssignment.objects.all()
     return render(request, 'hod_template/manage_staff_role_list.html', {'staff_assignments': staff_assignments})
 
+@login_required
 def edit_staff_role(request, assignment_id):
     assignment = get_object_or_404(StaffRoleAssignment, id=assignment_id)
 
@@ -222,8 +228,11 @@ def edit_staff_role(request, assignment_id):
             messages.error(request, f'Error updating staff role assignment: {str(e)}')  # Error message
 
     # Render the template for editing with the assignment data
-    return render(request, 'hod_template/add_staff_role_assignment_form.html', {'assignment': assignment, 'action': 'edit'})
+    staff_members = Staffs.objects.all()  # Replace 'Staffs' with your actual model
+    
+    return render(request, 'hod_template/add_staff_role_assignment_form.html', {'assignment': assignment, 'action': 'edit', 'staff_members': staff_members})
 
+@login_required
 def delete_staff_role(request, assignment_id):
     assignment = get_object_or_404(StaffRoleAssignment, id=assignment_id)
 
@@ -276,22 +285,32 @@ def get_class_choices(request):
 
     return JsonResponse({'choices': choices})
 
-
+@login_required
 def driver_form_view(request):
     return render(request, 'hod_template/add_driver_form.html')
+
+@login_required
 def add_security_person(request):
     return render(request, 'hod_template/add_security_person_form.html')
+
+@login_required
 def add_cooker(request):
     return render(request, 'hod_template/add_cooker_form.html')
+
+@login_required
 def add_schoolcleaner(request):
     return render(request, 'hod_template/add_schoolcleaner_form.html')
+
+@login_required
 def add_schoolclassroom(request):
     return render(request, 'hod_template/add_school_classroom.html')
+
+@login_required
 def add_schoolcar_view(request):
     drivers = SchoolDriver.objects.all()
     return render(request, 'hod_template/add_school_car.html',{'drivers':drivers})
 
-
+@login_required
 def add_driver_info_save(request):
     if request.method == 'POST':
         try:
@@ -401,6 +420,7 @@ def add_driver_info_save(request):
 
     return redirect("driver_form")
 
+@login_required
 def updating_driver_info_save(request, driver_id=None):
     driver = None
     if driver_id:
@@ -486,7 +506,7 @@ def updating_driver_info_save(request, driver_id=None):
 
     return redirect("driver_form")
 
-
+@login_required
 def add_driver_medical_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     medical_info, created = SchoolDriverMedicalInfo.objects.get_or_create(driver=driver)
@@ -559,6 +579,9 @@ def add_driver_license_info(request, driver_id):
 
     # Pass the existing license_info to the template for pre-filling the form
     return render(request, 'hod_template/add_driverlicenceinfo.html', {'driver_id': driver_id, 'license_info': license_info})
+
+
+@login_required
 def add_driver_contact_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     contact_info, created = SchoolDriverContact.objects.get_or_create(driver=driver)
@@ -590,6 +613,7 @@ def add_driver_contact_info(request, driver_id):
     # Pass the existing contact_info to the template for pre-filling the form
     return render(request, 'hod_template/add_drivercontactinfo.html', {'driver_id': driver_id, 'contact_info': contact_info})
 
+@login_required
 def add_driver_emergency_contact_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     emergency_contact_info, created = SchoolDriverEmergencyContact.objects.get_or_create(driver=driver)
@@ -623,7 +647,7 @@ def add_driver_emergency_contact_info(request, driver_id):
     # Pass the existing emergency_contact_info to the template for pre-filling the form
     return render(request, 'hod_template/add_driveremergencyinfo.html', {'driver_id': driver_id, 'emergency_contact_info': emergency_contact_info})
 
-
+@login_required
 def add_driver_employment_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     employment_info, created = SchoolDriverEmployment.objects.get_or_create(driver=driver)
@@ -679,6 +703,7 @@ def add_driver_employment_info(request, driver_id):
     return render(request, 'hod_template/add_driveremploymentinfo.html', {'driver_id': driver_id, 'employment_info': employment_info})
 
 
+@login_required
 def add_driver_vehicle_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     vehicle_info, created = SchoolDriverVehicle.objects.get_or_create(driver=driver)
@@ -716,7 +741,7 @@ def add_driver_vehicle_info(request, driver_id):
     return render(request, 'hod_template/add_drivervehicleinfo.html', {'cars': Car.objects.all(), 'driver_id': driver_id, 'vehicle_info': vehicle_info})
 
 
-
+@login_required
 def add_driver_languages(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     spoken_languages = SchoolDriverLanguage.objects.filter(driver=driver)
@@ -748,7 +773,7 @@ def add_driver_languages(request, driver_id):
     # Pass the existing spoken_languages to the template for pre-filling the form
     return render(request, 'hod_template/add_driverlanguageinfo.html', {'driver_id': driver_id, 'spoken_languages': spoken_languages})
 
-
+@login_required
 def add_driver_references(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     references = SchoolDriverReference.objects.filter(driver=driver)
@@ -776,13 +801,14 @@ def add_driver_references(request, driver_id):
     # Pass the existing references to the template for pre-filling the form
     return render(request, 'hod_template/add_driverreference.html', {'references': references})
 
-
+@login_required
 def manage_driver(request):
     # Retrieve all Securitys from the database
     drivers = SchoolDriver.objects.all()
 
     return render(request, 'hod_template/manage_schooldriver.html', {'drivers': drivers})
 
+@login_required
 def view_driver_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver.objects.select_related(
         'admin', 'medical_info', 'license_info', 'contact_info',
@@ -792,6 +818,7 @@ def view_driver_info(request, driver_id):
     context = {'driver': driver}
     return render(request, 'hod_template/details_schooldriver.html', context)
 
+@login_required
 def update_driver_info(request, driver_id):
     driver = get_object_or_404(SchoolDriver, id=driver_id)
     context = {'driver': driver}
@@ -3039,6 +3066,10 @@ def  student_feedback_message(request):
     feedbacks = FeedBackStudent.objects.all()
     return render(request,"hod_template/student_feedback_message.html",{"feedbacks":feedbacks})
 
+def  driver_feedback_message(request):
+    feedbacks = FeedbackSchoolDriver.objects.all()
+    return render(request,"hod_template/driver_feedback_message.html",{"feedbacks":feedbacks})
+
 def staff_feedback_message(request):
     feedbacks = FeedBackStaff.objects.all()
     return render(request,"hod_template/staff_feedback_message.html",{"feedbacks":feedbacks})
@@ -3050,6 +3081,18 @@ def student_feedback_message_replied(request):
     feedback_message = request.POST.get("message")
     try:    
       feedback = FeedBackStudent.objects.get(id=feedback_id)
+      feedback.feedback_reply = feedback_message
+      feedback.save() 
+      return HttpResponse(True)
+    except:
+       return HttpResponse(False)  
+   
+@csrf_exempt
+def driver_feedback_message_replied(request):
+    feedback_id = request.POST.get("id")
+    feedback_message = request.POST.get("message")
+    try:    
+      feedback = FeedbackSchoolDriver.objects.get(id=feedback_id)
       feedback.feedback_reply = feedback_message
       feedback.save() 
       return HttpResponse(True)
@@ -3073,6 +3116,10 @@ def student_leave_view(request):
     leaves = LeaveReportStudent.objects.all()
     return render(request,"hod_template/student_leave_view.html",{"leaves":leaves})
 
+def  driver_leave_view(request):
+    leaves = LeaveReportSchoolDriver.objects.all()
+    return render(request,"hod_template/driver_leave_view.html",{"leaves":leaves})
+
 
 
 def student_approve_leave(request,leave_id):
@@ -3081,11 +3128,23 @@ def student_approve_leave(request,leave_id):
     leave.save()
     return HttpResponseRedirect(reverse("student_leave_view"))
 
+def driver_approve_leave(request,leave_id):
+    leave = LeaveReportSchoolDriver.objects.get(id=leave_id)
+    leave.leave_status = 1
+    leave.save()
+    return HttpResponseRedirect(reverse("driver_leave_view"))
+
 def student_disapprove_leave(request,leave_id):
     leave = LeaveReportStudent.objects.get(id=leave_id)
     leave.leave_status = 2
     leave.save()
     return HttpResponseRedirect(reverse("student_leave_view"))
+
+def driver_disapprove_leave(request,leave_id):
+    leave = LeaveReportSchoolDriver.objects.get(id=leave_id)
+    leave.leave_status = 2
+    leave.save()
+    return HttpResponseRedirect(reverse("driver_leave_view"))
 
 
 def staff_leave_view(request):
@@ -3111,23 +3170,41 @@ def admin_view_attendance(request):
 
 @csrf_exempt
 def admin_get_student_attendance(request):
-    attendance_date=request.POST.get("attendance_date_id")     
-    attendance_date_id=Attendance.objects.get(id=attendance_date)
-    attendance_data =AttendanceReport.objects.filter(attendance_id=attendance_date_id)   
-    
-    list_data=[]
+    try:
+        attendance_date = request.POST.get("attendance_date_id")
+        current_class = request.POST.get("current_class")
+        
+        
+        # Fetch students who belong to the selected current class
+        students = Students.objects.filter(current_class=current_class)
+        
+        
+        # Fetch attendance records for the selected date and students
+        attendance_data = AttendanceReport.objects.filter(
+            attendance_id=attendance_date,
+            student_id__in=students
+        )
+        
+        
+        list_data = []
 
-    for student in attendance_data:
-        data_small={"id":student.student_id.admin.id,"name":student.student_id.admin.first_name+" "+student.student_id.admin.last_name,"status":student.status}
-        list_data.append(data_small)
-    return JsonResponse(json.dumps(list_data),content_type="application/json",safe=False)
+        for student in attendance_data:
+            data_small = {"id": student.student_id.admin.id, "name": student.student_id.admin.first_name + " " + student.student_id.admin.last_name, "status": student.status}
+            list_data.append(data_small)
+
+        return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
+    except Exception as e:
+          # Fix the print statement here
+        return JsonResponse({"error": str(e)}, status=400)
 
 @csrf_exempt
 def admin_get_attendance_date(request):
      subject = request.POST.get("subject_id")
      session_year_id = request.POST.get("session_year_id")
+     
      print(subject)
      print(session_year_id)
+     
      subject_obj = Subject.objects.get(id=subject)
      session_year_obj = SessionYearModel.objects.get(id=session_year_id)
      attendance = Attendance.objects.filter(subject_id=subject_obj,session_id=session_year_obj)
@@ -3595,14 +3672,54 @@ def delete_route(request, route_id):
     # Handle GET request if needed, e.g., showing a confirmation page
     return render(request, 'hod_template/delete_confirm_route.html', {'route_id': route_id})
 
-def activate_cleaner(request, cleaner_id):
-    cleaner = get_object_or_404(SchoolCleaner, id=cleaner_id)
-    cleaner.is_active = True
-    cleaner.save()
-    return JsonResponse({'success': True})
 
-def deactivate_cleaner(request, cleaner_id):
-    cleaner = get_object_or_404(SchoolCleaner, id=cleaner_id)
-    cleaner.is_active = False
-    cleaner.save()
-    return JsonResponse({'success': True})
+
+
+@csrf_exempt
+def admin_get_transport_attendance(request):
+    try:
+        route_id = request.POST.get("route_id")
+        transport_date = request.POST.get("transport_date")
+        
+        # Fetch students who belong to the selected route
+        route = Route.objects.get(id=route_id)
+        students = route.students.all()
+        
+        # Fetch transportation attendance records for the selected date and students
+        attendance_data = TransportationAttendanceReport.objects.filter(
+            attendance__route=route,
+            attendance__date=transport_date,
+            student__in=students
+        )
+        
+        list_data = []
+
+        for student in attendance_data:
+            data_small = {
+                "name": student.student.admin.first_name + " " + student.student.admin.last_name,
+                "status": student.status
+            }
+            list_data.append(data_small)
+
+        return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+@csrf_exempt
+def admin_get_transport_dates(request):
+    try:
+        route_id = request.POST.get("route_id")
+        
+        # Fetch available transport dates for the selected route
+        transport_dates = TransportationAttendance.objects.filter(route_id=route_id).values("date").distinct()
+
+        date_list = [{"date": str(date["date"])} for date in transport_dates]
+
+        return JsonResponse(json.dumps(date_list), content_type="application/json", safe=False)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)    
+    
+def admin_view_transport_attendance(request):
+    routes = Route.objects.all()  
+    
+    return render(request,"hod_template/admin_view_transport_attendance.html",{"routes":routes})    

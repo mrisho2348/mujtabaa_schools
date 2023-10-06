@@ -24,6 +24,24 @@ View  Attendance
                         {% endfor %}
                     </select>
                   </div>
+                   <div class="form-group">
+                    <label>Select class </label>
+                    <select class="form-control" name="current_class" id="current_class">
+                        <option value="Baby">Baby</option>
+                        <option value="KG1">KG1</option>
+                        <option value="KG2">KG2</option>
+                        <option value="STD I">STD I</option>
+                        <option value="STD II">STD II</option>
+                        <option value="STD IV">STD IV</option>
+                        <option value="STD V">STD V</option>
+                        <option value="STD VI">STD VI</option>
+                        <option value="STD VII">STD VII</option>
+                        <option value="Form I">Form I</option>
+                        <option value="Form II">Form II</option>
+                        <option value="Form III">Form III</option>
+                        <option value="Form IV">Form IV</option>
+                    </select>
+                  </div>
                   <div class="form-group">
                     <label>session year </label>
                     <select class="form-control" name="session_years" id="session_year">
@@ -83,6 +101,7 @@ View  Attendance
         $("#fetch_attendance").click(function(){
               var subject_id = $("#subject").val()
               var session_year_id = $("#session_year").val()
+              
        
           $.ajax({
             url:'{% url 'admin_get_attendance_date' %}',
@@ -140,40 +159,54 @@ View  Attendance
 
         $("#fetch_student").click(function() {
           var attendance_date = $("#attendance_date").val();
-        
+          var current_class = $("#current_class").val();
+          var attendance_datee = $("#attendance_date option:selected").text();
+          var subjectee = $("#subject option:selected").text();
+          
           $.ajax({
-            url: "{% url 'admin_get_student_attendance' %}",
-            type: "POST",
-            data: { attendance_date_id: attendance_date },
-            success: function(response) {
-              var json_data = JSON.parse(response);
-              console.log(json_data);
-        
-              var div_data = "<div class='form-group'><label>Student Attendance:</label></div><div class='form-group'><div class='row'>";
-        
-              for (var key in json_data) {
-                div_data += "<div class='col-lg-4'>";
-                div_data += "<label class='form-check-label'>" + json_data[key]['name'] + "</label>";
-        
-                if (json_data[key]["status"]) {
-                  div_data += "<b>[Present]</b>";
-                } else {
-                  div_data += "<b>[Absent]</b>";
-                }
-        
-                div_data += "</div>";
+              url: "{% url 'admin_get_student_attendance' %}",
+              type: "POST",
+              data: {
+                  attendance_date_id: attendance_date,
+                  current_class: current_class
+              },
+              success: function(response) {
+                  var json_data = JSON.parse(response);
+                  console.log(json_data);
+                  
+                  // Generate a formatted header with the current class and date
+                  var header = "<div class='form-group'><div class='card card-success'><div class='card-header'>";
+                  header += current_class + " Student Attendance on " + attendance_datee + " on " + subjectee + " subject ";
+                  header += "</div><div class='card-body'>";
+                  
+                  var div_data = header;
+                  
+                  // Generate the list of students
+                  div_data += "<div class='row'>";
+                  
+                  for (var key in json_data) {
+                      div_data += "<div class='col-lg-4'>";
+                      div_data += "<label class='form-check-label'>" + json_data[key]['name'] + "</label>";
+                      
+                      if (json_data[key]["status"]) {
+                          div_data += "<b>[Present]</b>";
+                      } else {
+                          div_data += "<b>[Absent]</b>";
+                      }
+                      
+                      div_data += "</div>";
+                  }
+                  
+                  div_data += "</div></div></div></div>";
+                  
+                  $("#student_data").html(div_data);
+              },
+              error: function() {
+                  alert("Error in Fetching Student");
               }
-        
-              div_data += "</div></div>";
-              div_data += "<div class='form-group'></div>";
-        
-              $("#student_data").html(div_data);
-            },
-            error: function() {
-              alert("Error in Fetching Student");
-            }
           });
-        });
+      });
+      
 
 
 

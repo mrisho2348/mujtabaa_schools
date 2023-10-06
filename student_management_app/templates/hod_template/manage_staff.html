@@ -53,6 +53,7 @@
           <th>Picture</th>
           <th>last loged in</th>
           <th>Date joined</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -74,6 +75,25 @@
             
               <td>{{staff.admin.last_login}}</td>
               <td>{{staff.admin.date_joined}}</td>
+              <td>
+                <form method="POST" action="{% url 'update_staff_status' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ staff.admin.id }}">
+                    <input type="hidden" name="is_active" value="{% if staff.admin.is_active %}1{% else %}0{% endif %}">
+                    <input
+                        type="checkbox"
+                        data-toggle="switchbutton"
+                        data-size="xs"
+                        data-onlabel="Active"
+                        data-offlabel="Inactive"
+                        data-offstyle="danger"
+                        data-onstyle="success"
+                        {% if staff.admin.is_active %}checked{% endif %}
+                        onchange="submitForm(this)"
+                    >
+                </form>
+            </td>
+            
               <td class="text-center">
                 <a href="{% url 'single_staff_detail' staff_id=staff.id %}" data-toggle="tooltip" title="View detail">
                     <button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>
@@ -121,4 +141,10 @@
         </ul>
     </div>
     {% endif %}
+
+    <script>
+      function submitForm(checkbox) {
+          checkbox.form.submit();
+      }
+  </script>
 {% endblock main_content %}

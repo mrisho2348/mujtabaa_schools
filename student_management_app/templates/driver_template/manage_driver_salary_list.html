@@ -1,0 +1,53 @@
+{% extends 'driver_template/base_template.html' %}
+
+{% block page_title %}
+   driver Salary List
+{% endblock page_title %}
+
+
+
+{% block main_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of my Salaries</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Staff Member</th>
+                                    <th>Month</th>
+                                    <th>Paid Amount</th>
+                                    <th>Total Amount Required</th>
+                                    <th>Remaining Amount</th>
+                                    <th>Description</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for salary in driver_salaries %}
+                                    <tr>
+                                        <td>{{salary.driver_member.admin.first_name}}  {{salary.driver_member.admin.last_name}}</td>
+                                        <td>{{ salary.month|date:"F Y" }}</td>
+                                        <td>{{ salary.paid_amount }}/Tsh</td>
+                                        <td>{{ salary.total_amount_required }}/Tsh</td>
+                                        <td>{{ salary.remaining_payment }}/Tsh</td>
+                                        <td>{{ salary.description }}</td>
+                                        
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="7">No staff salaries found.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

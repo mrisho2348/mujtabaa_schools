@@ -45,6 +45,7 @@ class CustomUser(AbstractUser):
         (8, "Parent"),
     )
     user_type = models.CharField(default=1, choices=user_type_data, max_length=15)
+    is_active = models.BooleanField(default=True)  # Add the is_active field here
 
     # Replace the default manager with the custom manager
     objects = CustomUserManager()
@@ -55,7 +56,7 @@ class CustomUser(AbstractUser):
 class AdminHOD(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)    
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
@@ -66,8 +67,7 @@ class Staffs(models.Model):
     surname = models.TextField(blank=True)
     street_address = models.TextField(blank=True)
     house_number = models.TextField(blank=True)
-    gender = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
+    gender = models.TextField(blank=True)    
     date_of_birth = models.DateField(blank=True, default='2000-01-01')
     contact_number = models.CharField(max_length=20, blank=True)
     background_check = models.TextField(blank=True)
@@ -186,8 +186,7 @@ class SchoolDriver(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     license_number = models.CharField(max_length=20, blank=False)    
-    contact_number = models.CharField(max_length=20, blank=False)
-    is_active = models.BooleanField(default=True)
+    contact_number = models.CharField(max_length=20, blank=False)   
     address = models.CharField(max_length=200, blank=False)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female')], blank=True)
@@ -310,8 +309,7 @@ class SchoolSecurityPerson(models.Model):
     address = models.CharField(max_length=200, blank=False)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female')], blank=True)
-    profile_pic = models.ImageField(upload_to='security_person_profiles/', blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    profile_pic = models.ImageField(upload_to='security_person_profiles/', blank=True, null=True)    
     # Role-specific Information
     security_clearance_expiry = models.DateField(blank=True, null=True)
     patrol_area = models.CharField(max_length=100, blank=True, null=True)
@@ -346,8 +344,7 @@ class Cooker(models.Model):
     address = models.CharField(max_length=200, blank=False)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female')], blank=True)
-    profile_pic = models.ImageField(upload_to='cooker_profiles/', blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    profile_pic = models.ImageField(upload_to='cooker_profiles/', blank=True, null=True)    
     # Role-specific Information
     cooking_shift_hours = models.CharField(max_length=50, blank=True, null=True)
     uniform_size = models.CharField(max_length=10, blank=True, null=True)
@@ -381,8 +378,7 @@ class SchoolCleaner(models.Model):
     # Role-specific Information
     cleaning_shift_hours = models.CharField(max_length=50, blank=True, null=True)
     uniform_size = models.CharField(max_length=10, blank=True, null=True)
-    cleaning_duties = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    cleaning_duties = models.TextField(blank=True, null=True)    
     # Relationships
     assigned_classrooms = models.ManyToManyField('Classroom', related_name='cleaning_staff', blank=True)
 
@@ -434,8 +430,7 @@ class Students(models.Model):
     gender = models.CharField(max_length=10)    
     phone_number = models.CharField(max_length=20)
     school_segment = models.CharField(max_length=100)
-    current_class = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
+    current_class = models.CharField(max_length=100)    
     birth_certificate_id = models.CharField(max_length=100)
     allergies = models.TextField(blank=True, null=True)
     current_year = models.IntegerField(blank=True, null=True)
@@ -478,8 +473,7 @@ class Parent(models.Model):
     address = models.CharField(max_length=100)
     street_address = models.CharField(max_length=100)
     house_number = models.CharField(max_length=10)
-    national_id = models.CharField(max_length=20)
-    is_active = models.BooleanField(default=True)
+    national_id = models.CharField(max_length=20)    
     status = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     parent_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
