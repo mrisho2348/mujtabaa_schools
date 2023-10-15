@@ -112,7 +112,7 @@ def generate_income_graph(request):
         income_values.append(total_amount_paid)
 
     # Create a bar chart using Matplotlib
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(18, 6))
     plt.bar(income_categories, income_values)
     plt.xlabel('Income Categories')
     plt.ylabel('Amount (TSH)')
