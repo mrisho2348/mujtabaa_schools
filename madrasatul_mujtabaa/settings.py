@@ -91,9 +91,9 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE':'django.db.backends.mysql',
         'NAME':'student_management_system',
-        'USER':'student_management_system',
+        'USER':'managementsystem',
         'PASSWORD':'m2r3i4s8',            
-        'HOST':'localhost',
+        'HOST':'studentmanagementsystem.crm2gzptg2rt.us-east-1.rds.amazonaws.com',
         'PORT':'3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -101,6 +101,15 @@ DATABASES = {
     }
 }
 
+AWS_ACCESS_KEY_ID = 'AKIA4GBQJ2QS4ZPPVFFM '
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'studentmanagementsystem'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 # Password validation
