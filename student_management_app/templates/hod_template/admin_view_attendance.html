@@ -16,31 +16,31 @@ View  Attendance
               <!-- /.card-header -->
               <!-- form start -->
                 <div class="card-body">
+        
+                    <div class="form-group">
+                        <label for="school_segment">School Education Level</label>
+                        <select class="form-control" id="school_segment" name="school_segment">
+                            <option value="">Select Education Level</option>
+                            {% for education_level in all_education_levels %}
+                                <option value="{{ education_level.id }}">{{ education_level.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+              
                    <div class="form-group">
                     <label>Subject </label>
-                    <select class="form-control" name="subjects" id="subject">
-                        {% for subject in subjects %}
-                          <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <select class="form-control" id="subjects" name="subjects" required=required >
+                      <option value="">Select subjects</option>
+                     
+                  </select>
                   </div>
                    <div class="form-group">
                     <label>Select class </label>
                     <select class="form-control" name="current_class" id="current_class">
-                        <option value="Baby">Baby</option>
-                        <option value="KG1">KG1</option>
-                        <option value="KG2">KG2</option>
-                        <option value="STD I">STD I</option>
-                        <option value="STD II">STD II</option>
-                        <option value="STD IV">STD IV</option>
-                        <option value="STD V">STD V</option>
-                        <option value="STD VI">STD VI</option>
-                        <option value="STD VII">STD VII</option>
-                        <option value="Form I">Form I</option>
-                        <option value="Form II">Form II</option>
-                        <option value="Form III">Form III</option>
-                        <option value="Form IV">Form IV</option>
-                    </select>
+                      {% for class_level in class_levels %}
+                          <option value="{{ class_level.id }}">{{ class_level.name }}</option>
+                      {% endfor %}
+                  </select>
                   </div>
                   <div class="form-group">
                     <label>session year </label>
@@ -99,7 +99,7 @@ View  Attendance
         
 
         $("#fetch_attendance").click(function(){
-              var subject_id = $("#subject").val()
+              var subjects = $("#subjects").val()
               var session_year_id = $("#session_year").val()
               
        
@@ -107,7 +107,7 @@ View  Attendance
             url:'{% url 'admin_get_attendance_date' %}',
             type:'POST',
             data:{
-              subject_id:subject_id,
+              subject_id:subjects,
               session_year_id:session_year_id
             },
         })
@@ -160,6 +160,7 @@ View  Attendance
         $("#fetch_student").click(function() {
           var attendance_date = $("#attendance_date").val();
           var current_class = $("#current_class").val();
+          console.log(attendance_date)
           var attendance_datee = $("#attendance_date option:selected").text();
           var subjectee = $("#subject option:selected").text();
           
@@ -176,7 +177,7 @@ View  Attendance
                   
                   // Generate a formatted header with the current class and date
                   var header = "<div class='form-group'><div class='card card-success'><div class='card-header'>";
-                  header += current_class + " Student Attendance on " + attendance_datee + " on " + subjectee + " subject ";
+                  header += "{{current_class.name}}" + " Student Attendance on " + attendance_datee + " on " + subjectee + " subject ";
                   header += "</div><div class='card-body'>";
                   
                   var div_data = header;
@@ -212,5 +213,97 @@ View  Attendance
 
 
     })
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Get references to the education level and current class select elements
+    var educationLevelSelect = $('#school_segment');
+    var currentClassSelect = $('#current_class');
+
+    // Listen for changes in the education level select
+    educationLevelSelect.on('change', function() {
+        var selectedEducationLevel = educationLevelSelect.val();
+        
+        // Make an AJAX request to fetch class levels based on the selected education level
+        $.ajax({
+            url: 'get_class_levels',  // Replace with the actual URL to your get_class_levels view
+            data: {
+                'education_level_id': selectedEducationLevel
+            },
+            dataType: 'json',
+            success: function(data) {
+                // Clear the current class dropdown
+                currentClassSelect.empty();
+                
+                // Add a default option
+                currentClassSelect.append($('<option>', {
+                    value: '',
+                    text: 'Select Class'
+                }));
+                
+                // Populate the current class dropdown with retrieved data
+                $.each(data, function(index, item) {
+                    currentClassSelect.append($('<option>', {
+                        value: item.id,
+                        text: item.name
+                    }));
+                });
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors here
+                console.error(error);
+            }
+        });
+    });
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+// Get references to the education level and subjects select elements
+var educationLevelSelect = $('#school_segment');
+var subjectsSelect = $('#subjects');
+
+// Listen for changes in the education level select
+educationLevelSelect.on('change', function() {
+var selectedEducationLevel = educationLevelSelect.val();
+
+// Make an AJAX request to fetch subjects based on the selected education level
+$.ajax({
+url: 'get_subjects_by_education_level', // Replace with the actual URL for your backend view
+data: {
+    'education_level_id': selectedEducationLevel
+},
+dataType: 'json',
+success: function(data) {
+    // Clear the subjects select
+    subjectsSelect.empty();
+
+    // Add a default option
+    subjectsSelect.append($('<option>', {
+        value: '',
+        text: 'Select Subjects'
+    }));
+
+    // Populate the subjects select with retrieved data
+    $.each(data, function(index, item) {
+        subjectsSelect.append($('<option>', {
+            value: item.id,
+            text: item.subject_name
+        }));
+    });
+},
+error: function(xhr, status, error) {
+    // Handle any errors here
+    console.error(error);
+}
+});
+});
+});
 </script>
 {% endblock customer_js %}

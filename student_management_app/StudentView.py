@@ -8,13 +8,14 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from financial_management.models import Invoice
+from financial_management.models import Income_Payment, Invoice
 from student_management_app.models import (
     Attendance,
     AttendanceReport,  
     CustomUser,
     FeedBackStudent,
     LeaveReportStudent,
+    Notes,
     Parent,
     Route,
     Students, 
@@ -183,8 +184,10 @@ def student_profile_save(request):
 def student_subject_wise_result(request, exam_type):
     # Get the student based on the provided student_id
     student = Students.objects.get(admin=request.user.id)
-    # Replace 'Students' with your actual student model
-    form_i_students = Students.objects.filter(current_class=student.current_class)
+    # Replace 'Students' with your actual student mode
+    
+  
+    form_i_students = Students.objects.filter(selected_class=student.selected_class)
     total_students = form_i_students.count()
     # Query the results for the specific student
     exam_type = get_object_or_404(ExamType, name=exam_type)
@@ -193,14 +196,14 @@ def student_subject_wise_result(request, exam_type):
     exam_info = StudentExamInfo.objects.filter(
         student=student,
         exam_type=exam_type,
-        current_class=student.current_class
+        selected_class=student.selected_class
     ).first()
 
     # Retrieve the StudentPositionInfo for the specified student, exam type, and current class
     position_info = StudentPositionInfo.objects.filter(
         student=student,
         exam_type=exam_type,
-        current_class=student.current_class
+        current_class=student.selected_class
     ).first()
 
     if exam_info:
@@ -320,3 +323,30 @@ def student_view_transport_attendance(request):
     student = Students.objects.get(admin=request.user)  # Use request.user directly
     routes = student.routes.all()  # Access the related routes
     return render(request, "student_template/student_view_transport_attendance.html", {"routes": routes, "students": student})
+
+def student_notes(request):
+    # Assuming the student is logged in and associated with the request
+    logged_in_student = request.user.students
+    # Retrieve the class level of the logged-in student
+    student_class = logged_in_student.selected_class
+    # Fetch all notes related to the student's class
+    class_notes = Notes.objects.filter(selected_class=student_class)
+
+    # You can pass the class_notes queryset to your template for rendering
+    return render(request, 'student_template/students_view_notes.html', {'class_notes': class_notes})
+
+@login_required
+def student_payments_record(request):
+    # Get the logged-in student
+    student = request.user.students
+    # Retrieve payment records for the student
+    payments = Income_Payment.objects.filter(student=student)
+    # Group payments by service
+    grouped_payments = {}
+    for payment in payments:
+        service_name = payment.service_details.service_name
+        if service_name not in grouped_payments:
+            grouped_payments[service_name] = []
+        grouped_payments[service_name].append(payment)
+
+    return render(request, 'student_template/student_payment_record.html', {'grouped_payments': grouped_payments,'students':student})

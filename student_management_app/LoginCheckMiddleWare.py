@@ -60,6 +60,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                                 modulename == "student_management_app.views" or
                                 modulename == "django.views.static" or
                                 modulename == "library_management_app.views" or
+                                modulename == "student_management_app.Delete" or
                                 modulename == "financial_management.views" or
                                 modulename == "financial_management.Financial" or
                                 modulename == "exams.views"):

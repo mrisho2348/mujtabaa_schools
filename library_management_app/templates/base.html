@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="icon" type="image/png" href="{% static '../dist/img/LogoNembo.jpg' %}">
+    <link rel="icon" type="image/png" href="{% static 'dist/img/logoNembo.jpg' %}">
     <title>MUJTABAA | Dashboard</title>
     {% if page_title %}
     <title>{{ page_title }} | {{system_name}} </title>
@@ -188,10 +188,14 @@
         </div> -->
 
         <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            © {% now 'Y' %} Copyright:
-            <a class="text-dark" href="http://mujtabahschool.ac.tz/" target="_blank">mrisho</a>
-        </div>
+     
+        <footer class="main-footer text-center p-3">
+            <strong>Copyright &copy; {% now 'Y' %} developed by <a href="#">MRISHO JUMANNE +255657315955</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+              <b>Version</b> 0.0.1
+            </div>
+          </footer>
         <!-- Copyright -->
     </footer>
     {% endif %}

@@ -1,7 +1,14 @@
 import json
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,Http404
+import os
+from django.conf import settings
+from storages.backends.s3boto3 import S3Boto3Storage
+from django.core.files.storage import default_storage
+from django.core.exceptions import ValidationError
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse,Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.text import slugify
+from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers
 from django.contrib import messages
@@ -13,10 +20,12 @@ from financial_management.models import StaffSalary
 from student_management_app.models import (
     Attendance,
     AttendanceReport,
+    Class_level,
     CustomUser,
     EmploymentHistory,
     FeedBackStaff,
     LeaveReportStaffs,
+    Notes,
     Qualifications,
     References,
     SessionYearModel,
@@ -81,9 +90,21 @@ def staff_home(request):
     
 def staff_take_attendance(request):
     staff = Staffs.objects.get(admin=request.user.id)
+
+    # Assuming that the educational level is a ForeignKey in Staffs model
+    educational_level = staff.education_level
+
+    # Retrieve class levels corresponding to the staff's educational level
+    class_levels = Class_level.objects.filter(school_level=educational_level)
+
     subjects = staff.subjects.all() 
     session_years = SessionYearModel.objects.all()
-    return render(request,"staff_template/staff_take_attendance.html",{"subjects":subjects,"session_years":session_years})
+
+    return render(request, "staff_template/staff_take_attendance.html", {
+        "subjects": subjects,
+        "session_years": session_years,
+        "class_levels": class_levels,
+    })
 
 
 
@@ -92,7 +113,7 @@ def get_students(request):
     subject_id = request.POST.get("subject")
     session_year_id = request.POST.get("session_year")
     current_class = request.POST.get("current_class")  # Add this line
-
+    form_one_class = Class_level.objects.get(name=current_class)    
     try:
         subject = get_object_or_404(Subject, id=subject_id)
         session_year = get_object_or_404(SessionYearModel, id=session_year_id)
@@ -101,7 +122,7 @@ def get_students(request):
         students = Students.objects.filter(
             subjects=subject,
             session_year=session_year,
-            current_class=current_class  # Filter by the current class
+            selected_class=form_one_class  # Filter by the current class
         )
 
         list_data = []
@@ -150,9 +171,21 @@ def save_attendance_data(request):
     
 def staff_update_attendance(request):
     staff = Staffs.objects.get(admin=request.user.id)
+
+    # Assuming that the educational level is a ForeignKey in Staffs model
+    educational_level = staff.education_level
+
+    # Retrieve class levels corresponding to the staff's educational level
+    class_levels = Class_level.objects.filter(school_level=educational_level)
+
     subjects = staff.subjects.all() 
     session_years = SessionYearModel.objects.all()
-    return render(request,"staff_template/staff_update_attendance.html",{"subjects":subjects,"session_years":session_years})
+
+    return render(request, "staff_template/staff_update_attendance.html", {
+        "subjects": subjects,
+        "session_years": session_years,
+        "class_levels": class_levels,
+    })
 
 @csrf_exempt
 def get_attendance_date(request):
@@ -178,7 +211,8 @@ def get_attendance_date(request):
 def get_student_attendance(request):  
     attendance_date=request.POST.get("attendance_date_id") 
     current_class = request.POST.get("current_class") 
-    students = Students.objects.filter(current_class=current_class)
+    form_one_class = Class_level.objects.get(name=current_class)
+    students = Students.objects.filter(selected_class=form_one_class)
     attendance_date_id=Attendance.objects.get(id=attendance_date)
     attendance_data = AttendanceReport.objects.filter(
             attendance_id=attendance_date_id,
@@ -304,6 +338,7 @@ def staff_profile_save(request):
 
 def assign_results_save(request):
     staff = Staffs.objects.get(admin=request.user.id)
+    
     if request.method == 'POST':
         try:
             student_id = request.POST.get('student_id')
@@ -313,15 +348,15 @@ def assign_results_save(request):
             date_of_exam = request.POST.get('date_of_exam')
 
             # Retrieve the student's current class
-            student = Students.objects.get(id=student_id)
-            current_class = student.current_class
+            student = get_object_or_404(Students, id=student_id)
+            selected_class = student.selected_class
 
             # Check if there is an existing result for this student, subject, and exam type
             existing_result = Result.objects.filter(
                 student_id=student_id,
                 subject_id=subject_id,
                 exam_type_id=exam_type_id,
-                current_class=current_class
+                selected_class=selected_class
             ).first()
 
             if existing_result:
@@ -340,7 +375,7 @@ def assign_results_save(request):
                     exam_type_id=exam_type_id,
                     marks=marks,
                     date_of_exam=date_of_exam,
-                    current_class=current_class
+                    selected_class=selected_class
                 )
                 result.save()
                 messages.success(request, 'Exam results assigned successfully.')
@@ -357,7 +392,7 @@ def assign_results_save(request):
     context = {
         'students': students,
         'exam_types': exam_types,
-        'staff':staff,
+        'staff': staff,
     }
 
     return render(request, 'staff_template/upload_results.html', context)
@@ -384,24 +419,38 @@ def students_summary_staff(request, exam_type=None):
     # Fetch secondary students
     staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, name=exam_type)
-    form_i_students = Students.objects.filter(current_class='Form I')
-    form_ii_students = Students.objects.filter(current_class='Form II')
-    form_iii_students = Students.objects.filter(current_class='Form III')
-    form_iv_students = Students.objects.filter(current_class='Form IV')
+    form_one_class = Class_level.objects.get(name='Form I')
+    form_i_students = Students.objects.filter(selected_class=form_one_class)
+    form_two_class = Class_level.objects.get(name='Form II')
+    form_ii_students = Students.objects.filter(selected_class=form_two_class)
+    form_three_class = Class_level.objects.get(name='Form III')
+    form_iii_students = Students.objects.filter(selected_class=form_three_class)
+    form_four_class = Class_level.objects.get(name='Form IV')
+    form_iv_students = Students.objects.filter(selected_class=form_four_class)
     
        # Fetch primary students
-    std_i_students = Students.objects.filter(current_class='STD I')
-    std_ii_students = Students.objects.filter(current_class='STD II')
-    std_iii_students = Students.objects.filter(current_class='STD III')
-    std_iv_students = Students.objects.filter(current_class='STD IV')
-    std_v_students = Students.objects.filter(current_class='STD V')
-    std_vi_students = Students.objects.filter(current_class='STD VI')
-    std_vii_students = Students.objects.filter(current_class='STD VII')
+    standard_one_class = Class_level.objects.get(name='STD I')   
+    std_i_students = Students.objects.filter(selected_class=standard_one_class)
+    standard_two_class = Class_level.objects.get(name='STD II')   
+    std_ii_students = Students.objects.filter(selected_class=standard_two_class)
+    standard_three_class = Class_level.objects.get(name='STD III') 
+    std_iii_students = Students.objects.filter(selected_class=standard_three_class)
+    standard_four_class = Class_level.objects.get(name='STD IV') 
+    std_iv_students = Students.objects.filter(selected_class=standard_four_class)
+    standard_five_class = Class_level.objects.get(name='STD V') 
+    std_v_students = Students.objects.filter(selected_class=standard_five_class)
+    standard_six_class = Class_level.objects.get(name='STD VI')     
+    std_vi_students = Students.objects.filter(selected_class=standard_six_class)
+    standard_seven_class = Class_level.objects.get(name='STD VII')         
+    std_vii_students = Students.objects.filter(selected_class=standard_seven_class)
     
        # Fetch nursery students
-    baby_students = Students.objects.filter(current_class='Baby')
-    kg1_students = Students.objects.filter(current_class='KG1')
-    kg2_students = Students.objects.filter(current_class='KG2')
+    Baby_class = Class_level.objects.get(name='Baby')      
+    baby_students = Students.objects.filter(selected_class=Baby_class)
+    KG1_class = Class_level.objects.get(name='KG1')  
+    kg1_students = Students.objects.filter(selected_class=KG1_class)
+    KG2_class = Class_level.objects.get(name='KG2') 
+    kg2_students = Students.objects.filter(selected_class=KG2_class)
     
     
     # Calculate the total number of secondary  students
@@ -514,7 +563,8 @@ def form_i_students(request, exam_type_id, current_class):
     # Fetch Form I students
     staff = Staffs.objects.get(admin=request.user.id)
     exam_type = get_object_or_404(ExamType, id=exam_type_id)
-    students = Students.objects.filter(current_class=current_class)
+    form_one_class = Class_level.objects.get(name=current_class)
+    students = Students.objects.filter(selected_class=form_one_class)
     return render(request, 'staff_template/form_i_students_template.html', {
         'students': students,
         'current_class': current_class,
@@ -616,3 +666,167 @@ def staff_salary(request):
     staff_salaries = StaffSalary.objects.filter(staff_member__admin=request.user)
     context = {'staff_salaries': staff_salaries,'staff':staff}
     return render(request, 'staff_template/manage_staff_salary_list.html', context)
+
+
+def add_notes(request):
+    try:
+        if request.method == 'POST':
+            # Extract data from the form submission
+            subject_id = request.POST.get('subject')
+            selected_class_id = request.POST.get('selected_class')
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            file = request.FILES.get('file')
+
+            # Validate file format and size
+            if file:
+                max_file_size = 5 * 1024 * 1024  # 5 MB
+                accepted_formats = ['pdf', 'doc', 'docx']
+
+                if file.size > max_file_size:
+                    raise ValidationError("File size should be less than 5 MB.")
+
+                file_extension = file.name.lower().split('.')[-1]
+                print(file_extension)
+                if file_extension not in accepted_formats:
+                    raise ValidationError("Only PDF, DOC, and DOCX file formats are allowed.")
+
+                # Save the file to the database
+                fs = FileSystemStorage()
+                filename = slugify(file.name)  # Use slugify to create a valid filename
+                file_path = fs.save(filename, file)
+                file_url = fs.url(file_path)
+            else:
+                file_url = None
+
+            # Retrieve the logged-in staff
+            logged_in_staff = request.user.staffs
+
+            # Create a new Notes instance
+            new_note = Notes(
+                staff=logged_in_staff,
+                subject_id=subject_id,
+                selected_class_id=selected_class_id,
+                title=title,
+                description=description,
+                file=file_url,
+            )
+
+            # Save the new note
+            new_note.save()
+
+            messages.success(request, 'Notes added successfully!')
+            return redirect('add_notes')
+
+        else:
+            # Retrieve the logged-in staff
+            logged_in_staff = request.user.staffs
+
+            # Get subjects and class levels associated with the logged-in staff
+            subjects = logged_in_staff.subjects.all()
+            class_levels = logged_in_staff.education_level.class_level_set.all()
+
+            # Render the template with the required context data
+            return render(request, 'staff_template/add_notes.html', {'subjects': subjects, 'class_levels': class_levels})
+
+    except ValidationError as e:
+        messages.error(request, str(e))
+        return redirect('add_notes')
+
+    except Exception as e:
+        messages.error(request, f'An error occurred: {str(e)}')
+        return redirect('add_notes')# Redirect to the appropriate URL after encountering an error
+ 
+def edit_notes(request, note_id):
+    try:
+        # Retrieve the note to be edited
+        note = Notes.objects.get(pk=note_id)
+
+        if request.method == 'POST':
+            # Extract data from the form submission
+            subject_id = request.POST.get('subject')
+            selected_class_id = request.POST.get('selected_class')
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            file = request.FILES.get('file')
+
+            # Validate file format and size
+            if file:
+                max_file_size = 5 * 1024 * 1024  # 5 MB
+                accepted_formats = ['.pdf', '.doc', '.docx']
+
+                if file.size > max_file_size:
+                    raise ValidationError("File size should be less than 5 MB.")
+
+                file_extension = file.name.lower().split('.')[-1]
+                if file_extension not in accepted_formats:
+                    raise ValidationError("Only PDF, DOC, and DOCX file formats are allowed.")
+
+                # Save the file to the database
+                fs = FileSystemStorage()
+                filename = slugify(file.name)  # Use slugify to create a valid filename
+                file_path = fs.save(filename, file)
+                note.file = file_path
+
+            # Update the existing note with the new data
+            note.subject_id = subject_id
+            note.selected_class_id = selected_class_id
+            note.title = title
+            note.description = description
+
+            # Save the changes
+            note.save()
+
+            messages.success(request, 'Note updated successfully!')
+            return redirect('edit_notes', note_id=note_id)
+
+        else:
+            # Retrieve the logged-in staff
+            logged_in_staff = request.user.staffs
+
+            # Get subjects and class levels associated with the logged-in staff
+            subjects = logged_in_staff.subjects.all()
+            class_levels = logged_in_staff.education_level.class_level_set.all()
+
+            # Render the template with the required context data
+            return render(request, 'staff_template/edit_notes.html', {'subjects': subjects, 'class_levels': class_levels, 'note': note})
+
+    except Notes.DoesNotExist:
+        messages.error(request, 'Note not found!')
+        return redirect('edit_notes', note_id=note_id)  # Replace 'your_error_redirect_url' with the actual URL for error handling
+
+    except ValidationError as e:
+        messages.error(request, str(e))
+        return redirect('edit_notes', note_id=note_id)
+
+    except Exception as e:
+        messages.error(request, f'An error occurred: {str(e)}')
+        return redirect('edit_notes', note_id=note_id)
+    
+
+
+
+
+def download_notes(request, note_id):
+    note = get_object_or_404(Notes, pk=note_id)
+    file_path = note.file.name  # Use the file's name instead of path
+
+    try:
+        s3_storage = default_storage  # Use default_storage for S3
+        file_data = s3_storage.open(file_path, 'rb').read()
+
+        response = HttpResponse(file_data, content_type="application/octet-stream")
+        response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+        return response
+    except FileNotFoundError:
+        raise Http404
+
+
+def manage_notes(request):
+    # Retrieve the logged-in staff
+    logged_in_staff = request.user.staffs
+    # Get notes associated with the logged-in staff
+    notes = Notes.objects.filter(staff=logged_in_staff)
+
+    # Render the template with the required context data
+    return render(request, 'staff_template/manage_notes.html', {'notes': notes})  

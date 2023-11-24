@@ -1,236 +1,253 @@
 {% extends 'staff_template/base_template.html' %}
 {% block page_title %}
-       Edit Exam
+    Edit Exam
 {% endblock page_title %}
 {% block main_content %}
-{% load static %}
-<section class="content">
-    <div class="container-fluid">
-        <div class="content-wrappe">
-            <!-- Content Header (Page header) -->    
-        
-            <!-- Main content -->
-            <section class="content">
-              <div class="container-fluid">
-                <div class="row">
-                  <!-- left column -->
-                  <di class="col-md-12">
-                    <div class="container-fluid mt-4">
-                        <h1>Edit Exam</h1>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Exam Details</h5>
-                                <form id="exam-form">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="name">Exam Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="{{ exam.name }}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="totalMarks">Total Marks</label>
-                                        <input type="number" class="form-control" id="totalMarks" name="totalMarks" value="{{ exam.total_marks }}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="studentGroups">Student Groups</label>
-                                        <select class="form-control" name="studentGroups" id="group-select" required>
-                                            <option value="{{ group.id }}">{{ group.name }}</option>
-                                            <!-- Other options will be populated dynamically -->
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="subjects">Subjects</label>
-                                        <select class="form-control" name="subjects" id="subject-select" required>
-                                            <option value="{{ subject.id }}">{{ subject.name }}</option>
-                                            <!-- Other options will be populated dynamically -->
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="questionPaper">Question Paper</label>
-                                        <select class="form-control" name="questionPaper" id="questionPaper" required>
-                                            <option value="{{ question_paper.id }}">{{ question_paper.name }}</option>
-                                            <!-- Other options will be populated dynamically -->
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="startTime">Start Time</label>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="startDate">Date:</label>
-                                                <input type="date" class="form-control" id="startDate" name="startDate" value="{{ exam.start_time|date:'Y-m-d' }}" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="startTime">Time:</label>
-                                                <input type="time" class="form-control" id="startTime" name="startTime" value="{{ exam.start_time|date:'H:i' }}" required>
-                                            </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="content-wrappe">
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <div class="container-fluid mt-4">
+                                    <h1>Edit Exam</h1>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Exam Details</h5>
+                                            <form id="exam-form">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="name">Exam Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name"
+                                                           value="{{ exam.name }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="totalMarks">Total Marks</label>
+                                                    <input type="number" class="form-control" id="totalMarks"
+                                                           name="totalMarks" value="{{ exam.total_marks }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="studentGroups">Student Groups</label>
+                                                    <select class="form-control" name="studentGroups" id="group-select"
+                                                            required>
+                                                        {% for class_level in class_levels %}
+                                                            <option value="{{ class_level.id }}"
+                                                                    {% if class_level.id in examData.classLevels %}selected{% endif %}>
+                                                                {{ class_level.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="subjects">Subjects</label>
+                                                    <select class="form-control" name="subjects" id="subject-select"
+                                                            required>
+                                                        {% for subject in staff_subjects %}
+                                                            <option value="{{ subject.id }}"
+                                                                    {% if subject.id in examData.subjects %}selected{% endif %}>
+                                                                {{ subject.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="questionPaper">Question Paper</label>
+                                                    <select class="form-control" name="questionPaper"
+                                                            id="questionPaper" required>
+                                                        {% for question_paper in question_papers %}
+                                                            <option value="{{ question_paper.id }}"
+                                                                    {% if question_paper.id == examData.questionPaper %}selected{% endif %}>
+                                                                {{ question_paper.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="startTime">Start Time</label>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="startDate">Date:</label>
+                                                            <input type="date" class="form-control" id="startDate"
+                                                                   name="startDate"
+                                                                   value="{{ exam.start_time|date:'Y-m-d' }}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="startTime">Time:</label>
+                                                            <input type="time" class="form-control" id="startTime"
+                                                                   name="startTime"
+                                                                   value="{{ exam.start_time|date:'H:i' }}" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="endTime">End Time</label>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="endDate">Date:</label>
+                                                            <input type="date" class="form-control" id="endDate"
+                                                                   name="endDate"
+                                                                   value="{{ exam.end_time|date:'Y-m-d' }}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="endTime">Time:</label>
+                                                            <input type="time" class="form-control" id="endTime"
+                                                                   name="endTime"
+                                                                   value="{{ exam.end_time|date:'H:i' }}" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="duration">Duration (minutes)</label>
+                                                    <input type="number" class="form-control" id="duration"
+                                                           name="duration" value="{{ exam.duration }}" required>
+                                                </div>
+                                                <!-- Other fields here -->
+                                                <div class="text-right">
+                                                    <!-- Save buttons -->
+                                                    <button type="button" class="btn btn-success" id="save">Save</button>
+                                                    <button type="button" class="btn btn-primary"
+                                                            id="save-continue">Save and Continue Adding
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" id="save-edit">Save
+                                                        and Continue Editing
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            <!-- Alert container -->
+                                            <div id="alert-container" class="mt-3"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="endTime">End Time</label>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="endDate">Date:</label>
-                                                <input type="date" class="form-control" id="endDate" name="endDate" value="{{ exam.end_time|date:'Y-m-d' }}" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="endTime">Time:</label>
-                                                <input type="time" class="form-control" id="endTime" name="endTime" value="{{ exam.end_time|date:'H:i' }}" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="duration">Duration (minutes)</label>
-                                        <input type="number" class="form-control" id="duration" name="duration" value="{{ exam.duration }}" required>
-                                    </div>
-                                    <!-- Other fields here -->
-                                    <div class="text-right">
-                                        <!-- Save buttons -->
-                                        
-                                        <button type="button" class="btn btn-success" id="save">Save</button>
-                                        <button type="button" class="btn btn-primary" id="save-continue">Save and Continue Adding</button>
-                                        <button type="button" class="btn btn-primary" id="save-edit">Save and Continue Editing</button>
-                                    </div>
-                                </form>
-                                <!-- Alert container -->
-                                <div id="alert-container" class="mt-3"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
+                </section>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
-        
-                  </di>
+    <script>
+        var examData = {{ examData|safe }};
+    </script>
 
-                  </div>
-                  <!--/.col (right) -->
-                </div>
-             
-              
-            </section>
-            <!-- /.content -->
-          </div>
-    </div><!-- /.container-fluid -->
-  </section>
-  <script>
-    var examData = {{ examData|safe }};
-</script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-      $(document).ready(function() {
-          // Fetch and populate student groups
-          function populateStudentGroups(selectedGroup) {
-              $.ajax({
-                  type: 'GET',
-                  url: '{% url "exams:get_student_groups" %}',  // Update with the actual URL name or path
-                  success: function(response) {
-                      var groupSelect = $('#group-select');
-                      groupSelect.empty(); // Clear existing options
-                      response.forEach(function(group) {
-                          groupSelect.append($('<option>', {
-                              value: group.id,
-                              text: group.name
-                          }));
-                      });
-                      populateSelect(groupSelect.get(0), selectedGroup);
-                  },
-                  error: function(xhr, status, error) {
-                      console.error('Error fetching student groups:', error);
-                  }
-              });
-          }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Fetch and populate student groups
+            function populateStudentGroups(selectedGroup) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "exams:get_student_groups" %}',  // Update with the actual URL name or path
+                    success: function (response) {
+                        var groupSelect = $('#group-select');
+                        groupSelect.empty(); // Clear existing options
+                        response.forEach(function (class_level) {
+                            groupSelect.append($('<option>', {
+                                value: class_level.id,
+                                text: class_level.name
+                            }));
+                        });
+                        populateSelect(groupSelect.get(0), selectedGroup);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching student groups:', error);
+                    }
+                });
+            }
 
-          // Fetch and populate subjects
-          function populateSubjects(selectedSubjects) {
-              $.ajax({
-                  type: 'GET',
-                  url: '{% url "exams:get_subjects" %}',  // Update with the actual URL name or path
-                  success: function(response) {
-                      var subjectSelect = $('#subject-select');
-                      subjectSelect.empty(); // Clear existing options
-                      response.forEach(function(subject) {
-                          subjectSelect.append($('<option>', {
-                              value: subject.id,
-                              text: subject.name
-                          }));
-                      });
-                      populateSelect(subjectSelect.get(0), selectedSubjects);
-                  },
-                  error: function(xhr, status, error) {
-                      console.error('Error fetching subjects:', error);
-                  }
-              });
-          }
+            // Fetch and populate subjects
+            function populateSubjects(selectedSubjects) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "exams:get_subjects" %}',  // Update with the actual URL name or path
+                    success: function (response) {
+                        var subjectSelect = $('#subject-select');
+                        subjectSelect.empty(); // Clear existing options
+                        response.forEach(function (subject) {
+                            subjectSelect.append($('<option>', {
+                                value: subject.id,
+                                text: subject.name
+                            }));
+                        });
+                        populateSelect(subjectSelect.get(0), selectedSubjects);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching subjects:', error);
+                    }
+                });
+            }
 
-          // Fetch and populate question papers
-          function populateQuestionPapers(selectedQuestionPaper) {
-              $.ajax({
-                  type: 'GET',
-                  url: '{% url "exams:get_question_papers" %}',  // Update with the actual URL name or path
-                  success: function(response) {
-                      var questionPaperSelect = $('#questionPaper');
-                      questionPaperSelect.empty(); // Clear existing options
-                      response.forEach(function(questionPaper) {
-                          questionPaperSelect.append($('<option>', {
-                              value: questionPaper.id,
-                              text: questionPaper.name
-                          }));
-                      });
-                      populateSelect(questionPaperSelect.get(0), selectedQuestionPaper);
-                  },
-                  error: function(xhr, status, error) {
-                      console.error('Error fetching question papers:', error);
-                  }
-              });
-          }
+            // Fetch and populate question papers
+            function populateQuestionPapers(selectedQuestionPaper) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "exams:get_question_papers" %}',  // Update with the actual URL name or path
+                    success: function (response) {
+                        var questionPaperSelect = $('#questionPaper');
+                        questionPaperSelect.empty(); // Clear existing options
+                        response.forEach(function (questionPaper) {
+                            questionPaperSelect.append($('<option>', {
+                                value: questionPaper.id,
+                                text: questionPaper.name
+                            }));
+                        });
+                        populateSelect(questionPaperSelect.get(0), selectedQuestionPaper);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching question papers:', error);
+                    }
+                });
+            }
 
-          // Call the functions to populate data when the page is ready
-          populateStudentGroups(examData.studentGroups);
-          populateSubjects(examData.subjects);
-          populateQuestionPapers(examData.questionPaper);
+            // Call the functions to populate data when the page is ready
+            populateStudentGroups(examData.classLevels);
+            populateSubjects(examData.subjects);
+            populateQuestionPapers(examData.questionPaper);
 
-          function populateSelect(selectElement, selectedValue) {
-            for (var i = 0; i < selectElement.options.length; i++) {
-                var option = selectElement.options[i];
-                if (option.value == selectedValue) {
-                    option.selected = true;
-                    break;
+            function populateSelect(selectElement, selectedValue) {
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    var option = selectElement.options[i];
+                    if (option.value == selectedValue) {
+                        option.selected = true;
+                        break;
+                    }
                 }
             }
-        }
-      
-          
 
+            // Validate and submit the form
+            $('#save, #save-continue, #save-edit').on('click', function () {
+                var action = $(this).attr('id');
+                var formData = $('#exam-form').serialize();
 
-          // Validate and submit the form
-          $('#save, #save-continue, #save-edit').on('click', function() {
-              var action = $(this).attr('id');
-              var formData = $('#exam-form').serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "exams:edit_exam_save" exam.id %}',  // Update with the actual URL name or path
+                    data: formData + '&action=' + action,
+                    success: function (response) {
+                        displayAlert('success', response.message);
+                        if (action === 'save-continue') {
+                            $('#exam-form')[0].reset();
+                        } else if (action === 'save-edit') {
+                            // Implement logic to navigate back to the list view
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = error;
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        displayAlert('danger', 'Error saving exam: ' + errorMessage);
+                    }
+                });
+            });
 
-              $.ajax({
-                  type: 'POST',
-                  url: '{% url "exams:edit_exam_save" exam.id %}',  // Update with the actual URL name or path
-                  data: formData + '&action=' + action,
-                  success: function(response) {
-                      displayAlert('success', response.message);
-                      if (action === 'save-continue') {
-                          $('#exam-form')[0].reset();
-                      } else if (action === 'save-edit') {
-                          // Implement logic to navigate back to the list view
-                      }
-                  },
-                  error: function(xhr, status, error) {
-                      var errorMessage = error;
-                      if (xhr.responseJSON && xhr.responseJSON.message) {
-                          errorMessage = xhr.responseJSON.message;
-                      }
-                      displayAlert('danger', 'Error saving exam: ' + errorMessage);
-                  }
-              });
-          });
-
-          // Display Bootstrap alert
-          function displayAlert(type, message) {
-              var alertHtml = `
+            // Display Bootstrap alert
+            function displayAlert(type, message) {
+                var alertHtml = `
                   <div class="alert alert-${type} alert-dismissible fade show" role="alert">
                       ${message}
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -238,11 +255,9 @@
                       </button>
                   </div>
               `;
-              $('#alert-container').html(alertHtml);
-          }
-      });
+                $('#alert-container').html(alertHtml);
+            }
+        });
+    </script>
 
-
-  </script>
-
-  {% endblock main_content %}
+{% endblock main_content %}

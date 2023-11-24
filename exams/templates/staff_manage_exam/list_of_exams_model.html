@@ -49,8 +49,8 @@
                                                 <td>{{ exam.total_marks }}</td>
                                                 <td>{{ exam.duration }}</td>
                                                 <td>
-                                                    {% if exam.group %}
-                                                        {{ exam.group.name }}
+                                                    {% if exam.selected_class %}
+                                                        {{ exam.selected_class.name }}
                                                     {% else %}
                                                         N/A
                                                     {% endif %}

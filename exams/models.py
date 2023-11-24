@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
 from django.utils import timezone
-from student_management_app.models import Students, Subject, Staffs
+from student_management_app.models import Class_level, Students, Subject, Staffs
 from django.db import transaction
 
 class Question_DB(models.Model):
@@ -118,13 +118,7 @@ def update_results(sender, instance, **kwargs):
             StuResults_DB.objects.create(student=instance.student, created_at=timezone.now())
         
         
-class Group(models.Model):
-    name = models.CharField(max_length=255)
-    students = models.ManyToManyField(Students, related_name='groups')
-    objects = models.Manager()
 
-    def __str__(self):
-        return self.name 
     
 class Exam_Model(models.Model):
     staff = models.ForeignKey(Staffs, on_delete=models.CASCADE)  
@@ -132,7 +126,7 @@ class Exam_Model(models.Model):
     total_marks = models.IntegerField()
     duration = models.IntegerField()
     question_paper = models.ForeignKey(Question_Paper, on_delete=models.CASCADE, related_name='exams')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)  # Use the Group model here
+    selected_class = models.ForeignKey(Class_level, on_delete=models.SET_NULL, null=True, blank=True)   
     subjects = models.ManyToManyField(Subject)  
     start_time = models.DateTimeField(default=timezone.now)  # Change to timezone.now()
     end_time = models.DateTimeField(default=timezone.now)    # Change to timezone.now()

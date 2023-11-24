@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from student_management_app.models import (
  
+    Notes,
     SessionYearModel,
     Staffs,
     Students,
@@ -166,3 +167,16 @@ def delete_subject(request, subject_id):
         return redirect('manage_subject')  # Replace 'subject_list' with your actual list view name
 
     return render(request, 'delete/delete_subject_confirm.html', {'subject': subject})
+
+def delete_note(request, note_id):
+    # Retrieve the subject object or return a 404 if not found
+    note = get_object_or_404(Notes, id=note_id)
+
+    if request.method == 'POST':
+        # Perform the deletion
+        note.delete()
+        # Redirect to a success page or a list view
+        messages.success(request, 'Note deleted successfully.')
+        return redirect('manage_notes')  # Replace 'subject_list' with your actual list view name
+
+    return render(request, 'delete/delete_note_confirmation.html', {'note': note})

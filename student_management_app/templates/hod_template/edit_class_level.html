@@ -1,0 +1,63 @@
+{% extends 'hod_template/base_template.html' %}
+{% block title %}
+    Edit Class Level
+{% endblock title %}
+{% block main_content %}
+{% load static %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Class Level</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Create a form to edit the Class Level -->
+                        <form method="post" action="{% url 'edit_class_level_save' class_level.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" id="name" name="name" class="form-control" required value="{{ class_level.name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="school_level">School Level:</label>
+                                <!-- You can create a dropdown select field for the school_level -->
+                                <select id="school_level" name="school_level" class="form-control" required>
+                                    {% for education_level in education_levels %}
+                                        <option value="{{ education_level.id }}" {% if education_level.id == class_level.school_level.id %}selected{% endif %}>{{ education_level.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="capacity">Capacity:</label>
+                                <input type="number" id="capacity" name="capacity" class="form-control" required value="{{ class_level.capacity }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="start_date">Start Date:</label>
+                                <input type="date" id="start_date" name="start_date" class="form-control" required
+                                value="{{ class_level.start_date|date:'Y-m-d' }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Display messages here -->
+                {% if messages %}
+                    <div class="col-12">
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <!-- Display error messages in red -->
+                                <div class="alert alert-danger">{{ message }}</div>
+                            {% elif message.tags == 'success' %}
+                                <!-- Display success messages in blue -->
+                                <div class="alert alert-primary">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+{% endblock main_content %}

@@ -1,0 +1,27 @@
+{% extends 'hod_template/base_template.html' %}
+{% block title %}
+    Confirm Delete Education Level
+{% endblock title %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrapper">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Confirm Deletion</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Are you sure you want to delete "{{ education_level.name }}"?</p>
+                        <form method="post" action="{% url 'delete_education_level' education_level.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                            <a href="{% url 'manage_education_level' %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+{% endblock main_content %}

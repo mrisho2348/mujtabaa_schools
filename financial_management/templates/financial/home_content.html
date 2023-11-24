@@ -7,137 +7,110 @@ Accountant Dashboard
 {% load static %}
 <section class="content">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ staff_count }}</h3>
-                    <p>Total Staff</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>{{ subject_count }}</h3>
-                    <p>Total Subjects</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-book"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>{{ student_count }}</h3>
-                    <p>Total Students</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-primary">
-                <div class="inner">
-                    <h3>{{ classroom_count }}</h3>
-                    <p>Total Classrooms</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-chalkboard"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <!-- Second Row -->
-    <div class="row">
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ security_count }}</h3>
-                    <p>Total Security Staff</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-primary">
-                <div class="inner">
-                    <h3>{{ cooker_count }}</h3>
-                    <p>Total Cookers</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-utensils"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ driver_count }}</h3>
-                    <p>Total Drivers</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-bus"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>{{ cleaner_count }}</h3>
-                    <p>Total Cleaners</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-broom"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-3 col-6">
+<!-- Third Row -->
+<div class="row">
+    <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-warning">
+        <div class="small-box bg-info">
             <div class="inner">
-                <h3>{{ parent_count }}</h3>
-                <p>Total Parents</p>
+                <h3>{{ paid_staff_count }}</h3>
+                <p>Paid Staff</p>
             </div>
             <div class="icon">
-                <i class="fas fa-users"></i>
+                <i class="fas fa-dollar-sign"></i>
             </div>
         </div>
     </div>
     <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-primary">
+        <div class="small-box bg-danger">
             <div class="inner">
-                <h3>{{ route_count }}</h3>
-                <p>Total Routes</p>
+                <h3>{{ unpaid_staff_count }}</h3>
+                <p>Unpaid Staff</p>
             </div>
             <div class="icon">
-                <i class="fas fa-route"></i>
+                <i class="fas fa-dollar-sign"></i>
             </div>
         </div>
     </div>
-    <!-- /.row -->
-      
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>{{ paid_security_count }}</h3>
+                <p>Paid Security Staff</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>{{ unpaid_security_count }}</h3>
+                <p>Unpaid Security Staff</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cooker -->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-success">
+        <div class="inner">
+            <h3>{{ paid_cooker_count }}</h3>
+            <p>Paid Cookers</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-danger">
+        <div class="inner">
+            <h3>{{ unpaid_cooker_count }}</h3>
+            <p>Unpaid Cookers</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Driver -->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-info">
+        <div class="inner">
+            <h3>{{ paid_driver_count }}</h3>
+            <p>Paid Drivers</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-warning">
+        <div class="inner">
+            <h3>{{ unpaid_driver_count }}</h3>
+            <p>Unpaid Drivers</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+</div>
+
+</div>
      
    
      

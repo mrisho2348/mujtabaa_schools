@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseForbidden, JsonResponse, HttpResponseServerError,HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_POST
-from student_management_app.models import Students, Subject
-from .models import Exam_Model, Group, Question_DB, Question_Paper, Staffs, Stu_Question, StuExam_DB, StuResults_DB
+from student_management_app.models import Class_level, Students, Subject
+from .models import Exam_Model, Question_DB, Question_Paper, Staffs, Stu_Question, StuExam_DB, StuResults_DB
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -124,11 +124,14 @@ def get_questions(request):
         return JsonResponse({'message': 'Invalid request method'}, status=400)
     
 def get_student_groups(request):
-    student_groups = Students.objects.values_list('current_class', flat=True).distinct()
-    
+    # Assuming the staff is logged in
+    logged_in_staff = Staffs.objects.get(admin=request.user.id)    
+    # Fetch the educational level of the logged-in staff
+    staff_education_level = logged_in_staff.education_level
+    # Fetch the class levels under the staff's educational level
+    class_levels = Class_level.objects.filter(school_level=staff_education_level)
     # Format the data as a list of dictionaries
-    groups_data = [{'id': idx, 'name': group} for idx, group in enumerate(student_groups, start=1)]
-    
+    groups_data = [{'id': level.id, 'name': level.name} for level in class_levels]
     return JsonResponse(groups_data, safe=False)
     
 
@@ -180,8 +183,8 @@ def add_exam_save(request):
             total_marks = request.POST.get('totalMarks')
             duration = int(request.POST.get('duration'))  # Convert duration to an integer
             question_paper_id = request.POST.get('questionPaper')
-            group_id = request.POST.get('studentGroups')  # Use the correct field name
-            print(group_id)
+            selected_class = request.POST.get('studentGroups')  # Use the correct field name
+           
             subjects = request.POST.getlist('subjects')  # If the field supports multiple selections
             start_date_str = request.POST.get('startDate')
             start_time_str = request.POST.get('startTime')
@@ -203,7 +206,7 @@ def add_exam_save(request):
             
             # Assuming you have a logged-in teacher or staff associated with the request
             staff = request.user.staffs  # Replace with the actual way to get the staff
-            
+            selected_class = Class_level.objects.get(id=selected_class)
             # Create the Exam_Model instance
             exam = Exam_Model.objects.create(
                 staff=staff,
@@ -211,7 +214,7 @@ def add_exam_save(request):
                 total_marks=total_marks,
                 duration=duration,
                 question_paper_id=question_paper_id,
-                group_id=group_id,  # Use the correct field name
+                selected_class=selected_class,  # Use the correct field name
                 start_time=start_datetime,
                 end_time=end_datetime
             )
@@ -228,23 +231,28 @@ def add_exam_save(request):
     
 def edit_exam_model(request, exam_id):
     exam = get_object_or_404(Exam_Model, id=exam_id)
-    student_groups = Group.objects.all()  # Fetch all student groups
-    subjects = Subject.objects.all()  # Fetch all subjects
-    question_papers = Question_Paper.objects.all()  # Fetch all question papers
+    # Retrieve the current logged-in staff
+    current_staff = Staffs.objects.get(admin=request.user.id)
+    # Retrieve all class levels under the educational level of the staff
+    class_levels = Class_level.objects.filter(school_level=current_staff.education_level)
+    # Fetch subjects taught by the current staff
+    staff_subjects = current_staff.subjects.all()
+    question_papers = Question_Paper.objects.filter(teacher=current_staff)  # Fetch all question papers
     
     context = {
        'exam': exam,
-       'student_groups': student_groups,
-       'subjects': subjects,
+       'class_levels': class_levels,     
+       'staff_subjects': staff_subjects,
        'question_papers': question_papers,
-        'examData': {
-             'studentGroups': [exam.group.id] if exam.group else [],
-             'subjects': [subject.id for subject in exam.subjects.all()],
-             'questionPaper': exam.question_paper.id,  # Assuming you have a question_paper field in your Exam_Model
-        # ... other exam data
-         }
-     }
+       'examData': {
+           'classLevels': [exam.selected_class.id] if exam.selected_class else [],           
+           'questionPaper': exam.question_paper.id if exam.question_paper else None,
+           # ... other exam data
+       }
+    }
+
     return render(request, 'staff_manage_exam/edit_exams_model.html', context)
+
 
 def view_exam_model(request, exam_id):
     exam = get_object_or_404(Exam_Model, id=exam_id)
@@ -291,7 +299,7 @@ def edit_exam_save(request, exam_id):
             
             # Handle 'studentGroups'
             group_id = request.POST.get('studentGroups')
-            exam.group = Group.objects.get(id=group_id)
+            exam.selected_class = Class_level.objects.get(id=group_id)
             
             # Handle 'subjects'
             subject_ids = request.POST.getlist('subjects')
@@ -305,8 +313,8 @@ def edit_exam_save(request, exam_id):
             return JsonResponse({'message': 'Exam not found.'}, status=404)
         except Question_Paper.DoesNotExist:
             return JsonResponse({'message': 'Question Paper not found.'}, status=404)
-        except Group.DoesNotExist:
-            return JsonResponse({'message': 'Student Group not found.'}, status=404)
+        except Class_level.DoesNotExist:
+            return JsonResponse({'message': 'Student Class_level not found.'}, status=404)
         except Subject.DoesNotExist:
             return JsonResponse({'message': 'Subject not found.'}, status=404)
         except Exception as e:
@@ -534,17 +542,15 @@ def edit_question_save(request, qno):
 
 def get_published_exam_count(request):
     student = Students.objects.get(admin=request.user.id)
-    group_name = student.current_class
-    
-    student_group = Group.objects.filter(name=group_name).first()
-
-    if student_group:
-        count = Exam_Model.objects.filter(is_published=True, group=student_group).count()
-        
+    selected_class = student.selected_class  # Assuming selected_class is the related class for the student
+   
+    if selected_class:
+        count = Exam_Model.objects.filter(is_published=True, selected_class=selected_class).count()
+      
     else:
         count = 0
 
-    return JsonResponse({"count": count})  
+    return JsonResponse({"count": count})
     
 
 def take_exam(request, exam_id):
@@ -565,26 +571,33 @@ def take_exam(request, exam_id):
 
 
 
-def available_exams(request):    
-    student = Students.objects.get(admin=request.user.id)
-    group_name = student.current_class
-    student_group = Group.objects.filter(name=group_name).first()
+def available_exams(request):
+    try:
+        student = Students.objects.get(admin=request.user.id)
+        selected_class = student.selected_class
 
-    if student_group:
-        current_time = timezone.now()
+        if selected_class:
+            current_time = timezone.now()
 
-        # Exclude exams that are already completed by the student
-        completed_exam_ids = StuExam_DB.objects.filter(student=student).values_list('qpaper__id', flat=True)
-        available_exams = Exam_Model.objects.filter(
-            Q(is_published=True),
-            Q(group=student_group),
-            Q(end_time__gt=current_time),
-            ~Q(id__in=completed_exam_ids)
-        )
+            # Exclude exams that are already completed by the student
+            completed_exam_ids = StuExam_DB.objects.filter(student=student).values_list('qpaper__id', flat=True)
 
-        return render(request, "student_manage_exam/available_exams.html", {"available_exams": available_exams})
-    else:
+            available_exams = Exam_Model.objects.filter(
+                Q(is_published=True),
+                Q(selected_class=selected_class),
+                Q(end_time__gt=current_time),
+                ~Q(id__in=completed_exam_ids)
+            )
+
+            return render(request, "student_manage_exam/available_exams.html", {"available_exams": available_exams})
+        else:
+            return render(request, "student_manage_exam/available_exams.html", {"available_exams": None})
+    except Students.DoesNotExist:
+        # Handle the case where the Students object is not found
         return render(request, "student_manage_exam/available_exams.html", {"available_exams": None})
+    except Exception as e:
+        # Handle other exceptions
+        return render(request, "student_manage_exam/available_exams.html", {"error_message": str(e)})
 
 
   
@@ -693,52 +706,57 @@ def results(request):
     
 
 def view_exams_and_result(request):
-    student = Students.objects.get(admin=request.user.id)
+    try:
+        student = Students.objects.get(admin=request.user.id)
 
-    group_name = student.current_class
-    student_group = Group.objects.filter(name=group_name).first()
+        group_name = student.selected_class
 
-    examsList = []
-    if student_group:
-        stud_exams = Exam_Model.objects.filter(group=student_group)
-        
-        if stud_exams.exists():
-            if stud_exams.count() > 1:
-                for stud_exam in stud_exams:
-                    examsList.append(stud_exam)
-                    
-            else:
-                examsList.append(stud_exams.first())
+        exams_list = []
+        if group_name:
+            stud_exams = Exam_Model.objects.filter(selected_class=group_name)
 
-    passed_exams = []
-    failed_exams = []
-    if examsList:
-        for exam in examsList:
-            currentExamList = StuExam_DB.objects.filter(examname=exam.name, student=student)
+            if stud_exams.exists():
+                if stud_exams.count() > 1:
+                    exams_list = list(stud_exams)
+                else:
+                    exams_list.append(stud_exams.first())
 
-            if not currentExamList.exists():  # If no exams are there, add exams
-                tempExam = StuExam_DB(student=student, examname=exam.name,
-                                        qpaper=exam.question_paper, score=0, completed=0)
-                tempExam.save()
-                exam_question_paper = exam.question_paper
-                questions_in_paper = exam_question_paper.questions.all()
-                
-                for ques in questions_in_paper:
-                    # Add all the questions from the question paper to the student's database
-                    studentQuestion = Stu_Question(question=ques.question, optionA=ques.optionA, optionB=ques.optionB,
-                                                    optionC=ques.optionC, optionD=ques.optionD,
-                                                    answer=ques.answer, student=student)
-                    studentQuestion.save()
-                    tempExam.questions.add(studentQuestion)
-            
-            current_exam = currentExamList.first()
-            if current_exam and current_exam.is_passed:
-                passed_exams.append(current_exam)
-            elif current_exam:
-                failed_exams.append(current_exam)
+        passed_exams = []
+        failed_exams = []
+        if exams_list:
+            for exam in exams_list:
+                current_exam_list = StuExam_DB.objects.filter(examname=exam.name, student=student)
 
-    return render(request, 'student_manage_exam/view_exam_result.html', {
-        'students': student,
-        'passed_exams': passed_exams,
-        'failed_exams': failed_exams
-    })
+                if not current_exam_list.exists():
+                    temp_exam = StuExam_DB(student=student, examname=exam.name, qpaper=exam.question_paper, score=0, completed=0)
+                    temp_exam.save()
+                    exam_question_paper = exam.question_paper
+                    questions_in_paper = exam_question_paper.questions.all()
+
+                    for ques in questions_in_paper:
+                        student_question = Stu_Question(
+                            question=ques.question, optionA=ques.optionA, optionB=ques.optionB,
+                            optionC=ques.optionC, optionD=ques.optionD, answer=ques.answer, student=student
+                        )
+                        student_question.save()
+                        temp_exam.questions.add(student_question)
+
+                current_exam = current_exam_list.first()
+                if current_exam and current_exam.is_passed:
+                    passed_exams.append(current_exam)
+                elif current_exam:
+                    failed_exams.append(current_exam)
+
+        return render(request, 'student_manage_exam/view_exam_result.html', {
+            'students': student,
+            'passed_exams': passed_exams,
+            'failed_exams': failed_exams
+        })
+
+    except Students.DoesNotExist:
+        # Handle the case where the Students object is not found
+        return render(request, 'student_manage_exam/view_exam_result.html', {'error_message': 'Student not found'})
+
+    except Exception as e:
+        # Handle other exceptions
+        return render(request, 'student_manage_exam/view_exam_result.html', {'error_message': str(e)})

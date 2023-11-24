@@ -19,8 +19,8 @@ View Attendance record
                 {% csrf_token %}
                 <div class="card-body">
                    <div class="form-group">
-                    <label>Subject </label>
-                    <select class="form-control" name="route" id="route">
+                    <label>Roote Name </label>
+                    <select class="form-control" name="route" id="route" required>
                         {% for route in routes %}
                           <option value="{{ route.id }}">{{ route.name }}</option>
                         {% endfor %}
@@ -31,13 +31,13 @@ View Attendance record
                     
                   <div class="form-group">
                     <label>Start Date</label>
-                    <input type="date" name="start_date" id="" class="form-control" placeholder="Enter start date">                 
+                    <input type="date" name="start_date" id="" class="form-control" placeholder="Enter start date" required>                 
                 </div>                               
                 </div>
                     <div class="col-lg-6">
                   <div class="form-group">
                     <label>End Date</label>
-                    <input type="date" name="end_date" id="" class="form-control" placeholder="Enter end date">
+                    <input type="date" name="end_date" id="" class="form-control" placeholder="Enter end date" required>
                   </div>
                 </div>
                 </div>

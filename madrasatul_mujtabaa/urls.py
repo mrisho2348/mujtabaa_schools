@@ -97,6 +97,7 @@ urlpatterns = [
     path('admin_get_student_attendance', HodView.admin_get_student_attendance, name='admin_get_student_attendance'), 
     path('admin_get_attendance_date', HodView.admin_get_attendance_date, name='admin_get_attendance_date'), 
     path('admin_save_updateattendance', HodView.admin_save_updateattendance, name='admin_save_updateattendance'),
+    path('get_subjects_by_education_level', HodView.get_subjects_by_education_level, name='get_subjects_by_education_level'),
     path('admin_profile', HodView.admin_profile, name='admin_profile'),     
     path('single_student_detail/<int:student_id>/', HodView.single_student_detail, name='single_student_detail'),
     path('single_parent_detail/<str:parent_id>', HodView.single_parent_detail, name='single_parent_detail'),
@@ -136,7 +137,7 @@ urlpatterns = [
     path('add_schoolcar_view/', HodView.add_schoolcar_view, name='add_schoolcar_view'),
     path('add_schoolclassroom/', HodView.add_schoolclassroom, name='add_schoolclassroom'),
     path('add_classroom_view/', HodView.add_classroom_save, name='add_classroom'),
-    
+    path('get_class_levels/', HodView.get_class_levels, name='get_class_levels'),  
     
     # edit url view 
     path('edit_staff_role/<int:assignment_id>/', HodView.edit_staff_role, name='edit_staff_role'),
@@ -158,6 +159,28 @@ urlpatterns = [
     path('edit_session_save/<int:session_id>/', HodView.edit_session_save, name='edit_session_save'),
     path('edit_profile_save', HodView.edit_profile_save, name='edit_profile_save'), 
     path('exam-types/edit/<int:exam_type_id>/', HodView.exam_type_form, name='exam-type-form'),
+    
+    
+    path('add_class_level/', HodView.add_class_level, name='add_class_level'),
+    path('manage-class-level/', HodView.manage_class_level, name='manage_class_level'),      
+    path('add_class-level-save/', HodView.add_class_level_save, name='add_class_level_save'),      
+    path('edit_class_level_save/<int:class_level_id>/', HodView.edit_class_level_save, name='edit_class_level_save'),
+    path('edit_class_level/<int:class_level_id>/', HodView.edit_class_level, name='edit_class_level'),
+    path('delete_class_level/<int:class_level_id>/', HodView.delete_class_level, name='delete_class_level'),
+
+    
+    path('add_school', HodView.add_school, name='add_school'),   
+    path('add_school_save', HodView.add_school_save, name='add_school_save'),   
+    path('manage_school_save', HodView.manage_school_save, name='manage_school_save'), 
+    path('edit_school/<int:school_id>/', HodView.edit_school, name='edit_school'),
+    path('delete_school/<int:school_id>/', HodView.delete_school, name='delete_school'),
+    
+    path('add_education_level', HodView.add_education_level, name='add_education_level'),   
+    path('add_education_level_save', HodView.add_education_level_save, name='add_education_level_save'),   
+    path('manage_education_level', HodView.manage_education_level, name='manage_education_level'), 
+    path('edit_education_level/<int:education_level_id>/', HodView.edit_education_level, name='edit_education_level'),
+    path('delete_education_level/<int:education_level_id>/', HodView.delete_education_level, name='delete_education_level'),
+    path('confirm_delete_education_level/<int:education_level_id>/', HodView.confirm_delete_education_level, name='confirm_delete_education_level'),
     
     # manage
     path('manage_security/', HodView.manage_security, name='manage_security'),    
@@ -198,6 +221,12 @@ urlpatterns = [
     path('staff_detail', StaffView.staff_detail, name='staff_detail'),  
     path('staff_profile', StaffView.staff_profile, name='staff_profile'),  
     path('staff_salary', StaffView.staff_salary, name='staff_salary'),  
+    path('manage_notes/', StaffView.manage_notes, name='manage_notes'),
+    path('add_notes/', StaffView.add_notes, name='add_notes'),
+    path('edit_notes/<int:note_id>/', StaffView.edit_notes, name='edit_notes'),
+
+   
+    path('download_notes/<int:note_id>/', StaffView.download_notes, name='download_notes'),    
     path('staff_profile_save', StaffView.staff_profile_save, name='staff_profile_save'), 
     path('update-students-results/<int:result_id>/<int:student_id>/<int:exam_type_id>/',StaffView.update_students_results,name='update_students_results'),
     path('student/<int:student_id>/<int:exam_type_id>/', StaffView.student_details, name='student_details'),    
@@ -215,11 +244,13 @@ urlpatterns = [
     path('student-subject-wise-result/<str:exam_type>/', StudentView.student_subject_wise_result, name='student_subject_wise_result'),  
     path('student_apply_leave', StudentView.student_apply_leave, name='student_apply_leave'),  
     path('student_apply_leave_save', StudentView.student_apply_leave_save, name='student_apply_leave_save'),  
+    path('student_payments_record', StudentView.student_payments_record, name='student_payments_record'),  
     path('student_sendfeedback', StudentView.student_sendfeedback, name='student_sendfeedback'),  
     path('student_sendfeedback_save', StudentView.student_sendfeedback_save, name='student_sendfeedback_save'),    
     path('student_profile', StudentView.student_profile, name='student_profile'),    
     path('student_profile_save', StudentView.student_profile_save, name='student_profile_save'), 
     path('single_student_details', StudentView.single_student_details, name='single_student_details'),   
+    path('student_notes', StudentView.student_notes, name='student_notes'), 
     path('student_invoice_list', StudentView.student_invoice_list, name='student_invoice_list'), 
     path('student_transport_attendance_post/', StudentView.student_transport_attendance_post, name='student_transport_attendance_post'),  
     path('student_view_transport_attendance/', StudentView.student_view_transport_attendance, name='student_view_transport_attendance'),  
@@ -257,6 +288,7 @@ urlpatterns = [
     path('delete_staff/<int:staff_id>/', Delete.delete_staff, name='delete_staff'),
     path('delete_student/<int:student_id>/', Delete.delete_student, name='delete_student'),
     path('delete_subject/<int:subject_id>/', Delete.delete_subject, name='delete_subject'),
+    path('delete_note/<int:note_id>/', Delete.delete_note, name='delete_note'),
 
 
 

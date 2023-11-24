@@ -31,8 +31,9 @@
 
       <!-- Home -->
       <li class="nav-item">
+        {% url 'student_home' as student_home %}
           <a href="{% url 'student_home' %}"
-              class="nav-link {% if request.path == 'student_home' %} active {% endif %}">
+              class="nav-link {% if request.path == student_home %} active {% endif %}">
               <i class="nav-icon fas fa-home"></i>
               <p>Home</p>
           </a>
@@ -40,15 +41,17 @@
 
       <!-- View Attendance -->
       <li class="nav-item">
+        {% url 'student_view_attendance' as student_view_attendance %}
           <a href="{% url 'student_view_attendance' %}"
-              class="nav-link {% if request.path == 'student_view_attendance' %} active {% endif %}">
+              class="nav-link {% if request.path == student_view_attendance %} active {% endif %}">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>View Attendance</p>
           </a>
       </li>
       <li class="nav-item">
+        {% url 'student_view_transport_attendance' as student_view_transport_attendance %}
           <a href="{% url 'student_view_transport_attendance' %}"
-              class="nav-link {% if request.path == 'student_view_transport_attendance' %} active {% endif %}">
+              class="nav-link {% if request.path == student_view_transport_attendance %} active {% endif %}">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>Transport Attendance</p>
           </a>
@@ -56,8 +59,9 @@
 
       <!-- Apply for Leave -->
       <li class="nav-item">
+        {% url 'student_apply_leave' as student_apply_leave %}
           <a href="{% url 'student_apply_leave' %}"
-              class="nav-link {% if request.path == 'student_apply_leave' %} active {% endif %}">
+              class="nav-link {% if request.path == student_apply_leave %} active {% endif %}">
               <i class="nav-icon fas fa-file"></i>
               <p>Apply for Leave</p>
           </a>
@@ -65,8 +69,9 @@
 
       <!-- Send Feedback -->
       <li class="nav-item">
+        {% url 'student_sendfeedback' as student_sendfeedback %}
           <a href="{% url 'student_sendfeedback' %}"
-              class="nav-link {% if request.path == 'student_sendfeedback' %} active {% endif %}">
+              class="nav-link {% if request.path == student_sendfeedback %} active {% endif %}">
               <i class="nav-icon fas fa-comment"></i>
               <p>Send Feedback</p>
           </a>
@@ -74,6 +79,7 @@
 
       <!-- Results Management -->
       <li class="nav-item has-treeview">
+        
           <a href="#" class="nav-link">
               <i class="nav-icon fas fa-graduation-cap"></i>
               <p>
@@ -84,6 +90,7 @@
           <ul class="nav nav-treeview">
               <!-- Necta Results -->
               <li class="nav-item">
+                {% url 'student_subject_wise_result' exam_type as student_subject_wise_result %}
                   <a href="{% url 'student_subject_wise_result' exam_type='Necta' %}"
                       class="nav-link {% if request.path == student_subject_wise_result %} active {% endif %}">
                       <i class="nav-icon fas fa-graduation-cap"></i>
@@ -179,7 +186,8 @@
 
       <!-- Details Page -->
       <li class="nav-item exams-badge">
-          <a href="{% url 'single_student_details' %}" class="nav-link">
+        {% url 'single_student_details' as single_student_details %}
+          <a href="{% url 'single_student_details' %}" class="nav-link   {% if request.path == single_student_details %}active{% endif %} ">
               <i class="nav-icon fas fa-info"></i>
               <p>Details</p>
           </a>
@@ -187,11 +195,27 @@
 
       <!-- My Invoice -->
       <li class="nav-item exams-badge">
-          <a href="{% url 'student_invoice_list' %}" class="nav-link">
+        {% url 'student_invoice_list' as student_invoice_list %}
+          <a href="{% url 'student_invoice_list' %}" class="nav-link   {% if request.path == student_invoice_list %}active{% endif %} ">
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>My Invoice</p>
           </a>
       </li>
+      <li class="nav-item exams-badge">
+        {% url 'student_payments_record' as student_payments_record %}
+        <a href="{% url 'student_payments_record' %}" class="nav-link  {% if request.path == student_payments_record %}active{% endif %} ">
+            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+            <p>My Payament</p>
+        </a>
+    </li>
+      <li class="nav-item exams-badge">
+        {% url 'student_notes' as student_notes %}
+          <a href="{% url 'student_notes' %}" class="nav-link   {% if request.path == student_notes %}active{% endif %} ">
+              <i class="nav-icon fas fa-file-invoice-dollar"></i>
+              <p>Notes</p>
+          </a>
+      </li>
+    
   </ul>
 </nav>
 <!-- /.sidebar-menu -->

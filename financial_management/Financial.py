@@ -54,6 +54,21 @@ def accountant_home(request):
     cleaner_count = SchoolCleaner.objects.all().count()
     parent_count = Parent.objects.all().count()
     staff_all = Staffs.objects.all()
+     # Get the count of staff members who have been paid and those who have not been paid
+    paid_staff_count = StaffSalary.objects.exclude(paid_amount=0).count()
+    unpaid_staff_count = Staffs.objects.exclude(staffsalary__paid_amount__gt=0).count()
+
+    # Get the count of security members who have been paid and those who have not been paid
+    paid_security_count = SecuritySalary.objects.exclude(paid_amount=0).count()
+    unpaid_security_count = SchoolSecurityPerson.objects.exclude(securitysalary__paid_amount__gt=0).count()
+
+    # Get the count of cooker members who have been paid and those who have not been paid
+    paid_cooker_count = CookerSalary.objects.exclude(paid_amount=0).count()
+    unpaid_cooker_count = Cooker.objects.exclude(cookersalary__paid_amount__gt=0).count()
+
+    # Get the count of driver members who have been paid and those who have not been paid
+    paid_driver_count = DriverSalary.objects.exclude(paid_amount=0).count()
+    unpaid_driver_count = SchoolDriver.objects.exclude(driversalary__paid_amount__gt=0).count()
     attendance_absent_staff_list = []
     staff_name_list = []
     for staff in staff_all:
@@ -84,6 +99,14 @@ def accountant_home(request):
         "classroom_count": classroom_count,
         "cleaner_count": cleaner_count,
         "parent_count": parent_count,
+        'paid_staff_count': paid_staff_count,
+        'unpaid_staff_count': unpaid_staff_count,
+        'paid_security_count': paid_security_count,
+        'unpaid_security_count': unpaid_security_count,
+        'paid_cooker_count': paid_cooker_count,
+        'unpaid_cooker_count': unpaid_cooker_count,
+        'paid_driver_count': paid_driver_count,
+        'unpaid_driver_count': unpaid_driver_count,
         "attendance_absent_staff_list": attendance_absent_staff_list,
         "staff_name_list": staff_name_list,
         "attendance_present_student_list": attendance_present_student_list,

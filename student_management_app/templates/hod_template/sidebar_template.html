@@ -447,6 +447,38 @@
                     </a>
                   </li>
                   <li class="nav-item">
+                    {% url 'manage_school_save' as manage_school_save %}
+                    <a href="{% url 'manage_school_save' %}" class="nav-link {% if request.path == manage_school_save %}active{% endif %}">
+                      <i class="nav-icon fas fa-th"></i>
+                      <p>
+                        Manage school details
+                        {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'manage_education_level' as manage_education_level %}
+                    {% url 'edit_subject' subject_id=id as edit_subject %}
+                    <a href="{% url 'manage_education_level' %}" class="nav-link {% if request.path == manage_education_level %}active{% endif %}{% if request.path == edit_subject %} active {% endif %} ">
+                      <i class="nav-icon fas fa-th"></i>
+                      <p>
+                        Manage education level
+                        {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    {% url 'manage_class_level' as manage_class_level %}
+                    {% url 'edit_subject' subject_id=id as edit_subject %}
+                    <a href="{% url 'manage_class_level' %}" class="nav-link {% if request.path == manage_class_level %}active{% endif %}{% if request.path == edit_subject %} active {% endif %} ">
+                      <i class="nav-icon fas fa-th"></i>
+                      <p>
+                        Manage school class
+                        {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
+                      </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     {% url 'manage_subject' as manage_subject %}
                     {% url 'edit_subject' subject_id=id as edit_subject %}
                     <a href="{% url 'manage_subject' %}" class="nav-link  {% if request.path == manage_subject %}active{% endif %}{% if request.path == edit_subject %} active {% endif %} ">

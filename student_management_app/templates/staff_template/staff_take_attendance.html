@@ -27,20 +27,10 @@ Take Attendance
                   <div class="form-group">
                     <label>Select class </label>
                     <select class="form-control" name="current_class" id="current_class">
-                        <option value="Baby">Baby</option>
-                        <option value="KG1">KG1</option>
-                        <option value="KG2">KG2</option>
-                        <option value="STD I">STD I</option>
-                        <option value="STD II">STD II</option>
-                        <option value="STD IV">STD IV</option>
-                        <option value="STD V">STD V</option>
-                        <option value="STD VI">STD VI</option>
-                        <option value="STD VII">STD VII</option>
-                        <option value="Form I">Form I</option>
-                        <option value="Form II">Form II</option>
-                        <option value="Form III">Form III</option>
-                        <option value="Form IV">Form IV</option>
-                    </select>
+                      {% for class_level in class_levels %}
+                          <option value="{{ class_level.name }}">{{ class_level.name }}</option>
+                      {% endfor %}
+                  </select>
                   </div>
                   <div class="form-group">
                     <label>Session Year</label>

@@ -1,0 +1,84 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block title %}
+    {% if edit_mode %}
+        Edit Previous Education
+    {% else %}
+        Add Previous Education
+    {% endif %}
+{% endblock title %}
+
+{% block main_content %}
+    {% load static %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="content-wrappe">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                {% if edit_mode %}
+                                    Edit Previous Education
+                                {% else %}
+                                    Add Previous Education
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Create a form to add/edit previous education information -->
+                            <form method="post" action="{% if edit_mode %}{% url 'edit_previous_education_save' student_id=student.id previous_education_id=previous_education.id %}{% else %}{% url 'add_previous_education_save' student_id=student.id %}{% endif %}">
+                                {% csrf_token %}
+                              
+                                <div class="form-group">
+                                    <label for="examination_number">Examination Number:</label>
+                                    <input type="text" id="examination_number" name="examination_number" class="form-control" value="{% if edit_mode %}{{ previous_education.examination_number }}{% endif %}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="year_completed">Year Completed:</label>
+                                    <input type="number" id="year_completed" name="year_completed" class="form-control" value="{% if edit_mode %}{{ previous_education.year_completed }}{% endif %}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="education_level">Education Level:</label>
+                                    <select id="school_level" name="school_level" class="form-control" required>
+                                        {% for education_level in education_levels %}
+                                            <option value="{{ education_level.id }}" {% if edit_mode and education_level.id == previous_education.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="school_name">School Name:</label>
+                                    <input type="text" id="school_name" name="school_name" class="form-control" value="{% if edit_mode %}{{ previous_education.school_name }}{% endif %}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="results">Results:</label>
+                                    <textarea id="results" name="results" class="form-control" required>{% if edit_mode %}{{ previous_education.results }}{% endif %}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    {% if edit_mode %}
+                                        Save Changes
+                                    {% else %}
+                                        Add Previous Education
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Display messages here -->
+                    {% if messages %}
+                        <div class="col-12">
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <!-- Display error messages in red -->
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% elif message.tags == 'success' %}
+                                    <!-- Display success messages in blue -->
+                                    <div class="alert alert-primary">{{ message }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+{% endblock main_content %}

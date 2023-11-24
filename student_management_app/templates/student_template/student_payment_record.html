@@ -1,0 +1,53 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+    Payments
+{% endblock page_title %}
+
+{% block main_content %}
+{% load static %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="content-wrappe">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Payments</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Display a table to list payments -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Amount Required</th>
+                                    <th>Amount Paid</th>
+                                    <th>Amount Remaining</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in student_payments %}
+                                    <tr>
+                                        <td>{{ payment.service_details.service_name }}</td>
+                                        <td>{{ payment.service_details.amount_required }}</td>
+                                        <td>{{ payment.amount_paid }}</td>
+                                        <td>{{ payment.amount_remaining }}</td>
+                                        <td>{{ payment.created_at }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Your additional JavaScript logic (if needed)
+</script>
+
+{% endblock main_content %}

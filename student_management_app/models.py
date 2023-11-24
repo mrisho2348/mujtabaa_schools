@@ -57,9 +57,17 @@ class AdminHOD(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)    
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
+class EducationLevel(models.Model):
+    name = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+    def __str__(self):
+        return self.name  
+     
 class Staffs(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -70,15 +78,11 @@ class Staffs(models.Model):
     gender = models.TextField(blank=True)    
     date_of_birth = models.DateField(blank=True, default='2000-01-01')
     contact_number = models.CharField(max_length=20, blank=True)
-    background_check = models.TextField(blank=True)
-    availability = models.CharField(max_length=255, blank=True)
-    preferred_grade_level = models.CharField(max_length=255, blank=True, null=True)
-    salary_expectations = models.CharField(max_length=255, blank=True, null=True)
-    profile_pic = models.FileField(null=True, blank=True)
+    profile_pic = models.FileField(upload_to='staff_profile_pic',null=True, blank=True)
+    education_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE,null=True, blank=True)
     national_identity_number = models.TextField(null=True, blank=True)
     national_id_photo = models.FileField(null=True, blank=True)
-    birth_certificate_photo = models.FileField(null=True, blank=True)
-    personal_statement = models.TextField(blank=True)
+    birth_certificate_photo = models.FileField(upload_to='stass_birth_certificate_photo',null=True, blank=True)   
     fcm_token = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -98,15 +102,19 @@ class StaffRoleAssignment(models.Model):
     class Meta:
         verbose_name = "Staff Role Assignment"
         verbose_name_plural = "Staff Role Assignments"
+        
+ 
+           
 class Subject(models.Model):
     id = models.AutoField(primary_key=True)
-    school_segment = models.CharField(max_length=255, null=True, blank=True)
+    education_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)
     subject_name = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    staff = models.ForeignKey(Staffs, on_delete=models.CASCADE, related_name='staff_subjects', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+    def __str__(self):
+        return f"{self.subject_name} - {self.education_level.name}"
     
 class Qualifications(models.Model):
     id = models.AutoField(primary_key=True)
@@ -114,12 +122,23 @@ class Qualifications(models.Model):
     teaching_experience = models.IntegerField(null=True,blank=True)
     educational_qualification = models.CharField(max_length=255)
     certification = models.CharField(max_length=255)
-    cv = models.FileField(null=True, blank=True)
-    other_certificates = models.FileField(null=True, blank=True)
+    cv = models.FileField(upload_to='staff_cv',null=True, blank=True)
+    other_certificates = models.FileField(upload_to='staff_other_certificates',null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
-    
+   
+class Class_level(models.Model):
+    name = models.CharField(max_length=50)
+    school_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE)
+    capacity = models.PositiveIntegerField()
+    start_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.school_level.name} - {self.name}"      
 class Skills(models.Model):
     id = models.AutoField(primary_key=True)
     staff_id = models.ForeignKey(Staffs, on_delete=models.CASCADE)
@@ -128,7 +147,7 @@ class Skills(models.Model):
     professional_development = models.TextField(null=True,blank=True)
     language_proficiency = models.TextField(null=True,blank=True)
     technology_skills = models.TextField(null=True,blank=True)
-    certificate_url = models.FileField(null=True, blank=True)
+    certificate_url = models.FileField(upload_to='staff_skill_certificate',null=True, blank=True)
     special_skills = models.TextField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -315,10 +334,6 @@ class SchoolSecurityPerson(models.Model):
     patrol_area = models.CharField(max_length=100, blank=True, null=True)
     security_training_courses = models.TextField(blank=True, null=True)
 
-    # Relationships
-    
-
-    # Additional fields
     emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
     emergency_contact_number = models.CharField(max_length=20, blank=True, null=True)
     shift_start_time = models.TimeField(blank=True, null=True)
@@ -326,7 +341,7 @@ class SchoolSecurityPerson(models.Model):
     years_of_experience = models.PositiveIntegerField(blank=True, null=True)
     
     uniform_size = models.CharField(max_length=10, blank=True, null=True)
-    vehicle_assigned = models.ForeignKey('Car', on_delete=models.SET_NULL, blank=True, null=True)
+  
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -349,19 +364,15 @@ class Cooker(models.Model):
     cooking_shift_hours = models.CharField(max_length=50, blank=True, null=True)
     uniform_size = models.CharField(max_length=10, blank=True, null=True)
     special_dietary_requirements = models.TextField(blank=True, null=True)
-
     # Relationships
     assigned_classrooms = models.ManyToManyField('Classroom', related_name='cooking_staff', blank=True)
-
     # Additional fields (if applicable)
     emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
     emergency_contact_number = models.CharField(max_length=20, blank=True, null=True)
     years_of_experience = models.PositiveIntegerField(blank=True, null=True)
     performance_ratings = models.TextField(blank=True, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f"{self.admin.first_name} {self.admin.last_name}"
 
@@ -374,20 +385,17 @@ class SchoolCleaner(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female')], blank=True)
     profile_pic = models.ImageField(upload_to='cleaner_profiles/', blank=True, null=True)
-
     # Role-specific Information
     cleaning_shift_hours = models.CharField(max_length=50, blank=True, null=True)
     uniform_size = models.CharField(max_length=10, blank=True, null=True)
     cleaning_duties = models.TextField(blank=True, null=True)    
     # Relationships
     assigned_classrooms = models.ManyToManyField('Classroom', related_name='cleaning_staff', blank=True)
-
     # Additional fields (if applicable)
     emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
     emergency_contact_number = models.CharField(max_length=20, blank=True, null=True)
     years_of_experience = models.PositiveIntegerField(blank=True, null=True)
     performance_ratings = models.TextField(blank=True, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -429,25 +437,29 @@ class Students(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10)    
     phone_number = models.CharField(max_length=20)
-    school_segment = models.CharField(max_length=100)
-    current_class = models.CharField(max_length=100)    
+    education_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)
+    route = models.ForeignKey('Route', on_delete=models.SET_NULL, null=True, blank=True, related_name='students_routes')
+    selected_class = models.ForeignKey(Class_level, on_delete=models.SET_NULL, null=True, blank=True)   
     birth_certificate_id = models.CharField(max_length=100)
     allergies = models.TextField(blank=True, null=True)
-    current_year = models.IntegerField(blank=True, null=True)
-    is_finished = models.BooleanField(default=False)
     address = models.CharField(max_length=200)
     street_address = models.CharField(max_length=200)
     house_number = models.CharField(max_length=20)
     health_status = models.CharField(max_length=200)
     physical_disability = models.CharField(max_length=200)
-    subjects = models.ManyToManyField(Subject, related_name='students', blank=True)
-    profile_pic = models.FileField(null=True, blank=True)
-    birth_certificate_photo = models.FileField(null=True, blank=True)
+    subjects = models.ManyToManyField(Subject, related_name='students', blank=True)    
+    # Modify the file fields with the upload_to attribute
+    profile_pic = models.FileField(upload_to='student_profile_pics/', null=True, blank=True)
+    birth_certificate_photo = models.FileField(upload_to='student_birth_certificate_photos/', null=True, blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(auto_now=True)
+    
     # Add the ForeignKey field to SessionYearModel
     session_year = models.ForeignKey(SessionYearModel, on_delete=models.SET_NULL, null=True, blank=True)
+    
     objects = models.Manager()
+    
     def __str__(self):
         return self.admin.first_name + " " + self.admin.last_name
     
@@ -480,20 +492,31 @@ class Parent(models.Model):
     student = models.ManyToManyField(Students,  related_name='parent')
     fcm_token = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)       
+    updated_at = models.DateTimeField(auto_now=True)      
     objects = models.Manager()    
     def __str__(self):
         return f"{self.admin.first_name} {self.admin.last_name}"
 
 class Route(models.Model):
     name = models.CharField(max_length=100)
-    students = models.ManyToManyField(Students, blank=True, related_name='routes')
+    students = models.ManyToManyField(Students, blank=True, related_name='route_students')
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)       
+    updated_at = models.DateTimeField(auto_now=True)       
     objects = models.Manager()   
 
     def __str__(self):
         return self.name    
+    
+class Notes(models.Model):
+    staff = models.ForeignKey(Staffs, on_delete=models.CASCADE)   
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    selected_class = models.ForeignKey(Class_level, on_delete=models.CASCADE)  
+    title = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    file = models.FileField(upload_to='notes/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f'{self.title} - {self.subject} - {self.school_class}'    
 class TransportationAttendance(models.Model):
     id = models.AutoField(primary_key=True)
     route = models.ForeignKey(Route, on_delete=models.CASCADE)
@@ -523,7 +546,7 @@ class Attendance(models.Model):
     attendance_date = models.DateField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     session_id = models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(auto_now_add=True)  
+    updated_at = models.DateTimeField(auto_now=True)  
     objects = models.Manager()
 
 
@@ -533,7 +556,7 @@ class AttendanceReport(models.Model):
     attendance_id = models.ForeignKey(Attendance,on_delete=models.DO_NOTHING)
     status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)   
+    updated_at = models.DateTimeField(auto_now=True)  
     objects = models.Manager()
     
 class LeaveReportStudent(models.Model):
@@ -543,7 +566,7 @@ class LeaveReportStudent(models.Model):
      leave_message = models.TextField()
      leave_status = models.IntegerField(default=0)    
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)  
      objects = models.Manager()
      
      
@@ -554,7 +577,7 @@ class LeaveReportStaffs(models.Model):
      leave_message = models.TextField()
      leave_status = models.IntegerField(default=0)    
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)   
      objects = models.Manager()
      
 class LeaveReportSchoolDriver(models.Model):
@@ -564,7 +587,7 @@ class LeaveReportSchoolDriver(models.Model):
     leave_message = models.TextField()
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -579,7 +602,7 @@ class LeaveReportSchoolSecurityPerson(models.Model):
     leave_message = models.TextField()
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -593,7 +616,7 @@ class LeaveReportCooker(models.Model):
     leave_message = models.TextField()
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -608,7 +631,7 @@ class LeaveReportSchoolCleaner(models.Model):
     leave_message = models.TextField()
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -623,7 +646,7 @@ class LeaveReportParent(models.Model):
     leave_message = models.TextField()
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -637,7 +660,7 @@ class FeedBackStudent(models.Model):
      feedback = models.CharField(max_length=255)     
      feedback_reply = models.TextField()    
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)
      objects = models.Manager()
      
      
@@ -647,7 +670,7 @@ class FeedBackStaff(models.Model):
      feedback = models.CharField(max_length=255)     
      feedback_reply = models.TextField()    
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)   
      objects = models.Manager() 
      
 class FeedbackSchoolDriver(models.Model):
@@ -656,7 +679,7 @@ class FeedbackSchoolDriver(models.Model):
     feedback = models.CharField(max_length=255)
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -669,7 +692,7 @@ class FeedbackSchoolSecurityPerson(models.Model):
     feedback = models.CharField(max_length=255)
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -682,7 +705,7 @@ class FeedbackCooker(models.Model):
     feedback = models.CharField(max_length=255)
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -696,7 +719,7 @@ class FeedbackSchoolCleaner(models.Model):
     feedback = models.CharField(max_length=255)
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -709,7 +732,7 @@ class FeedbackParent(models.Model):
     feedback = models.CharField(max_length=255)
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -721,7 +744,7 @@ class NotificationStudent(models.Model):
      student_id = models.ForeignKey(Students,on_delete=models.DO_NOTHING)     
      message = models.TextField()       
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)   
      objects = models.Manager()   
      
      
@@ -730,7 +753,7 @@ class NotificationSchoolDriver(models.Model):
     driver_id = models.ForeignKey(SchoolDriver, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -742,7 +765,7 @@ class NotificationSchoolSecurityPerson(models.Model):
     security_person_id = models.ForeignKey(SchoolSecurityPerson, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -755,7 +778,7 @@ class NotificationCooker(models.Model):
     cooker_id = models.ForeignKey(Cooker, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -768,7 +791,7 @@ class NotificationSchoolCleaner(models.Model):
     cleaner_id = models.ForeignKey(SchoolCleaner, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -781,7 +804,7 @@ class NotificationParent(models.Model):
     parent_id = models.ForeignKey(Parent, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
@@ -794,7 +817,7 @@ class NotificationStaff(models.Model):
      staff_id = models.ForeignKey(Staffs,on_delete=models.DO_NOTHING)     
      message = models.TextField()       
      created_at = models.DateTimeField(auto_now_add=True)
-     updated_at = models.DateTimeField(auto_now_add=True)   
+     updated_at = models.DateTimeField(auto_now=True)   
      objects = models.Manager()   
      
      
@@ -857,7 +880,7 @@ class Result(models.Model):
     exam_type = models.ForeignKey(ExamType, on_delete=models.CASCADE)
     marks = models.DecimalField(max_digits=5, decimal_places=2)
     date_of_exam = models.DateField()
-    current_class = models.CharField(max_length=100,default="Form I")
+    selected_class = models.ForeignKey(Class_level, on_delete=models.SET_NULL, null=True, blank=True) 
     total_marks = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, default=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -901,7 +924,7 @@ class StudentExamInfo(models.Model):   # ... (other fields)
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
     exam_type = models.ForeignKey(ExamType, on_delete=models.CASCADE)
     division = models.CharField(max_length=50, null=True, blank=True)
-    current_class = models.CharField(max_length=100,default="Form I")
+    selected_class = models.ForeignKey(Class_level, on_delete=models.SET_NULL, null=True, blank=True) 
     total_grade_points = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, default=0)
     best_subjects = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -949,13 +972,13 @@ def update_student_exam_info(sender, instance, **kwargs):
 
     # Check if there are at least seven subjects with results for the student
     student = instance.student
-    current_class = instance.current_class
+    current_class = instance.selected_class
     exam_type = instance.exam_type
 
     exam_results = Result.objects.filter(
         student=student,
         exam_type=exam_type,
-        current_class=current_class
+        selected_class=current_class
     )
 
     if exam_results.count() >= 7:
@@ -982,7 +1005,7 @@ def update_student_exam_info(sender, instance, **kwargs):
         student_exam_info, created = StudentExamInfo.objects.get_or_create(
             student=student,
             exam_type=exam_type,
-            current_class=current_class,
+            selected_class=current_class,
         )
 
         student_exam_info.division = division
@@ -997,7 +1020,7 @@ def update_student_exam_info(sender, instance, **kwargs):
 def update_student_position(sender, instance, **kwargs):
     # Retrieve all students with the same current class and exam type
     students = StudentExamInfo.objects.filter(
-        current_class=instance.current_class,
+        selected_class=instance.selected_class,
         exam_type=instance.exam_type,
     ).order_by('total_grade_points')  # Order by total_grade_points in ascending order
 
@@ -1006,7 +1029,33 @@ def update_student_position(sender, instance, **kwargs):
         student_position, created = StudentPositionInfo.objects.get_or_create(
             student=student.student,
             exam_type=student.exam_type,
-            current_class=student.current_class,
+            current_class=student.selected_class,
         )
         student_position.position = index
         student_position.save()     
+        
+        
+     
+    
+
+
+    
+# Model for Schools
+class School(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.TextField()
+    contact_person = models.CharField(max_length=100, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = models.CharField(max_length=20, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    established_year = models.PositiveIntegerField(blank=True, null=True)
+    principal = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.name      
+    
+    
