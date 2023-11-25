@@ -135,6 +135,19 @@ ADMIN HOME
                 </div>
             </div>
         </div>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h3>{{ car_count }}</h3>
+                    <p>Total Car</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-route"></i>
+                </div>
+            </div>
+        </div>
+        </div>
         <!-- /.row -->
 
         <div class="row">
@@ -289,7 +302,7 @@ ADMIN HOME
       </div>
       <!-- Fourth Row -->
       <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-6">
               <!-- BAR CHART -->
               <div class="card card-success">
                   <div class="card-header">
@@ -312,8 +325,71 @@ ADMIN HOME
               </div>
               <!-- /.card -->
           </div>
+          <div class="col-lg-6">
+            <!-- PIE CHART -->
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Distribution of Students by Education Level</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
       </div>
-      
+    <div class="row">
+                <!-- Bar Chart Container -->
+                <div class="col-lg-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Number of Students in Each Class Level</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <canvas id="classLevelChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Number of Staffs in Each Education Level</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <canvas id="staffsByEducationLevelChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Number of Subjects in Each Education Level</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="subjectsByEducationLevelChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- Third Row - Add more small boxes or sections as needed -->
 
@@ -959,4 +1035,179 @@ var studentCounts = [
       options: options
   });
 </script>
+
+<script>
+    // Convert Django QuerySet to a list of strings
+    var educationLevels = [{% for level in education_levels %}"{{ level }}", {% endfor %}];
+
+    // Convert Django dictionary to a JavaScript array of numbers
+    var educationLevelCounts = Object.values({% autoescape off %}{{ education_level_counts }}{% endautoescape %});
+
+    console.log(educationLevels);
+    console.log(educationLevelCounts);
+
+    // Get the canvas element
+    var ctx = document.getElementById('pieChart').getContext('2d');
+
+    // Create the pie chart
+    var pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: educationLevels,
+            datasets: [{
+                data: educationLevelCounts,
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    // Add more colors if you have more education levels
+                ],
+            }],
+        },
+    });
+</script>
+
+<script>
+    // Get the data for the bar chart from your context data
+    var classLevels = {{ class_levels|safe }};
+    var numStudents = {{ num_students|safe }};
+
+    // Get the canvas element
+    var ctx = document.getElementById('classLevelChart').getContext('2d');
+
+    // Create the bar chart
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: classLevels,
+            datasets: [{
+                label: 'Number of Students',
+                data: numStudents,
+                backgroundColor: [
+                '#113388',
+                '#993366',
+                '#113377',
+                '#119933',
+                '#113344',
+                '#993355',
+                '#113322',
+                '#119911',
+                '#113399',
+                '#991188',
+                '#112222',
+                '#113388',
+                '#114488',
+                '#995588',
+                '#116622',
+                '#117788',
+                '#118888',
+                '#999988',
+                '#113322',
+                '#229988',
+                '#333388',
+                '#443388',
+                '#113322',
+                '#229988',
+                '#333388',
+                '#443388',
+                '#553322',
+                '#669988',
+                '#773388',
+                '#883388',
+                '#993322',
+                '#123456',
+                '#789101',
+                '#121314',
+                '#151617',
+                '#181920',
+                '#212223',
+                '#242526',
+                '#272829',
+                '#303132',
+                '#333435',
+                '#363738',
+                '#394041',
+                '#424344',
+                '#454647',
+                '#484849',
+                '#505122',
+                '#569966',
+                ], // You can customize the color
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    var educationLevels = [{% for level in education_levels %}"{{ level }}", {% endfor %}];
+    var staffsCounts = {{ staffs_counts|safe }};
+    console.log(educationLevels)
+    var ctx = document.getElementById('staffsByEducationLevelChart').getContext('2d');
+
+    var pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: educationLevels,
+            datasets: [{
+                data: staffsCounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    // Add more colors if needed
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    // Add more colors if needed
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            // Add options as needed
+        }
+    });
+</script>
+
+<script>
+    var educationLevels = {{ education_levels_json|safe }};
+
+    var ctx = document.getElementById('subjectsByEducationLevelChart').getContext('2d');
+
+    var pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: educationLevels.map(item => item.fields.name),
+            datasets: [{
+                data: educationLevels.map(item => item.fields.subject_count),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    // Add more colors if you have more education levels
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    // Add more colors if you have more education levels
+                ],
+                borderWidth: 1
+            }]
+        },
+    });
+</script>
+
+
 {% endblock customer_js %}

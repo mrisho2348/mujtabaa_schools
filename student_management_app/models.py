@@ -437,8 +437,7 @@ class Students(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10)    
     phone_number = models.CharField(max_length=20)
-    education_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)
-    route = models.ForeignKey('Route', on_delete=models.SET_NULL, null=True, blank=True, related_name='students_routes')
+    education_level = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)    
     selected_class = models.ForeignKey(Class_level, on_delete=models.SET_NULL, null=True, blank=True)   
     birth_certificate_id = models.CharField(max_length=100)
     allergies = models.TextField(blank=True, null=True)
@@ -499,7 +498,7 @@ class Parent(models.Model):
 
 class Route(models.Model):
     name = models.CharField(max_length=100)
-    students = models.ManyToManyField(Students, blank=True, related_name='route_students')
+    students = models.ForeignKey(Students, blank=True,null=True,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)       
     objects = models.Manager()   

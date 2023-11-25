@@ -88,7 +88,33 @@ def admin_home(request):
     staff_count = Staffs.objects.all().count()
     subject_count = Subject.objects.all().count()
     student_count = Students.objects.all().count()
+    
+        # Retrieve the count of students for each class level
+    class_level_counts = Class_level.objects.annotate(num_students=Count('students')).values('name', 'num_students')
+    education_levels = EducationLevel.objects.annotate(subject_count=Count('subject'))
+    education_levels_json = [
+    {
+        'fields': {
+            'name': level.name,
+            'subject_count': level.subject_count,
+        }
+    }
+    for level in education_levels
+]
 
+    # Extract the data for the chart
+    class_levels = [entry['name'] for entry in class_level_counts]
+    num_students = [entry['num_students'] for entry in class_level_counts]
+        # Get all education levels
+    education_levels = EducationLevel.objects.all()
+    staffs_counts = [Staffs.objects.filter(education_level=level).count() for level in education_levels]
+    # Create a dictionary to store the count for each education level
+    education_level_counts = {}
+
+    # Loop through each education level and count the number of students
+    for education_level in education_levels:
+        count = Students.objects.filter(education_level=education_level).count()
+        education_level_counts[education_level.name] = count
     # Count the number of each type of staff
     security_count = SchoolSecurityPerson.objects.all().count()
     cooker_count = Cooker.objects.all().count()
@@ -137,11 +163,14 @@ def admin_home(request):
     classroom_count = Classroom.objects.all().count()
     cleaner_count = SchoolCleaner.objects.all().count()
     parent_count = Parent.objects.all().count()
+    car_count = Car.objects.all().count()
 
     # Count the total transport attendance route-wise
     route_transport_attendance_counts = Route.objects.annotate(
         total_transport_attendance=Count('transportationattendance__transportationattendancereport')
     ).values('name', 'total_transport_attendance')
+    
+  
 
     context = {
         "staff_count": staff_count,
@@ -150,7 +179,12 @@ def admin_home(request):
         "security_count": security_count,
         "cooker_count": cooker_count,
         "driver_count": driver_count,
+        "car_count": car_count,
         "route_count": route_count,
+        'class_levels': class_levels,
+        'education_levels_json': education_levels_json,
+        'num_students': num_students,
+        'staffs_counts': staffs_counts,
         "route_student_counts": route_student_counts,
         "driver_attendance_counts": driver_attendance_counts,
         "staff_attendance_counts": staff_attendance_counts,
@@ -161,6 +195,8 @@ def admin_home(request):
         "classroom_count": classroom_count,
         "cleaner_count": cleaner_count,
         "parent_count": parent_count,
+        'education_levels': education_levels,
+        'education_level_counts': education_level_counts,
         "route_transport_attendance_counts": route_transport_attendance_counts,
     }
 
