@@ -29,204 +29,235 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
         data-accordion="false">
 
-        <!-- Home -->
-        <li class="nav-item">
-            <a href="{% url 'student_home' %}"
-                class="nav-link {% if request.path == 'student_home' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Home</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            {% url 'staff_sendfeedback' as staff_sendfeedback %}
-            <a href="{% url 'financial_management:staff_sendfeedback' %}" class="nav-link {% if request.path == staff_sendfeedback %} active {% endif %}">
+    <!-- Home -->
+    <li class="nav-item">
+        {% url 'financial_management:accountant_home' as accountant_home %}
+        <a href="{% url 'financial_management:accountant_home' %}"
+            class="nav-link {% if request.path == accountant_home %} active {% endif %}">
+            <i class="nav-icon fas fa-home"></i>
+            <p>Home</p>
+        </a>
+    </li>
 
-              <i class="nav-icon fas fa-graduation-cap"></i>
-              <p>
-                Send FeedBack
-              </p>
-            </a>
-          </li>        
-        
-          <li class="nav-item">
-            {% url 'staff_apply_leave' as staff_apply_leave %}
-            <a href="{% url 'financial_management:staff_apply_leave' %}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+    <!-- Send Feedback -->
+    <li class="nav-item">
+        {% url 'financial_management:staff_sendfeedback' as staff_sendfeedback %}
+        <a href="{% url 'financial_management:staff_sendfeedback' %}" class="nav-link {% if request.path == staff_sendfeedback %} active {% endif %}">
+            <i class="nav-icon fas fa-graduation-cap"></i>
+            <p>Send Feedback</p>
+        </a>
+    </li>
 
-              <i class="nav-icon fas fa-graduation-cap"></i>
-              <p>
-                Apply for Leave
-              </p>
-            </a>
-          </li>     
-        <!-- Financial Section -->
-        <li class="nav-item">
-            <a href="{% url 'financial_management:generate_income_graph' %}"
-                class="nav-link {% if request.path == 'generate_income_graph' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Income Graph</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:generate_income_statement' %}"
-                class="nav-link {% if request.path == 'generate_income_statement' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Income Statement</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:generate_balance_sheet' %}"
-                class="nav-link {% if request.path == 'generate_balance_sheet' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Balance Sheet</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:analyze_income_data' %}"
-                class="nav-link {% if request.path == 'analyze_income_data' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Income Data Analysis</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:contribution_form' %}"
-                class="nav-link {% if request.path == 'contribution_form' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Contribution</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:contribution_list' %}"
-                class="nav-link {% if request.path == 'contribution_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Manage Contribution</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_expense' %}"
-                class="nav-link {% if request.path == 'add_expense' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Expense</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:expense_list' %}"
-                class="nav-link {% if request.path == 'expense_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Manage Expense</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_service_details' %}"
-                class="nav-link {% if request.path == 'add_service_details' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>add service details</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:service_details_list' %}"
-                class="nav-link {% if request.path == 'service_details_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>manage service details</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:income_payment_form' %}"
-                class="nav-link {% if request.path == 'income_payment_form' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add student Payment record</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:income_payment_list' %}"
-                class="nav-link {% if request.path == 'income_payment_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>student Payment record</p>
-            </a>
-        </li>
-      
+    <!-- Apply for Leave -->
+    <li class="nav-item">
+        {% url 'financial_management:staff_apply_leave' as staff_apply_leave %}
+        <a href="{% url 'financial_management:staff_apply_leave' %}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+            <i class="nav-icon fas fa-calendar"></i>
+            <p>Apply for Leave</p>
+        </a>
+    </li>
 
-        <!-- Salary Section -->
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_staff_salary' %}"
-                class="nav-link {% if request.path == 'add_staff_salary' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Staff Salary</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:staff_salary_list' %}"
-                class="nav-link {% if request.path == 'staff_salary_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Staff Salary List</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_driver_salary' %}"
-                class="nav-link {% if request.path == 'add_driver_salary' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Driver Salary</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:driver_salary_list' %}"
-                class="nav-link {% if request.path == 'driver_salary_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Driver Salary List</p>
-            </a>
-        </li>
-     
+    <!-- Financial Section -->
+    <!-- (Other items are similarly modified with corresponding icons) -->
 
-        <!-- Security Salary Section -->
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_security_salary' %}"
-                class="nav-link {% if request.path == 'add_security_salary' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Security Salary</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:security_salary_list' %}"
-                class="nav-link {% if request.path == 'security_salary_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Security Salary List</p>
-            </a>
-        </li>
-      
+    <!-- Income Graph -->
+    <li class="nav-item">
+        {% url 'financial_management:generate_income_graph' as generate_income_graph %}
+        <a href="{% url 'financial_management:generate_income_graph' %}" class="nav-link {% if request.path == generate_income_graph %} active {% endif %}">
+            <i class="nav-icon fas fa-chart-line"></i>
+            <p>Income Graph</p>
+        </a>
+    </li>
 
-        <!-- Cooker Salary Section -->
-        <li class="nav-item">
-            <a href="{% url 'financial_management:add_cooker_salary' %}"
-                class="nav-link {% if request.path == 'add_cooker_salary' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Cooker Salary</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{% url 'financial_management:cooker_salary_list' %}"
-                class="nav-link {% if request.path == 'cooker_salary_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Cooker Salary List</p>
-            </a>
-        </li>
-      
+    <!-- Income Statement -->
+    <li class="nav-item">
+        {% url 'financial_management:generate_income_statement' as generate_income_statement %}
+        <a href="{% url 'financial_management:generate_income_statement' %}" class="nav-link {% if request.path == generate_income_statement %} active {% endif %}">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>Income Statement</p>
+        </a>
+    </li>
 
-        <!-- Car Expense Section -->
-        <li class="nav-item">
-            
-            <a href="{% url 'financial_management:add_car_expense' %}"
-                class="nav-link {% if request.path == 'add_car_expense' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Add Car Expense</p>
-            </a>
-        </li>
-        <li class="nav-item">
-          
-            <a href="{% url 'financial_management:car_expense_list' %}"
-                class="nav-link {% if request.path == 'car_expense_list' %} active {% endif %}">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Car Expense List</p>
-            </a>
-        </li>
+    <!-- Balance Sheet -->
+    <li class="nav-item">
+        {% url 'financial_management:generate_balance_sheet' as generate_balance_sheet %}
+        <a href="{% url 'financial_management:generate_balance_sheet' %}" class="nav-link {% if request.path == generate_balance_sheet %} active {% endif %}">
+            <i class="nav-icon fas fa-balance-scale"></i>
+            <p>Balance Sheet</p>
+        </a>
+    </li>
+<!-- Income Data Analysis -->
+<li class="nav-item">
+    {% url 'financial_management:analyze_income_data' as analyze_income_data %}
+    <a href="{% url 'financial_management:analyze_income_data' %}" class="nav-link {% if request.path == analyze_income_data %} active {% endif %}">
+        <i class="nav-icon fas fa-chart-pie"></i>
+        <p>Income Data Analysis</p>
+    </a>
+</li>
+
+<!-- Add Contribution -->
+<li class="nav-item">
+    {% url 'financial_management:contribution_form' as contribution_form %}
+    <a href="{% url 'financial_management:contribution_form' %}" class="nav-link {% if request.path == contribution_form %} active {% endif %}">
+        <i class="nav-icon fas fa-hand-holding-usd"></i>
+        <p>Add Contribution</p>
+    </a>
+</li>
+
+<!-- Manage Contribution -->
+<li class="nav-item">
+    {% url 'financial_management:contribution_list' as contribution_list %}
+    <a href="{% url 'financial_management:contribution_list' %}" class="nav-link {% if request.path == contribution_list %} active {% endif %}">
+        <i class="nav-icon fas fa-coins"></i>
+        <p>Manage Contribution</p>
+    </a>
+</li>
+
+<!-- Add Expense -->
+<li class="nav-item">
+    {% url 'financial_management:add_expense' as add_expense %}
+    <a href="{% url 'financial_management:add_expense' %}" class="nav-link {% if request.path == add_expense %} active {% endif %}">
+        <i class="nav-icon fas fa-shopping-cart"></i>
+        <p>Add Expense</p>
+    </a>
+</li>
+
+<!-- Manage Expense -->
+<li class="nav-item">
+    {% url 'financial_management:expense_list' as expense_list %}
+    <a href="{% url 'financial_management:expense_list' %}" class="nav-link {% if request.path == expense_list %} active {% endif %}">
+        <i class="nav-icon fas fa-list-alt"></i>
+        <p>Manage Expense</p>
+    </a>
+</li>
+
+<!-- Add Service Details -->
+<li class="nav-item">
+    {% url 'financial_management:add_service_details' as add_service_details %}
+    <a href="{% url 'financial_management:add_service_details' %}" class="nav-link {% if request.path == add_service_details %} active {% endif %}">
+        <i class="nav-icon fas fa-cogs"></i>
+        <p>Add Service Details</p>
+    </a>
+</li>
+
+<!-- Manage Service Details -->
+<li class="nav-item">
+    {% url 'financial_management:service_details_list' as service_details_list %}
+    <a href="{% url 'financial_management:service_details_list' %}" class="nav-link {% if request.path == service_details_list %} active {% endif %}">
+        <i class="nav-icon fas fa-wrench"></i>
+        <p>Manage Service Details</p>
+    </a>
+</li>
+
+<!-- Add Student Payment Record -->
+<li class="nav-item">
+    {% url 'financial_management:income_payment_form' as income_payment_form %}
+    <a href="{% url 'financial_management:income_payment_form' %}" class="nav-link {% if request.path == income_payment_form %} active {% endif %}">
+        <i class="nav-icon fas fa-dollar-sign"></i>
+        <p>Add Student Payment Record</p>
+    </a>
+</li>
+
+<!-- Student Payment Record -->
+<li class="nav-item">
+    {% url 'financial_management:income_payment_list' as income_payment_list %}
+    <a href="{% url 'financial_management:income_payment_list' %}" class="nav-link {% if request.path == income_payment_list %} active {% endif %}">
+        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+        <p>Student Payment Record</p>
+    </a>
+</li>
+
+       <!-- Add Staff Salary -->
+<li class="nav-item">
+    {% url 'financial_management:add_staff_salary' as add_staff_salary %}
+    <a href="{% url 'financial_management:add_staff_salary' %}" class="nav-link {% if request.path == add_staff_salary %} active {% endif %}">
+        <i class="nav-icon fas fa-user-plus"></i>
+        <p>Add Staff Salary</p>
+    </a>
+</li>
+
+<!-- Staff Salary List -->
+<li class="nav-item">
+    {% url 'financial_management:staff_salary_list' as staff_salary_list %}
+    <a href="{% url 'financial_management:staff_salary_list' %}" class="nav-link {% if request.path == staff_salary_list %} active {% endif %}">
+        <i class="nav-icon fas fa-users"></i>
+        <p>Staff Salary List</p>
+    </a>
+</li>
+
+<!-- Add Driver Salary -->
+<li class="nav-item">
+    {% url 'financial_management:add_driver_salary' as add_driver_salary %}
+    <a href="{% url 'financial_management:add_driver_salary' %}" class="nav-link {% if request.path == add_driver_salary %} active {% endif %}">
+        <i class="nav-icon fas fa-car"></i>
+        <p>Add Driver Salary</p>
+    </a>
+</li>
+
+<!-- Driver Salary List -->
+<li class="nav-item">
+    {% url 'financial_management:driver_salary_list' as driver_salary_list %}
+    <a href="{% url 'financial_management:driver_salary_list' %}" class="nav-link {% if request.path == driver_salary_list %} active {% endif %}">
+        <i class="nav-icon fas fa-car"></i>
+        <p>Driver Salary List</p>
+    </a>
+</li>
+
+<!-- Add Security Salary -->
+<li class="nav-item">
+    {% url 'financial_management:add_security_salary' as add_security_salary %}
+    <a href="{% url 'financial_management:add_security_salary' %}" class="nav-link {% if request.path == add_security_salary %} active {% endif %}">
+        <i class="nav-icon fas fa-shield-alt"></i>
+        <p>Add Security Salary</p>
+    </a>
+</li>
+
+<!-- Security Salary List -->
+<li class="nav-item">
+    {% url 'financial_management:security_salary_list' as security_salary_list %}
+    <a href="{% url 'financial_management:security_salary_list' %}" class="nav-link {% if request.path == security_salary_list %} active {% endif %}">
+        <i class="nav-icon fas fa-shield-alt"></i>
+        <p>Security Salary List</p>
+    </a>
+</li>
+
+<!-- Add Cooker Salary -->
+<li class="nav-item">
+    {% url 'financial_management:add_cooker_salary' as add_cooker_salary %}
+    <a href="{% url 'financial_management:add_cooker_salary' %}" class="nav-link {% if request.path == add_cooker_salary %} active {% endif %}">
+        <i class="nav-icon fas fa-utensils"></i>
+        <p>Add Cooker Salary</p>
+    </a>
+</li>
+
+<!-- Cooker Salary List -->
+<li class="nav-item">
+    {% url 'financial_management:cooker_salary_list' as cooker_salary_list %}
+    <a href="{% url 'financial_management:cooker_salary_list' %}" class="nav-link {% if request.path == cooker_salary_list %} active {% endif %}">
+        <i class="nav-icon fas fa-utensils"></i>
+        <p>Cooker Salary List</p>
+    </a>
+</li>
+
+<!-- Add Car Expense -->
+<li class="nav-item">
+    {% url 'financial_management:add_car_expense' as add_car_expense %}
+    <a href="{% url 'financial_management:add_car_expense' %}" class="nav-link {% if request.path == add_car_expense %} active {% endif %}">
+        <i class="nav-icon fas fa-car"></i>
+        <p>Add Car Expense</p>
+    </a>
+</li>
+
+<!-- Car Expense List -->
+<li class="nav-item">
+    {% url 'financial_management:car_expense_list' as car_expense_list %}
+    <a href="{% url 'financial_management:car_expense_list' %}" class="nav-link {% if request.path == car_expense_list %} active {% endif %}">
+        <i class="nav-icon fas fa-car"></i>
+        <p>Car Expense List</p>
+    </a>
+</li>
+
+<!-- (Continue with the remaining sections as needed) -->
    
     </ul>
 </nav>

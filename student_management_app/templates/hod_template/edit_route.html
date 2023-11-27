@@ -1,4 +1,8 @@
 {% extends 'hod_template/base_template.html' %}
+{% block title %}
+    {% if route.id %}Edit Route{% else %}Add Route{% endif %}
+{% endblock title %}
+
 {% block page_title %}
     {% if route.id %}Edit Route{% else %}Add Route{% endif %}
 {% endblock page_title %}

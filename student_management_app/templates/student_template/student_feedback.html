@@ -1,5 +1,8 @@
-{% extends 'student_template/base_template.html' %} {% block page_title %}
-FeedBack Message {% endblock page_title %} {% block main_content %}
+{% extends 'student_template/base_template.html' %} 
+{% block title %}
+student FeedBack Message
+ {% endblock title %}
+  {% block main_content %}
 <!-- Main content -->
 <section class="content">
   <div class="container-fluid">
@@ -88,6 +91,7 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
   </div>
 </section>
 <!-- /.content -->
+    
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
@@ -96,4 +100,5 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
 <script>
     new DataTable('#example');
 </script>
+
 {% endblock main_content %}

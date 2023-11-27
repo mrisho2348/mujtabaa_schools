@@ -1,7 +1,7 @@
 {% extends 'driver_template/base_template.html' %}
-{% block page_title %}
+{% block title %}
 Leave report and apply
-{% endblock page_title %}
+{% endblock title %}
 {% block main_content %}
     <!-- Main content -->
     <section class="content">
@@ -55,13 +55,16 @@ Leave report and apply
 
               <div class="card-body">
                 <div class="table">
-                <table class="table">
+                <table class="table table-bordered table-striped" id="example">
+                  <thead>
                   <tr>
                     <th>ID</th>
                     <th>Leave Date</th>
                     <th>Leave Messages</th>
                     <th>Leave status</th>
                   </tr>
+                  </thead>
+                  <tbody>
                   {% for row in driver_leave_report %}
                   <tr>
                     <td>{{row.id}}</td>
@@ -78,6 +81,7 @@ Leave report and apply
                       </td>
                   </tr> 
                   {% endfor %}
+                  </tbody>
                 </table>
               </div>
               </div>
@@ -93,5 +97,22 @@ Leave report and apply
     <script>
       console.log(driver_leave_report)
     </script>
+ 
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    
+    <script>
+        new DataTable('#example', {
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        });
+    </script> 
 {% endblock main_content %}
 

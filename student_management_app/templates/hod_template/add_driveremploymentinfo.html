@@ -1,4 +1,12 @@
 {% extends 'hod_template/base_template.html' %}
+{% block title %}
+        {% if driver_id and employment_info %}
+            Update Employment Information
+        {% else %}
+            Add Employment Information
+        {% endif %}
+{% endblock title %}
+
 {% block page_title %}
         {% if driver_id and employment_info %}
             Update Employment Information

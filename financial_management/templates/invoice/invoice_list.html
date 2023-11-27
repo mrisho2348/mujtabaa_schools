@@ -1,8 +1,8 @@
 {% extends 'financial/base.html' %}
 
-{% block page_title %}
+{% block title %}
     Invoice List
-{% endblock page_title %}
+{% endblock title %}
 
 {% block main_content %}
     <div class="container-fluid">
@@ -13,7 +13,7 @@
                         <h3 class="card-title">List of Invoices</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped" id="example">
                             <thead>
                                 <tr>
                                     <th>Student</th>
@@ -34,10 +34,7 @@
                                         <td>${{ invoice.amount_remaining }}</td>
                                         <td>{% if invoice.is_paid %}Paid{% else %}Not Paid{% endif %}</td>
                                     </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="6">No invoices found.</td>
-                                    </tr>
+                               
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -46,4 +43,21 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    
+    <script>
+        new DataTable('#example', {
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        });
+    </script>
+    
 {% endblock main_content %}

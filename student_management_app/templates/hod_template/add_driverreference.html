@@ -1,4 +1,12 @@
 {% extends 'hod_template/base_template.html' %}
+{% block title %}
+        {% if driver_id and references %}
+            Update References
+        {% else %}
+            Add References
+        {% endif %}
+{% endblock title %}
+
 {% block page_title %}
         {% if driver_id and references %}
             Update References

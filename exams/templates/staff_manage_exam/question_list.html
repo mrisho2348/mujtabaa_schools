@@ -1,7 +1,7 @@
 {% extends '../staff_template/base_template.html' %}
-{% block page_title %}
+{% block title %}
     Question lists 
-{% endblock page_title %}
+{% endblock title %}
 {% block breadcrumb %}
     <a class="btn btn-primary" href="{% url 'exams:add_question' %}">
         <i class="fas fa-plus"></i> New Question
@@ -150,9 +150,19 @@ $('input[name="_selected_action"]').on('change', function() {
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 <script>
-    new DataTable('#result_list');
+    new DataTable('#result_list', {
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+    });
 </script>
+
 
 {% endblock main_content %}

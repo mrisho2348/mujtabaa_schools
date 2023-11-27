@@ -1,7 +1,7 @@
 {% extends 'financial/base.html' %}
-{% block page_title %}
+{% block title %}
 FeedBack Message
-{% endblock page_title %}
+{% endblock title %}
 {% block main_content %}
     <!-- Main content -->
     <section class="content">
@@ -52,13 +52,16 @@ FeedBack Message
 
               <div class="card-body">
                 <div class="table">
-                <table class="table table-bordered table-striped"id="example">
+                <table class="table table-bordered table-striped" id="example">
+                  <thead>
                   <tr>
                     <th>ID</th>
                     <th>FeedBack Message</th>
                     <th>FeedBack Reply</th>
                    
                   </tr>
+                  </thead>
+                  <tbody>
                   {% for row in feedback_data %}
                   <tr>
                     <td>{{row.id}}</td>
@@ -67,6 +70,7 @@ FeedBack Message
                 
                   </tr> 
                   {% endfor %}
+                  </tbody>
                 </table>
               </div>
               </div>
@@ -80,12 +84,20 @@ FeedBack Message
     </section>
     <!-- /.content -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
-
-<script>
-    new DataTable('#example');
-</script>    
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    
+    <script>
+        new DataTable('#example', {
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        });
+    </script>  
 {% endblock main_content %}
 

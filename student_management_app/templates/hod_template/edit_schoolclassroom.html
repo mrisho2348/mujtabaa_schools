@@ -1,4 +1,11 @@
 {% extends 'hod_template/base_template.html' %}
+{% block title %}
+  {% if classroom %}
+    Update Classroom
+  {% else %}
+    Add Classroom
+  {% endif %}
+{% endblock title %}
 {% block page_title %}
   {% if classroom %}
     Update Classroom

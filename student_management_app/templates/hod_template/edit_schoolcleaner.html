@@ -1,5 +1,12 @@
 {% extends 'hod_template/base_template.html' %}
 
+{% block title %}
+  {% if cooker %}
+    Update Cleaner Information
+  {% else %}
+    Add Cleaner Information
+  {% endif %}
+{% endblock title %}
 {% block page_title %}
   {% if cooker %}
     Update Cleaner Information

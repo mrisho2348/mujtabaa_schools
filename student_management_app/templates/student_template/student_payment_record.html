@@ -1,7 +1,7 @@
 {% extends 'student_template/base_template.html' %}
-{% block page_title %}
+{% block title %}
     Payments
-{% endblock page_title %}
+{% endblock title %}
 
 {% block main_content %}
 {% load static %}
@@ -48,11 +48,14 @@
 <script>
     // Your additional JavaScript logic (if needed)
 </script>
+    
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
+
 <script>
     new DataTable('#example');
 </script>
+
 {% endblock main_content %}
