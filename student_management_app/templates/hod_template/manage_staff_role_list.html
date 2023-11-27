@@ -19,7 +19,7 @@
                         <h3 class="card-title">List of Staff with Assigned Roles</h3>
                     </div>
                     <div class="card-body">
-                        <div class="form-row">
+                        <div class="">
                             <div>
                                 {% if messages %}
                                     <div class="col-12">
@@ -33,7 +33,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped" id="example">
                             <thead>
                                 <tr>
                                     <th>Staff Member</th>
@@ -69,4 +69,12 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

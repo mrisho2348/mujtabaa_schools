@@ -62,12 +62,15 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
 
           <div class="card-body">
             <div class="table">
-              <table class="table">
+              <table class="table table-bordered table-striped" id="example">
+                <thead>
                 <tr>
                   <th>ID</th>
                   <th>FeedBack Message</th>
                   <th>FeedBack Reply</th>
                 </tr>
+                </thead>
+                <tbody>
                 {% for row in feedback_data %}
                 <tr>
                   <td>{{row.id}}</td>
@@ -75,6 +78,7 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
                   <td>{{row.feedback_reply}}</td>
                 </tr>
                 {% endfor %}
+                </tbody>
               </table>
             </div>
           </div>
@@ -84,4 +88,12 @@ FeedBack Message {% endblock page_title %} {% block main_content %}
   </div>
 </section>
 <!-- /.content -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

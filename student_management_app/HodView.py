@@ -246,6 +246,9 @@ def staff_role_list(request):
     staff_assignments = StaffRoleAssignment.objects.all()
     return render(request, 'hod_template/manage_staff_role_list.html', {'staff_assignments': staff_assignments})
 
+def datatables(request):
+    return render(request,'hod_template/datatable.html')
+
 @login_required
 def edit_staff_role(request, assignment_id):
     assignment = get_object_or_404(StaffRoleAssignment, id=assignment_id)
@@ -2550,18 +2553,8 @@ def single_parent_detail(request, parent_id):
 
   
 def manage_student(request):
-    per_page = request.GET.get('per_page', 3)
-    current_class = request.GET.get('current_class')  # Get the selected class from the request
-    students = Students.objects.all()
-    
-    if current_class:  # Filter students by class if it is selected
-        students = students.filter(current_class=current_class)
-    students = students.order_by('id')
-    paginator = Paginator(students, per_page)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    return render(request, "hod_template/manage_student.html", {"students": students, "page_obj": page_obj})
+    students = Students.objects.all()    
+    return render(request, "hod_template/manage_student.html", {"students": students})
 
 
 def manage_parent(request):
@@ -2588,14 +2581,9 @@ def student_list(request):
   
 
   
-def manage_staff(request):       
-    per_page = request.GET.get('per_page', 3)  # Get the number of items to display per page from the request
-    staffs=Staffs.objects.all()
-    staffs = staffs.order_by('id') 
-    paginator = Paginator(staffs, per_page)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request,"hod_template/manage_staff.html",{"staffs":staffs,"page_obj":page_obj})  
+def manage_staff(request):     
+    staffs=Staffs.objects.all()  
+    return render(request,"hod_template/manage_staff.html",{"staffs":staffs})  
 
 
 def manage_subject(request):
@@ -3312,8 +3300,8 @@ def exam_type_list(request):
 
 def student_results(request, exam_type_id,current_class):
     # Retrieve the list of students
-    
-    students = Students.objects.filter(current_class=current_class)  # Replace 'Students' with your actual student model
+    form_one_class = Class_level.objects.get(name=current_class)  
+    students = Students.objects.filter(selected_class=form_one_class)  # Replace 'Students' with your actual student model
 
     # Create a list to store student information
     student_info = []
@@ -3326,7 +3314,7 @@ def student_results(request, exam_type_id,current_class):
         exam_info = StudentExamInfo.objects.filter(
             student=student,
             exam_type=exam_type,
-            current_class=current_class
+            selected_class=form_one_class
         ).first()
 
         # Retrieve the StudentPositionInfo for the specified student, exam type, and current class
@@ -3386,8 +3374,7 @@ def subject_wise_result(request, student_id,exam_type_id):
 
 
 def students_summary(request, exam_type=None):
-    # Fetch secondary students
-    staff = Staffs.objects.get(admin=request.user.id)
+
     exam_type = get_object_or_404(ExamType, name=exam_type)
     form_one_class = Class_level.objects.get(name='Form I')
     form_i_students = Students.objects.filter(selected_class=form_one_class)

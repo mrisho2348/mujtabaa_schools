@@ -52,7 +52,7 @@ FeedBack Message
 
               <div class="card-body">
                 <div class="table">
-                <table class="table">
+                <table class="table table-bordered table-striped"id="example">
                   <tr>
                     <th>ID</th>
                     <th>FeedBack Message</th>
@@ -79,5 +79,13 @@ FeedBack Message
       </div>
     </section>
     <!-- /.content -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+
+<script>
+    new DataTable('#example');
+</script>    
 {% endblock main_content %}
 

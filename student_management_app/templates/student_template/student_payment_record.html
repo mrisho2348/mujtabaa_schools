@@ -7,8 +7,7 @@
 {% load static %}
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="content-wrappe">
+    <div class="container-fluid">      
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
@@ -16,7 +15,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Display a table to list payments -->
-                        <table class="table">
+                        <table class="table table-bordered table-striped" id="example">
                             <thead>
                                 <tr>
                                     <th>Service Name</th>
@@ -41,7 +40,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </div><!-- /.container-fluid -->
 </section>
 
@@ -49,5 +48,11 @@
 <script>
     // Your additional JavaScript logic (if needed)
 </script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

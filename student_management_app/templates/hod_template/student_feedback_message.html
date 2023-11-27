@@ -5,12 +5,6 @@
 {% endblock page_title %}
 {% block main_content %}
 {% load static %}
-<section class="content">
-    <div class="container-fluid">
-        <div class="content-wrappe">
-            <!-- Content Header (Page header) -->    
-        
-            <!-- Main content -->
             <section class="content">
               <div class="container-fluid">
                 <div class="row">
@@ -21,10 +15,8 @@
                       <div class="card-header">
                         <h3 class="card-title">Student feedback</h3>
                       </div>
-                      <!-- /.card-header -->
-                      <!-- form start -->
-                        <div class="table">
-                          <table>
+                          <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm" id="example">
+                            <thead>
                             <tr>
                               <th>ID</th>
                               <th>STUDENT ID</th>
@@ -35,6 +27,8 @@
                               <th>REPLY</th>
                                                         
                             </tr>
+                          </thead>
+                            <tbody>
                             {% for feedback in  feedbacks %}
                                 <tr>
                                   <td>{{feedback.id}}</td>
@@ -55,8 +49,9 @@
 
                                 </tr>
                             {% endfor %}
+                            </tbody>
                           </table>
-                        </div>
+                    
                     </div>
 
         
@@ -68,10 +63,7 @@
              
               
             </section>
-            <!-- /.content -->
-          </div>
-    </div><!-- /.container-fluid -->
-  </section>
+
 
 
     <!-- Modal -->
@@ -149,4 +141,12 @@
   
 
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    new DataTable('#example');
+</script>
   {% endblock customer_js %}

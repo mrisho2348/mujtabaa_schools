@@ -6,33 +6,9 @@
 
 
 {% block main_content %}
-<div class="table-responsive">
-    <div class="row">
-        <div class="col-md-3">
-            <form method="GET" action="{% url 'manage_subject' %}">
-                <div class="input-group ">
-                    <input type="number" name="per_page" class="form-control" placeholder="Items per page" aria-label="Items per page" aria-describedby="per-page-btn" min="1">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-primary mr-3 btn-sm" type="submit" id="per-page-btn">Set</button>
-                    </div>
-                </div>
-            </form>
-            <p>Show <strong>{{ page_obj.paginator.per_page }}</strong> Entries</p>
-        </div>
-        <div class="col-md-6 ml-5">
-            <form method="GET" action="{% url 'manage_subject' %}">
-                <div class="input-group mb-3">
-                    <input type="text" name="search" class="form-control" placeholder="Search by subject name or school segment" aria-label="Search" aria-describedby="search-btn">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-primary" type="submit" id="search-btn">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm" id="studentResultsTable">
+
+<table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm" id="example">
     <thead>
         <tr>
             <th>ID</th>
@@ -82,36 +58,14 @@
     </tbody>
 </table>
 
-{% if page_obj.has_other_pages %}
-<div aria-label="pagination">
-    <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
-        </li>
-        {% endif %}
-        {% for page in page_obj.paginator.page_range %}
-        {% if page_obj.number == page %}
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">{{ page }}<span class="sr-only">(current)</span></span>
-        </li>
-        {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-        {% endif %}
-        {% endfor %}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-        </li>
-        {% endif %}
-    </ul>
-</div>
-{% endif %}
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        // Initialize DataTable with your table's ID
-        $('#studentResultsTable').DataTable();
-    });
+    new DataTable('#example');
 </script>
 {% endblock main_content %}

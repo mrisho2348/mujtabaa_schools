@@ -10,8 +10,7 @@
 {% block main_content %}
     {% load static %}
     <section class="content">
-        <div class="container-fluid">
-            <div class="content-wrapper">
+        <div class="container-fluid">     
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Manage Routes</h3>
@@ -30,7 +29,8 @@
                               </div>
                             {% endif %}
                           </div>
-                        <table class="table table-striped table-bordered">
+                    </div>  
+                        <table class="table table-hover text-nowrap table-bordered table-striped table-sm" id="example">
                             <thead>
                                 <tr>
                                     <th>Route Name</th>
@@ -58,7 +58,15 @@
                         </table>
                     </div>
                 </div>
-            </div>
+        
         </div><!-- /.container-fluid -->
     </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

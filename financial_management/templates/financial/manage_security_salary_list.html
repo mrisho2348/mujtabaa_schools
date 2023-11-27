@@ -19,7 +19,7 @@
                         <h3 class="card-title">List of Security Salaries</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped" id="example">
                             <thead>
                                 <tr>
                                     <th>Security Member</th>
@@ -35,8 +35,8 @@
                                     <tr>
                                         <td>{{salary.security_member.admin.first_name}}  {{salary.security_member.admin.last_name}}</td>
                                         <td>{{ salary.month|date:"F Y" }}</td>
-                                        <td>${{ salary.paid_amount }}</td>
-                                        <td>${{ salary.total_amount_required }}</td>
+                                        <td>Tsh{{ salary.paid_amount }}</td>
+                                        <td>Tsh{{ salary.total_amount_required }}</td>
                                         <td>{{ salary.description }}</td>
                                         <td>
                                             <a href="{% url 'financial_management:edit_security_salary' salary.id %}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit Salary">
@@ -47,10 +47,7 @@
                                             </a>
                                         </td>
                                     </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="6">No security salaries found.</td>
-                                    </tr>
+                              
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -59,4 +56,12 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    
+    
+    <script>
+        new DataTable('#example');
+    </script>
 {% endblock main_content %}

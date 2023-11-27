@@ -13,7 +13,7 @@
                     <h3 class="card-title">List of Car Expenses</h3>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" id="example">
                         <thead>
                             <tr>
                                 <th>Expense Date</th>
@@ -53,4 +53,12 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

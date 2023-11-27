@@ -9,28 +9,14 @@
     <!-- Add more breadcrumb links if needed -->
 {% endblock breadcrumb %}
 {% block main_content %}
-<section class="content">
-    <div class="container-fluid">
-        <div class="content-wrappe">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Question Papers</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-            <!-- Main content -->
+
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered table-striped" id="example">
                                         <thead>
                                             <tr>
                                                 <th>Title</th>
@@ -57,9 +43,7 @@
                     </div>
                 </div>
             </section>
-        </div>
-    </div><!-- /.container-fluid -->
-</section>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Container for displaying alert messages -->
@@ -94,5 +78,11 @@
         }
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
+<script>
+    new DataTable('#example');
+</script>
 {% endblock main_content %}

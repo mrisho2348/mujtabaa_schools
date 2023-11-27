@@ -110,6 +110,7 @@ urlpatterns = [
     # add
     path('add_driver_contact_info/<int:driver_id>/', HodView.add_driver_contact_info, name='add_driver_contact_info'),
     path('add_session/', HodView.add_session, name='add_session'),
+    path('datatables/', HodView.datatables, name='datatables'),
     path('add_session_save/', HodView.add_session_save, name='add_session_save'),
     path('add_parents', HodView.add_parents, name='add_parents'), 
     path('add_student', HodView.add_student, name='add_student'),   
