@@ -183,11 +183,12 @@ def add_student_save(request):
 def add_student(request):
     all_subjects = Subject.objects.all()
     all_session_years = SessionYearModel.objects.all()
-    
+    staff = Staffs.objects.get(admin=request.user)
     # Query all education levels from the EducationLevel model
     all_education_levels = EducationLevel.objects.all()
 
     context = {
+        "staff": staff,
         "all_subjects": all_subjects,
         "all_session_years": all_session_years,
         "all_education_levels": all_education_levels,  # Add education levels to the context
@@ -199,6 +200,7 @@ def single_student_detail(request, student_id):
     students = get_object_or_404(Students, id=student_id)
     parents = Parent.objects.filter(student=students)
     selected_subjects = students.subjects.all()
+    staff = Staffs.objects.get(admin=request.user)
     father = None
     mother = None
     male_guardian = None
@@ -224,6 +226,7 @@ def single_student_detail(request, student_id):
                 female_sponsor = parent
 
     context = {
+        'staff': staff,
         'students': students,
         'father': father,
         'mother': mother,
@@ -238,10 +241,12 @@ def single_student_detail(request, student_id):
 
 
 def single_parent_detail(request, parent_id):
+    staff = Staffs.objects.get(admin=request.user)
     parent = get_object_or_404(Parent, id=parent_id)
     students = parent.student.all()  # Get all students associated with the parent
     
     context = {
+        'staff': staff,
         'parent': parent,
         'students': students,
     }
@@ -252,7 +257,7 @@ def single_parent_detail(request, parent_id):
 def delete_parent(request, parent_id):
     # Retrieve the parent object or return a 404 if not found
     parent = get_object_or_404(Parent, id=parent_id)
-
+    staff = Staffs.objects.get(admin=request.user)
     if request.method == 'POST':
         # Perform the deletion
         parent.delete()
@@ -260,12 +265,12 @@ def delete_parent(request, parent_id):
         messages.success(request, 'student parent deleted successfully.')
         return redirect('manage_parent')  # Replace 'parent_list' with your actual list view name
 
-    return render(request, 'secretary_template/delete_parent_confirm.html', {'parent': parent})
+    return render(request, 'secretary_template/delete_parent_confirm.html', {'parent': parent,"staff":staff})
 
 def delete_student(request, student_id):
     # Retrieve the student object or return a 404 if not found
     student = get_object_or_404(Students, id=student_id)
-
+    staff = Staffs.objects.get(admin=request.user)
     if request.method == 'POST':
         # Perform the deletion
         student.delete()
@@ -273,11 +278,12 @@ def delete_student(request, student_id):
         messages.success(request, 'student deleted successfully.')
         return redirect('manage_student')  # Replace 'student_list' with your actual list view name
 
-    return render(request, 'secretary_template/delete_student_confirm.html', {'student': student})
+    return render(request, 'secretary_template/delete_student_confirm.html', {'student': student,"staff":staff})
 
 def manage_student(request):
     students = Students.objects.all()    
-    return render(request, "secretary_template/manage_student.html", {"students": students})
+    staff = Staffs.objects.get(admin=request.user)
+    return render(request, "secretary_template/manage_student.html", {"students": students ,"staff":staff})
 
 
 def manage_parent(request):
@@ -287,7 +293,8 @@ def manage_parent(request):
     paginator = Paginator(parents, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, "secretary_template/manage_parent.html", {"students": parents, "page_obj": page_obj})
+    staff = Staffs.objects.get(admin=request.user)
+    return render(request, "secretary_template/manage_parent.html", {"students": parents, "page_obj": page_obj, "staff":staff})
  
  
 def update_parent(request, parent_id):
@@ -306,7 +313,7 @@ def update_parent(request, parent_id):
             status = request.POST.get('status')
             gender = request.POST.get('gender')
             parent_type = request.POST.get('type')
-
+            staff = Staffs.objects.get(admin=request.user)
             # Perform form field validation
             if not phone:
                 messages.error(request, "phone field is required.")         
@@ -354,6 +361,7 @@ def update_parent(request, parent_id):
                 return redirect("edit_parents", parent_id=parent_id)
 
         context = {
+            'staff': staff,
             'parent': parent,
             'students': Students.objects.all(),
             'selected_student_ids': [student.id for student in parent.student.all()] if hasattr(parent, 'student') else []
@@ -374,13 +382,14 @@ def student_list(request):
     paginator = Paginator(students, per_page=10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-    return render(request, "paginator.html", {"students": students, "page_obj": page_obj})  
+    staff = Staffs.objects.get(admin=request.user)
+    return render(request, "paginator.html", {"students": students, "page_obj": page_obj, "staff":staff})  
 
 
 def add_parents(request):
     students = Students.objects.all()
-    return render(request, "secretary_template/parent_form.html", {'students': students})   
+    staff = Staffs.objects.get(admin=request.user)
+    return render(request, "secretary_template/parent_form.html", {'students': students, "staff":staff})   
 
 
 def edit_parents(request, parent_id):
@@ -388,13 +397,14 @@ def edit_parents(request, parent_id):
         request.session['parent_id'] = parent_id       
         parent = Parent.objects.get(id=parent_id)
         students = Students.objects.all()
-
+        staff = Staffs.objects.get(admin=request.user)
         # Get the IDs of currently associated students, if any
         associated_student_ids = parent.student.all().values_list('id', flat=True)
 
         return render(request, "secretary_template/edit_parent.html", {
             "id": parent_id,
             "username": parent.name,
+            "staff": staff,
             "parents": parent,
             "students": students,
             "associated_student_ids": associated_student_ids,  # Pass the associated student IDs to the template
@@ -410,7 +420,7 @@ def edit_parents(request, parent_id):
 def secretary_template_parent(request, parent_id):
     try:
         parent = get_object_or_404(Parent, id=parent_id)
-
+        staff = Staffs.objects.get(admin=request.user)
         if request.method == 'POST':
             # Retrieve form field values from the request
             
@@ -471,6 +481,7 @@ def secretary_template_parent(request, parent_id):
                 return redirect("edit_parents", parent_id=parent_id)
 
         context = {
+            'staff': staff,
             'parent': parent,
             'students': Students.objects.all(),
             'selected_student_ids': [student.id for student in parent.student.all()] if hasattr(parent, 'student') else []
@@ -663,6 +674,7 @@ def edit_student(request, student_id):
         student = Students.objects.get(admin__id=student_id)
         request.session['student_id'] = student_id
         education_levels = EducationLevel.objects.all()
+        staff = Staffs.objects.get(admin=request.user)
         # Fetch all subjects and session years
         all_subjects = Subject.objects.all()
         all_session_years = SessionYearModel.objects.all()
@@ -680,6 +692,7 @@ def edit_student(request, student_id):
         return render(request, "secretary_template/edit_student.html", {
             "student_id": student_id,
             "username": student.admin.username,
+            "staff": staff,
             "students": student,
             "all_subjects": all_subjects,
             "all_session_years": all_session_years,
@@ -723,11 +736,11 @@ def generate_invoice(request, payment_id):
 
         # Redirect to the income payments list page or wherever you want
         messages.success(request, 'Invoice generated and sent successfully.')
-        return redirect('financial_management:income_payment_list')
+        return redirect('income_payment_list')
     except Exception as e:
         # Handle any exceptions here and display an error message
         messages.error(request, f'Error generating invoice: {str(e)}')
-        return redirect('financial_management:income_payment_list')  # You can redirect to an appropriate page or handle the error differently
+        return redirect('income_payment_list')  # You can redirect to an appropriate page or handle the error differently
 
 
 
@@ -783,15 +796,20 @@ def send_sms_notification(phone_number, message):
 def invoice_list(request):
     # Retrieve the list of invoices
     invoices = Invoice.objects.all()
-    context = {'invoices': invoices}
+    staff = Staffs.objects.get(admin=request.user)
+    context = {
+        'staff': staff,
+        'invoices': invoices
+        }
     return render(request, 'secretary_template/invoice_list.html', context)
 
 def income_payment_form(request):
     # Fetch the students and service details from your database
     students = Students.objects.all()
     service_details = ServiceDetails.objects.all()
-
+    staff = Staffs.objects.get(admin=request.user)
     context = {
+        'staff': staff,
         'students': students,
         'service_details': service_details,
     }
@@ -811,7 +829,7 @@ def save_income_payment(request):
             # Retrieve the student and service details objects
             student = Students.objects.get(pk=student_id)
             service_details = ServiceDetails.objects.get(pk=service_details_id)
-
+            staff = Staffs.objects.get(admin=request.user)
             # Calculate the amount remaining
             amount_required = service_details.amount_required
             amount_remaining = amount_required - amount_paid  # Now subtract Decimal from Decimal
@@ -838,7 +856,11 @@ def save_income_payment(request):
     # Retrieve the list of student members
     students = Students.objects.all()
     service_details = ServiceDetails.objects.all()
-    context = {'students': students, 'service_details': service_details}
+    context = {
+        'staff': staff, 
+        'students': students, 
+        'service_details': service_details
+        }
     return render(request, 'secretary_template/income_payment_form.html', context)
 
 def income_payment_list(request):
@@ -854,7 +876,7 @@ def edit_income_payment(request, income_payment_id):
 
     # Retrieve all ServiceDetails
     all_service_details = ServiceDetails.objects.all()
-
+    staff = Staffs.objects.get(admin=request.user)
     # Retrieve all Students
     all_students = Students.objects.all()
 
@@ -871,6 +893,7 @@ def edit_income_payment(request, income_payment_id):
             # You can log the exception for debugging purposes if needed
 
     context = {
+        'staff': staff,
         'income_payment': income_payment,
         'all_service_details': all_service_details,
         'all_students': all_students,
@@ -882,18 +905,23 @@ def edit_income_payment(request, income_payment_id):
 def delete_income_payment(request, payment_id):
     # Fetch the income payment to be deleted
     income_payment = get_object_or_404(Income_Payment, id=payment_id)
+    staff = Staffs.objects.get(admin=request.user)
     if request.method == 'POST':
         # delete the income payment
         income_payment.delete()
         # Redirect to the income payments list view
         return redirect('income_payment_list')
-    context = {'income_payment': income_payment}
+    context = {
+        'staff': staff,
+        'income_payment': income_payment
+        }
     return render(request, 'secretary_template/delete_income_payment.html', context)
 
 def staff_sendfeedback(request):
     staff_obj = Staffs.objects.get(admin=request.user.id)
     feedback_data = FeedBackStaff.objects.filter(staff_id=staff_obj)
     staff = Staffs.objects.get(admin=request.user.id)
+    
     return render(request,"secretary_template/staff_feedback.html",{"feedback_data":feedback_data,'staff':staff,})
 
 def staff_sendfeedback_save(request):

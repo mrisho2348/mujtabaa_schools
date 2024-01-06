@@ -57,6 +57,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                         elif staff_assignment and staff_assignment.role == "Secretary":
                             if (modulename == "student_management_app.Secretary" or
                                 modulename == "financial_management.Invoice" or                                
+                                modulename == "student_management_app.views" or                                
                                   modulename == "financial_management.Financial"):
                                 pass
                             else:    
