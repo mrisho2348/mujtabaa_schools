@@ -1057,4 +1057,14 @@ class School(models.Model):
     def __str__(self):
         return self.name      
     
+class ContactDetails(models.Model):
+    your_name = models.CharField(max_length=255)
+    your_email = models.EmailField()
+    your_subject = models.CharField(max_length=255, blank=True)
+    your_message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
     
+    def __str__(self):
+        return self.your_name  

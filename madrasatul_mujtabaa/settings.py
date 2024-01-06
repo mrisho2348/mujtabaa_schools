@@ -181,6 +181,7 @@ TWILIO_PHONE_NUMBER = '+15103384231'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+LOGIN_URL = 'home_page'
 
 # DEFAULT_AUTO_FIELD = 'student management system <mrishohamisi2348@gmail.com>'
 

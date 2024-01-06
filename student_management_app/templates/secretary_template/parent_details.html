@@ -1,0 +1,50 @@
+{% extends 'secretary_template/base_template.html' %}
+
+{% load static %}
+{% block title %}
+Personal Information
+{% endblock title %}
+{% block main_content %}
+<div class="container mt-5">
+    <!-- Personal Information -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Personal Information
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Name: {{ parent.admin.first_name }} {{ parent.admin.last_name }}</h5>
+            <p class="card-text">Phone Number: {{ parent.phone }}</p>
+            <p class="card-text">Registration Date: {{ parent.created_at }}</p>
+            <p class="card-text">Occupation: {{ parent.occupation }}</p>
+            <p class="card-text">Gender: {{ parent.gender }}</p>
+        </div>
+    </div>
+    <!-- Address Information -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Address Information
+        </div>
+        <div class="card-body">
+            <p class="card-text">Shehia: {{ parent.address }}</p>
+            <p class="card-text">Street Address: {{ parent.street_address }}</p>
+            <p class="card-text">House Number: {{ parent.house_number }}</p>
+            <p class="card-text">National ID: {{ parent.national_id }}</p>
+            <p class="card-text">Status: {{ parent.status }}</p>
+            <p class="card-text">Type: {{ parent.parent_type }}</p>
+        </div>
+    </div>
+    {% if students %}
+    <!-- Associated Students -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Associated Students
+        </div>
+        <div class="card-body">
+            {% for student in students %}
+            <p class="card-text">{{ student.admin.first_name }} {{ student.admin.last_name }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock main_content %}

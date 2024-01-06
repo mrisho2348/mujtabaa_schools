@@ -54,6 +54,13 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                                 pass
                             else:    
                                 return HttpResponseRedirect(reverse("financial_management:accountant_home"))
+                        elif staff_assignment and staff_assignment.role == "Secretary":
+                            if (modulename == "student_management_app.Secretary" or
+                                modulename == "financial_management.Invoice" or                                
+                                  modulename == "financial_management.Financial"):
+                                pass
+                            else:    
+                                return HttpResponseRedirect(reverse("secretary_home"))
                         else:                            
                             # Allow specific views and static pages
                             if (modulename == "student_management_app.StaffView" or
@@ -149,114 +156,4 @@ class LoginCheckMiddleWare(MiddlewareMixin):
 
 
 
-# class LoginCheckMiddleWare(MiddlewareMixin):
-    
-#     def process_view(self, request, view_func, view_args, view_kwargs):
-#         modulename = view_func.__module__
-#         user = request.user
-        
-#         if user.is_authenticated:
-#             # HOD (User Type 1)
-#             if user.user_type == "1":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.HodView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static" or
-#                     modulename == "library_management_app.views" or
-#                     modulename == "exams.views"
-#                  ):
-#                     pass
-#                 # Allow access to Django admin main dashboard
-#                 elif request.path == reverse("admin:index"):
-#                     pass
-                
-#                 else:
-#                     return HttpResponseRedirect(reverse("admin_home"))
-     
-            
-#             # Staff (User Type 2)
-#             elif user.user_type == "2":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.StaffView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static" or
-#                     modulename == "library_management_app.views" or
-#                     modulename == "exams.views"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("staff_home"))
-            
-#             # Student (User Type 3)
-#             elif user.user_type == "3":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.StudentView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static" or
-#                     modulename == "library_management_app.views" or
-#                     modulename == "exams.views"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("student_home"))
-            
-#             # SchoolDriver (User Type 4)
-#             elif user.user_type == "4":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.SchoolDriverView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("school_driver_home"))
-            
-#             # SchoolSecurityPerson (User Type 5)
-#             elif user.user_type == "5":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.SchoolSecurityPersonView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("school_security_person_home"))
-            
-#             # Cooker (User Type 6)
-#             elif user.user_type == "6":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.CookerView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("cooker_home"))
-            
-#             # SchoolCleaner (User Type 7)
-#             elif user.user_type == "7":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.SchoolCleanerView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("school_cleaner_home"))
-            
-#             # Parent (User Type 8)
-#             elif user.user_type == "8":
-#                 # Allow specific views and static pages
-#                 if (modulename == "student_management_app.ParentView" or
-#                     modulename == "student_management_app.views" or
-#                     modulename == "django.views.static"):
-#                     pass
-#                 else:
-#                     return HttpResponseRedirect(reverse("parent_home"))
-            
-#             # Invalid user type
-#             else:
-#                 return HttpResponseRedirect(reverse("login"))
-#         else:
-#             # Allow specific paths during login/logout processes
-#             if (request.path == reverse("login") or
-#                 request.path == reverse("DoLogin") or
-#                 request.path == reverse("logout_user") or
-#                 modulename == "django.contrib.auth.views"):
-#                 pass
-#             else:
-#                 return HttpResponseRedirect(reverse("login"))
+

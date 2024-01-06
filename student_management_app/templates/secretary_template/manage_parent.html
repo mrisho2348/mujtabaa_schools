@@ -1,0 +1,101 @@
+{% extends 'secretary_template/base_template.html' %}
+{% block title %}
+   List of all parents    
+{% endblock title %}
+
+{% block page_title %}
+   List of all parents    
+{% endblock page_title %}
+{% block breadcrumb %}
+    <a class="btn btn-primary" href="{% url 'add_parents' %}">
+        <i class="fas fa-plus"></i> New parents
+    </a>
+   
+{% endblock breadcrumb %}
+{% block main_content %}
+
+<div class="form-row">
+    <div>
+        {% if messages %}
+            <div class="col-12">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-primary">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div> 
+    <table class="table table-hover text-nowrap table-bordered table-striped table-sm" id="example">
+        <thead>
+            <tr>
+                <th>S/N</th>                
+                <th>Parent Name</th>
+                <th>Phone number</th>
+                <th>Address</th>
+                <th>Gender</th>
+                <th>Parent type</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for parents in page_obj %}
+            <tr>
+                <td>{{parents.id}}</td>
+                <td>{{ parents.admin.first_name }} {{ parents.admin.last_name }}</td>
+                <td>{{parents.phone}}</td>                       
+                <td>{{parents.address}}</td>
+                <td>{{parents.gender}}</td>
+                <td>{{parents.parent_type}}</td>
+                <td>
+                    <form method="POST" action="{% url 'update_parent_status' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ parents.admin.id }}">
+                        <input type="hidden" name="is_active" value="{% if parents.admin.is_active %}1{% else %}0{% endif %}">
+                        <input
+                            type="checkbox"
+                            data-toggle="switchbutton"
+                            data-size="xs"
+                            data-onlabel="Active"
+                            data-offlabel="Inactive"
+                            data-offstyle="danger"
+                            data-onstyle="success"
+                            {% if parents.admin.is_active %}checked{% endif %}
+                            onchange="submitForm(this)"
+                        >
+                    </form>
+                </td>
+                
+                
+                <td class="text-center">
+                    <a href="{% url 'secretary_single_parent_detail' parent_id=parents.id  %}">
+                        <button type="button" class="btn btn-light border btn-sm"><i class="fa fa-eye text-dark"></i></button>
+                    </a>
+                    <a href="{% url 'secretary_edit_parents' parent_id=parents.id  %}">
+                        <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit text-white"></i></button>
+                    </a>
+                    <a href="{% url 'secretary_delete_parent' parent_id=parents.id  %}" class="btn btn-danger" data-toggle="tooltip" title="Delete parent">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+   
+
+    <script>
+        function submitForm(checkbox) {
+            checkbox.form.submit();
+        }
+    </script>
+
+{% include 'hod_template/datatable.html' %}
+    
+
+{% endblock main_content %}

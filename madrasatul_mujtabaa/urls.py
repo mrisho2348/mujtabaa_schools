@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import include, path
 from madrasatul_mujtabaa import settings
-from student_management_app import StudentView, views,HodView,StaffView,DriverView,Delete,Activate
+from django.views.generic import RedirectView
+from student_management_app import StudentView, views,HodView,StaffView,DriverView,Delete,Activate,Secretary
 
 urlpatterns = [
-    path('', views.ShowLogin, name='login'),
+    path('', views.home_page, name='home_page'),
+    path('login', views.ShowLogin, name='login'), path('contact/', views.ContactFormView.as_view(), name='contact_form'),
+    
     path('accounts/', include('django.contrib.auth.urls')),   
     path('admin/', admin.site.urls),
     path('library_management_app/', include(('library_management_app.urls', 'library_management_app'), namespace='library_management_app')),
@@ -276,6 +279,35 @@ urlpatterns = [
     path('driver_profile_save', DriverView.driver_profile_save, name='driver_profile_save'), 
     path('update-transport-attendance/', DriverView.update_transport_attendance_data, name='update_transport_attendance_data'),
     path('view_driver_details/<int:driver_id>/', DriverView.view_driver_details, name='view_driver_details'),
+    
+    path('secretary-home/dashboard', Secretary.secretary_home, name='secretary_home'),
+    path('secretary/add_parents', Secretary.add_parents, name='secretary_add_parents'), 
+    path('secretary/add_student', Secretary.add_student, name='secretary_add_student'),
+    path('secretary/save_parent', Secretary.save_parent, name='secretary_save_parent'),  
+    path('secretary/update_parent/<int:parent_id>/', Secretary.update_parent, name='secretary_update_parent'),   
+    path('secretary/add_student_save', Secretary.add_student_save, name='secretary_add_student_save'),
+    path('secretary/edit_student/<str:student_id>', Secretary.edit_student, name='secretary_edit_student'),   
+    path('secretary/edit_parents/<str:parent_id>', Secretary.edit_parents, name='secretary_edit_parents'),   
+    path('secretary/edit_student_save', Secretary.edit_student_save, name='secretary_edit_student_save'),  
+    path('secretary/manage_parent', Secretary.manage_parent, name='secretary_manage_parent'),  
+    path('secretary/manage_student', Secretary.manage_student, name='secretary_manage_student'), 
+    path('secretary/generate_invoice/<int:payment_id>/', Secretary.generate_invoice, name='secretary_generate_invoice'),
+    path('secretary/edit_income_payment/<int:income_payment_id>/', Secretary.edit_income_payment, name='secretary_edit_income_payment'),
+    path('secretary/invoice_list/', Secretary.invoice_list, name='secretary_invoice_list'),
+    path('secretary/delete_income_payment/<int:payment_id>/', Secretary.delete_income_payment, name='secretary_delete_income_payment'),
+    path('secretary/income_payment_list/', Secretary.income_payment_list, name='secretary_income_payment_list'),
+    path('secretary/income_payment_form/', Secretary.income_payment_form, name='secretary_income_payment_form'),
+    path('secretary/save_income_payment/', Secretary.save_income_payment, name='secretary_save_income_payment'),
+    path('secretary/staff_apply_leave', Secretary.staff_apply_leave, name='secretary_staff_apply_leave'),  
+    path('secretary/staff_apply_leave_save', Secretary.staff_apply_leave_save, name='secretary_staff_apply_leave_save'),  
+    path('secretary/staff_sendfeedback', Secretary.staff_sendfeedback, name='secretary_staff_sendfeedback'),  
+    path('secretary/staff_sendfeedback_save', Secretary.staff_sendfeedback_save, name='secretary_staff_sendfeedback_save'),  
+    path('secretary/staff_detail', Secretary.staff_detail, name='secretary_staff_detail'),  
+    path('secretary/staff_profile', Secretary.staff_profile, name='secretary_staff_profile'),  
+    path('secretary/staff_salary', Secretary.staff_salary, name='secretary_staff_salary'),
+    path('secretary/single_student_detail/<int:student_id>/', Secretary.single_student_detail, name='secretary_single_student_detail'),
+    path('secretary/delete_parent/<int:parent_id>/', Secretary.delete_parent, name='secretary_delete_parent'),    
+    path('secretary/delete_student/<int:student_id>/', Secretary.delete_student, name='secretary_delete_student'),  
     
     # delete
     path('delete_cleaner/<int:cleaner_id>/', Delete.delete_cleaner, name='delete_cleaner'),
