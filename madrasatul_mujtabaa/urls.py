@@ -23,7 +23,8 @@ from student_management_app import StudentView, views,HodView,StaffView,DriverVi
 
 urlpatterns = [
     path('', views.home_page, name='home_page'),
-    path('login', views.ShowLogin, name='login'), path('contact/', views.ContactFormView.as_view(), name='contact_form'),
+    path('login', views.ShowLogin, name='login'), 
+    path('contact/', views.ContactFormView.as_view(), name='contact_form'),
     
     path('accounts/', include('django.contrib.auth.urls')),   
     path('admin/', admin.site.urls),
