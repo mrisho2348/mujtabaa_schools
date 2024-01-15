@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="education_level">Education Level:</label>
-                                    <select id="school_level" name="school_level" class="form-control" required>
+                                    <select id="school_level" name="school_level"   class="form-control select2bs4" style="width: 100%;"  required>
                                         {% for education_level in education_levels %}
                                             <option value="{{ education_level.id }}" {% if edit_mode and education_level.id == previous_education.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
                                         {% endfor %}

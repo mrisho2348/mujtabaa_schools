@@ -41,7 +41,8 @@
                             <tbody>
                                 {% for payment in income_payments %}
                                     <tr>
-                                        <td>{{payment.student.admin.first_name}}  {{payment.student.admin.last_name}}</td>
+                                    
+                                        <td>{{payment.student.admin.first_name}}   {{payment.student.surname}}  {{payment.student.admin.last_name}}</td>
                                         <td>{{ payment.service_details.service_name }}</td>
                                         <td>${{ payment.amount_paid }}</td>
                                         <td>${{ payment.amount_remaining }}</td>

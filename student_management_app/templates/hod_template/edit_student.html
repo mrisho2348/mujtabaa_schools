@@ -62,7 +62,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="gender">Gender</label>
-                                                                        <select class="form-control" id="gender" name="gender" required>
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="gender" name="gender" required>
                                                                             <option value="">Select Gender</option>
                                                                             <option value="Male" {% if students.gender == 'Male' %}selected{% endif %}>Male</option>
                                                                             <option value="Female" {% if students.gender == 'Female' %}selected{% endif %}>Female</option>
@@ -96,7 +96,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="school_segment">School Education Level</label>
-                                                                        <select class="form-control" id="school_segment" name="school_segment" required>
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment" required>
                                                                             <option value="">Select Education Level</option>
                                                                             {% for education_level in all_education_levels %}
                                                                             <option value="{{ education_level.id }}" {% if education_level.id == students.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
@@ -110,7 +110,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="current_class">Current Class</label>
-                                                                        <select class="form-control" id="current_class" name="current_class" required>
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="current_class" name="current_class" required>
                                                                             <option value="">Select Class</option>
                                                                         </select>
                                                                     </div>
@@ -180,7 +180,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="subjects">Subjects</label>
-                                                                        <select class="form-control" id="subjects" name="subjects" required=required multiple>
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="subjects" name="subjects" required=required multiple>
                                                                             <option value="">Select subjects</option>
                                                                            
                                                                         </select>
@@ -190,7 +190,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="session_year">Session Year</label>
-                                                                        <select class="form-control" id="session_year" name="session_year" required>
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="session_year" name="session_year" required>
                                                                             <option value="">Select session year</option>
                                                                             {% for session_year in all_session_years %}
                                                                                 <option value="{{ session_year.id }}" {% if session_year == selected_session_year %}selected{% endif %}>{{ session_year.session_start_year }} - {{ session_year.session_end_year}}</option>
@@ -221,7 +221,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="service_type">service type</label>
-                                                                        <select class="form-control" id="service_type" name="service_type">
+                                                                        <select   class="form-control select2bs4" style="width: 100%;"  id="service_type" name="service_type">
                                                                             <option value="">Select type of service</option>
                                                                             <option value="school" {% if students.service_type == 'school' %}selected{% endif %}>School</option>
                                                                             <option value="School and Madrasa" {% if students.service_type == 'School and Madrasa' %}selected{% endif %}>School and Madrasa </option>
@@ -326,7 +326,7 @@ Edit Student | username: {{ username}} | #ID. {{id}}
         // Get references to the education level and subjects select elements
         var educationLevelSelect = $('#school_segment');
         var subjectsSelect = $('#subjects');
-
+        s
         // Listen for changes in the education level select
         educationLevelSelect.on('change', function() {
             var selectedEducationLevel = educationLevelSelect.val();

@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 <label for="school_level">School Level:</label>
                                 <!-- You can create a dropdown select field for the school_level -->
-                                <select id="school_level" name="school_level" class="form-control" required>
+                                <select id="school_level" name="school_level"   class="form-control select2bs4" style="width: 100%;"  required>
                                     {% for education_level in education_levels %}
                                         <option value="{{ education_level.id }}">{{ education_level.name }}</option>
                                     {% endfor %}

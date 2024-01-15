@@ -15,7 +15,7 @@ Edit Security Salary
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="security_member" class="form-label">Security Member</label>
-                    <select class="form-select" id="security_member" name="security_member" required>
+                    <select c class="form-control select2bs4" style="width: 100%;"  id="security_member" name="security_member" required>
                         <option value="{{ selected_security_member.id }}">{{ selected_security_member.admin.first_name }} {{ selected_security_member.admin.last_name }}</option>
                         {% for security_member in security_members %}
                             {% if security_member.id != selected_security_member.id %}

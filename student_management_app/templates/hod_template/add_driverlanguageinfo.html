@@ -32,7 +32,7 @@
         {% csrf_token %}
         <div class="form-group">
           <label for="spoken_languages">Spoken Languages</label>
-          <select class="form-control" id="spoken_languages" name="spoken_languages" multiple>
+          <select   class="form-control select2bs4" style="width: 100%;"  id="spoken_languages" name="spoken_languages" multiple>
             <option value="English" {% if spoken_languages and 'English' in spoken_languages %}selected{% endif %}>English</option>
             <option value="Spanish" {% if spoken_languages and 'Spanish' in spoken_languages %}selected{% endif %}>Spanish</option>
             <option value="French" {% if spoken_languages and 'French' in spoken_languages %}selected{% endif %}>French</option>

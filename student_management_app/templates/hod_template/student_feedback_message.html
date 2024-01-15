@@ -29,11 +29,12 @@
                             </tr>
                           </thead>
                             <tbody>
+                             
                             {% for feedback in  feedbacks %}
                                 <tr>
                                   <td>{{feedback.id}}</td>
                                   <td>{{feedback.student_id}}</td>
-                                  <td>{{feedback.student_id.admin.first_name}} {{feedback.student_id.admin.last_name}}</td>
+                                  <td>{{feedback.student_id.admin.first_name}}  {{feedback.student_id.surname}}  {{feedback.student_id.admin.last_name}}</td>
                                   <td>{{feedback.student_id.session_id.session_start_year}} - {{feedback.student_id.session_id.session_end_year}}</td>
                                   <td>{{feedback.feedback}}</td>
                                   <td>{{feedback.created_at}}</td>

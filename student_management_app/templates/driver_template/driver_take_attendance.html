@@ -18,7 +18,7 @@ Take Transport Attendance
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Route</label>
-                                <select class="form-control" name="route" id="route">
+                                <select class="form-control select2bs4" style="width: 100%;"  name="route" id="route">
                                     {% for route in routes %}
                                         <option value="{{ route.id }}">{{ route.name }}</option>
                                     {% endfor %}

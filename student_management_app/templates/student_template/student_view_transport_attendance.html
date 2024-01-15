@@ -20,7 +20,7 @@ View Attendance record
                 <div class="card-body">
                    <div class="form-group">
                     <label>Roote Name </label>
-                    <select class="form-control" name="route" id="route" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  name="route" id="route" required>
                         {% for route in routes %}
                           <option value="{{ route.id }}">{{ route.name }}</option>
                         {% endfor %}

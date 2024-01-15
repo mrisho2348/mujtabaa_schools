@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="staff_member" class="form-label">Staff Member</label>
-                    <select class="form-select" id="staff_member" name="staff_member" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="staff_member" name="staff_member" required>
                         <option value="" disabled selected>Select Staff Member</option>
                         {% for staff_member in staff_members %}
                         <option value="{{ staff_member.id }}">{{staff_member.admin.first_name}}  {{staff_member.admin.last_name}}</option>

@@ -25,9 +25,10 @@
     </thead>
     <tbody>
         {% for student_data in student_info %} <!-- Updated to use student_info -->
+       
         <tr>
             <td>{{ student_data.student.id }}</td>
-            <td>{{ student_data.student.admin.first_name }} {{ student_data.student.admin.last_name }}</td>
+            <td>{{ student_data.student.admin.first_name }} {{ student_data.student.surname }}  {{ student_data.student.admin.last_name }}</td>
             <!-- Display Division -->
             <td>
                 {% if student_data.division != 'Division Not Available' %}

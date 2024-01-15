@@ -25,7 +25,7 @@
                       {% csrf_token %}
                       <div class="form-group">
                         <label for="school_segment">School Segment:</label>
-                        <select class="form-control" id="school_segment" name="school_segment">
+                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment">
                           <option value="Primary" {% if subject.school_segment == "Primary" %} selected {% endif %}>Primary</option>
                           <option value="Nursery" {% if subject.school_segment == "Nursery" %} selected {% endif %}>Nursery</option>
                           <option value="Secondary" {% if subject.school_segment == "Secondary" %} selected {% endif %}>Secondary</option>

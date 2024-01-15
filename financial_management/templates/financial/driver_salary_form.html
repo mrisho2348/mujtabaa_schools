@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="driver_member" class="form-label">Driver Member</label>
-                    <select class="form-select" id="driver_member" name="driver_member" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="driver_member" name="driver_member" required>
                         <option value="" disabled selected>Select Driver Member</option>
                         {% for driver_member in driver_members %}
                         <option value="{{ driver_member.id }}">{{driver_member.admin.first_name}}  {{driver_member.admin.last_name}}</option>

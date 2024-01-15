@@ -18,7 +18,7 @@ View Update  Attendance
                 <div class="card-body">
                    <div class="form-group">
                     <label>Subject </label>
-                    <select class="form-control" name="subjects" id="subject">
+                    <select  class="form-control select2bs4" style="width: 100%;"  name="subjects" id="subject">
                         {% for subject in subjects %}
                           <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
                         {% endfor %}
@@ -26,7 +26,7 @@ View Update  Attendance
                   </div>
                   <div class="form-group">
                     <label>Select class </label>
-                    <select class="form-control" name="current_class" id="current_class">
+                    <select  class="form-control select2bs4" style="width: 100%;"   name="current_class" id="current_class">
                       {% for class_level in class_levels %}
                           <option value="{{ class_level.name }}">{{ class_level.name }}</option>
                       {% endfor %}
@@ -34,7 +34,7 @@ View Update  Attendance
                   </div>
                   <div class="form-group">
                     <label>session year </label>
-                    <select class="form-control" name="session_years" id="session_year">
+                    <select  class="form-control select2bs4" style="width: 100%;"   name="session_years" id="session_year">
                       {% for session_year in session_years %}
                         <option value="{{ session_year.id }}">{{ session_year.session_start_year }} TO {{ session_year.session_end_year }}</option>
                       {% endfor %}

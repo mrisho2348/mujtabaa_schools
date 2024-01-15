@@ -26,8 +26,8 @@
                             </thead>
                             <tbody>
                                 {% for invoice in invoices %}
-                                    <tr>
-                                        <td>{{ invoice.student.admin.first_name }} {{ invoice.student.admin.last_name }}</td>
+                                    <tr> 
+                                        <td>{{ invoice.student.admin.first_name }}  {{ invoice.student.surname }}  {{ invoice.student.admin.last_name }}</td>
                                         <td>{{ invoice.service.service_name }}</td>
                                         <td>${{ invoice.amount_paid }}</td>
                                         <td>${{ invoice.amount_required }}</td>

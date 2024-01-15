@@ -23,10 +23,10 @@ Edit Parent | name: {{ username}} | #ID. {{id}}
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="student">Select Student:</label>
-                                        <select class="form-control" id="student" name="student_id">
+                                        <select   class="form-control select2bs4" style="width: 100%;"  id="student" name="student_id">
                                             {% for student in students %}
                                                 <option value="{{ student.id }}" {% if student.id in associated_student_ids %}selected{% endif %}>
-                                                    {{ student.admin.first_name }} {{ student.admin.last_name }}
+                                                    {{ student.admin.first_name }} {{ student.surname }} {{ student.admin.last_name }}
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -73,7 +73,7 @@ Edit Parent | name: {{ username}} | #ID. {{id}}
                                 </div>
                                 <div class="col-md-6">
                                     <label for="status">Status:</label>
-                                    <select class="form-control" id="gender" name="status">
+                                    <select   class="form-control select2bs4" style="width: 100%;"  id="gender" name="status">
                                         <option value="deceased" {% if parents.status == "deceased" %}selected{% endif %}>Deceased</option>
                                         <option value="alive" {% if parents.status == "alive" %}selected{% endif %}>Alive</option>
                                     </select>
@@ -83,7 +83,7 @@ Edit Parent | name: {{ username}} | #ID. {{id}}
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label for="gender">Gender:</label>
-                                    <select class="form-control" id="gender" name="gender">
+                                    <select   class="form-control select2bs4" style="width: 100%;"  id="gender" name="gender">
                                         <option value="" {% if parents.gender == "" %}selected{% endif %}>Select Gender</option>
                                         <option value="male" {% if parents.gender == "male" %}selected{% endif %}>Male</option>
                                         <option value="female" {% if parents.gender == "female" %}selected{% endif %}>Female</option>
@@ -91,7 +91,7 @@ Edit Parent | name: {{ username}} | #ID. {{id}}
                                 </div>
                                 <div class="col-md-6">
                                     <label for="type">Relation:</label>
-                                    <select class="form-control" id="type" name="type">
+                                    <select   class="form-control select2bs4" style="width: 100%;"  id="type" name="type">
                                         <option value="parent" {% if parents.parent_type == "parent" %}selected{% endif %}>Parent</option>
                                         <option value="guardian" {% if parents.parent_type == "guardian" %}selected{% endif %}>Guardian</option>
                                         <option value="sponsor" {% if parents.parent_type == "sponsor" %}selected{% endif %}>Sponsor</option>

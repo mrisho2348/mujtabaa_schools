@@ -20,7 +20,7 @@ View Attendance record
                 <div class="card-body">
                    <div class="form-group">
                     <label>Subject </label>
-                    <select class="form-control" name="subject" id="subject">
+                    <select class="form-control select2bs4" style="width: 100%;"  name="subject" id="subject">
                         {% for subject in subjects %}
                           <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
                         {% endfor %}

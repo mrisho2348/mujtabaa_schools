@@ -62,7 +62,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="gender">Gender</label>
-                <select class="form-control" id="gender" name="gender">
+                <select   class="form-control select2bs4" style="width: 100%;"  id="gender" name="gender">
                   <option value="male" {% if security and security.gender == 'male' %}selected{% endif %}>Male</option>
                   <option value="female" {% if security and security.gender == 'female' %}selected{% endif %}>Female</option>
                 </select>
@@ -129,7 +129,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="vehicle_assigned">Vehicle Assigned</label>
-                    <select class="form-control" id="vehicle_assigned" name="vehicle_assigned">
+                    <select   class="form-control select2bs4" style="width: 100%;"  id="vehicle_assigned" name="vehicle_assigned">
                         {% for vehicle in all_vehicles %}
                         <option value="{{ vehicle.id }}" {% if vehicle in selected_vehicle.all %}selected{% endif %}>{{ vehicle.subject_name }}</option>
                     {% endfor %}

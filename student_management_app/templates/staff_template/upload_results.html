@@ -27,7 +27,7 @@ Add {{ exam_type.name }}   Results
                     <div class="mb-3">
                         <div class="form-group">
                             <label for="subject" class="form-label">Subject:</label>
-                            <select name="subject" id="subject" class="form-control">
+                            <select name="subject" id="subject"  class="form-control select2bs4" style="width: 100%;"  >
                                 <option value="" selected="selected">Select Subject</option>
                                 {% for subject in subjects %}
                                     {% if existing_result and existing_result.subject.id == subject.id %}

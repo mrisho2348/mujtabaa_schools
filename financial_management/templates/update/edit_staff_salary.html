@@ -15,7 +15,7 @@ Edit Staff Salary
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="staff_member" class="form-label">Staff Member</label>
-                    <select class="form-select" id="staff_member" name="staff_member" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="staff_member" name="staff_member" required>
                         <option value="{{ selected_staff_member.id }}">{{ selected_staff_member.name }}</option>
                         {% for staff_member_id, staff_member_name in staff_members %}
                             {% if staff_member_id != selected_staff_member.id %}

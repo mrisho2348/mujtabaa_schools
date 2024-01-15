@@ -46,7 +46,7 @@ List of  Routes
                                         <td>{{ route.name }}</td>
                                         <td>
                                             {% for student in route.students.all %}
-                                            {{ student.admin.first_name }} {{ student.admin.last_name }}
+                                            {{ student.admin.first_name }} {{ student.surname }} {{ student.admin.last_name }}
                                                 {% if not forloop.last %}, {% endif %}
                                             {% endfor %}
                                         </td>

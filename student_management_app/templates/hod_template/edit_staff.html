@@ -74,7 +74,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="gender">Gender:</label>
-                    <select class="form-control" id="gender" name="gender" required>
+                    <select   class="form-control select2bs4" style="width: 100%;"  id="gender" name="gender" required>
                       <option value="">Select Gender</option>
                       <option value="Male" {% if staff.gender == 'Male' %}selected{% endif %}>Male</option>
                       <option value="Female" {% if staff.gender == 'Female' %}selected{% endif %}>Female</option>
@@ -83,7 +83,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="school_segment">School Education Level</label>
-                      <select class="form-control" id="school_segment" name="school_segment" required>
+                      <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment" required>
                         <option value="">Select Education Level</option>
                         {% for education_level in all_education_levels %}
                           <option value="{{ education_level.id }}" {% if education_level.id == staff.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
@@ -115,7 +115,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="subjects">Subjects:</label>
-                    <select class="form-control" id="subjects" name="subjects" required=required multiple>
+                    <select   class="form-control select2bs4" style="width: 100%;"  id="subjects" name="subjects" required=required multiple>
                       <option value="">Select subjects</option>
                       <!-- Add options for subjects -->
                     </select>

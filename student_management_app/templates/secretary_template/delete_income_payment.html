@@ -11,7 +11,8 @@
                 <h5 class="card-title">Confirm Deletion</h5>
             </div>
             <div class="card-body">
-                <p>Are you sure you want to delete the income payment for {{ income_payment.student.full_name }}?</p>
+              
+                <p>Are you sure you want to delete the income payment for {{  income_payment.student.admin.first_name }} {{  income_payment.student.surname }} {{  income_payment.student.admin.last_name }} ?</p>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary">Cancel</button>

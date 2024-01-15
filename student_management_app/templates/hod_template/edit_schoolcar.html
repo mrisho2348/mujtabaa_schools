@@ -35,7 +35,7 @@
                   </div>
                   <div class="form-group">
                     <label for="owner">Driver :</label>
-                    <select class="form-control" id="owner" name="owner">
+                    <select   class="form-control select2bs4" style="width: 100%;"  id="owner" name="owner">
                       <option value="">Select a driver</option>
                       {% for driver in drivers %}
                         <option value="{{ driver.id }}" {% if driver.id == car.owner_id %}selected{% endif %}>{{ driver.admin.first_name }} {{ driver.admin.last_name }}</option>

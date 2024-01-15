@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
-                    <select class="form-select" id="category" name="category" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="category" name="category" required>
                         <option value="" disabled>Select Category</option>
                         <option value="Electricity Bill" {% if expense.category == 'Electricity Bill' %}selected{% endif %}>Electricity Bill</option>
                         <option value="Water Bill" {% if expense.category == 'Water Bill' %}selected{% endif %}>Water Bill</option>

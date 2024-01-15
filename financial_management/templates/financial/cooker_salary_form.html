@@ -15,7 +15,7 @@ Add Cooker Salary
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="cooker_member" class="form-label">Cooker Member</label>
-                    <select class="form-select" id="cooker_member" name="cooker_member" required>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="cooker_member" name="cooker_member" required>
                         <option value="" disabled selected>Select Cooker Member</option>
                         {% for cooker in cooker_members %}
                         <option value="{{ cooker.id }}">{{cooker.admin.first_name}}  {{cooker.admin.last_name}}</option>

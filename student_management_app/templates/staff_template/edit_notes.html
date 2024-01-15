@@ -20,7 +20,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="subject">Subject</label>
-                <select class="form-control" id="subject" name="subject" required>
+                <select class="form-control select2bs4" style="width: 100%;"  id="subject" name="subject" required>
                   {% for subject in subjects %}
                     <option value="{{ subject.id }}" {% if subject.id == note.subject.id %}selected{% endif %}>{{ subject.subject_name }}</option>
                   {% endfor %}
@@ -30,7 +30,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="selected_class">Selected Class</label>
-                <select class="form-control" id="selected_class" name="selected_class" required>
+                <select  class="form-control select2bs4" style="width: 100%;"   id="selected_class" name="selected_class" required>
                   {% for class_level in class_levels %}
                     <option value="{{ class_level.id }}" {% if class_level.id == note.selected_class.id %}selected{% endif %}>{{ class_level.name }}</option>
                   {% endfor %}

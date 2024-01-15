@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="car" class="form-label">Car</label>
-                    <select class="form-select" id="car" name="car" disabled>
+                    <select  class="form-control select2bs4" style="width: 100%;"  id="car" name="car" disabled>
                         <option value="{{ car_expense.car.id }}">{{ car_expense.car.car_name }}</option>
                     </select>
                 </div>

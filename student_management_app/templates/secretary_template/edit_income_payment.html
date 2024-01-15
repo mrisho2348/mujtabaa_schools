@@ -9,19 +9,19 @@
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Edit Income Payment</h5>
-        </div>
+        </div> 
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="student">Student:</label>
-                    <select class="form-select" id="student" name="student" disabled>
-                        <option value="{{ income_payment.student.id }}">{{ income_payment.student.username }}</option>
+                    <select class="form-control select2bs4" style="width: 100%;"  id="student" name="student" disabled>
+                        <option value="{{ income_payment.student.id }}"> {{  income_payment.student.admin.first_name }} {{  income_payment.student.surname }} {{  income_payment.student.admin.last_name }}</option>
                     </select>
                 </div>
                 <div class="mb-3">
                   <label for="service_details">Service Details:</label>
-                  <select class="form-select" id="service_details" name="service_details">
+                  <select class="form-control select2bs4" style="width: 100%;" id="service_details" name="service_details">
                       <option value="">Select a service</option>  <!-- Add a default option -->
                       {% for service_detail in all_service_details %}
                           <option value="{{ service_detail.id }}"

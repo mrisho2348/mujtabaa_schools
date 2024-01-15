@@ -12,7 +12,7 @@ Students Information
     </div>
     <div class="card-body">
       {% if students.admin.first_name %}
-      <h5 class="card-title">Full Name: <span style="color: blue;">{{ students.admin.first_name }}</span> <span style="color: blue;">{{ students.admin.last_name }}</span></h5>
+      <h5 class="card-title">Full Name: <span style="color: blue;">{{ students.admin.first_name }}</span>  {{ student.surname }} <span style="color: blue;">{{ students.admin.last_name }}</span></h5>
       {% endif %}
       {% if students.address %}
       <p class="card-text">Address: {{ students.address }}</p>

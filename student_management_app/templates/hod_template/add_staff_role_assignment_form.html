@@ -25,7 +25,7 @@
         {% csrf_token %}
         <div class="form-group">
           <label for="staff">Staff Member:</label>
-          <select class="form-control" id="staff" name="staff">
+          <select   class="form-control select2bs4" style="width: 100%;"  id="staff" name="staff">
             {% for staff_member in staff_members %}
               <option value="{{ staff_member.id }}"
               {% if action == 'edit' and staff_member.id == assignment.staff.id %}

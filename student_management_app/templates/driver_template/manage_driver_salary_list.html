@@ -30,7 +30,7 @@
                             <tbody>
                                 {% for salary in driver_salaries %}
                                     <tr>
-                                        <td>{{salary.driver_member.admin.first_name}}  {{salary.driver_member.admin.last_name}}</td>
+                                        <td>{{salary.driver_member.admin.first_name}} {{salary.driver_member.surname}}   {{salary.driver_member.admin.last_name}}</td>
                                         <td>{{ salary.month|date:"F Y" }}</td>
                                         <td>{{ salary.paid_amount }}/Tsh</td>
                                         <td>{{ salary.total_amount_required }}/Tsh</td>

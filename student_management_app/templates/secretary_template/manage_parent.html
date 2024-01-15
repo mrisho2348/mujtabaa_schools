@@ -46,7 +46,8 @@
             {% for parents in page_obj %}
             <tr>
                 <td>{{parents.id}}</td>
-                <td>{{ parents.admin.first_name }} {{ parents.admin.last_name }}</td>
+              
+                <td>{{ parents.admin.first_name }} {{ parents.surname }} {{ parents.admin.last_name }}</td>
                 <td>{{parents.phone}}</td>                       
                 <td>{{parents.address}}</td>
                 <td>{{parents.gender}}</td>

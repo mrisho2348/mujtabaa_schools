@@ -40,7 +40,7 @@
             {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.admin.first_name }} {{ student.admin.last_name }}</td>
+                <td>{{ student.admin.first_name }} {{ student.surname }} {{ student.admin.last_name }}</td>
                 <td>{{ student.education_level.name }}</td>
                 <td>{{ student.selected_class.name }}</td>
                 <td>{{ student.admin.email }}</td>

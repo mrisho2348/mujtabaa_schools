@@ -23,7 +23,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="questions">Select Questions</label>
-                                    <select class="form-control" name="questions" id="question-select" multiple required>
+                                    <select  class="form-control select2bs4" style="width: 100%;"  name="questions" id="question-select" multiple required>
                                         {% for question in question_list %}
                                             <option value="{{ question.id }}"
                                                 {% if question.selected %}

@@ -32,7 +32,7 @@
         {% csrf_token %}
         <div class="form-group">
           <label for="vehicle_assigned">Vehicle Assigned</label>
-          <select class="form-control" id="vehicle_assigned" name="vehicle_assigned">
+          <select   class="form-control select2bs4" style="width: 100%;"  id="vehicle_assigned" name="vehicle_assigned">
             <option value="">Select a vehicle</option>
             {% for car in cars %}
               <option value="{{ car.id }}" {% if vehicle_info and vehicle_info.vehicle_assigned == car %}selected{% endif %}>{{ car.name }}</option>
