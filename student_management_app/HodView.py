@@ -2555,6 +2555,11 @@ def manage_student(request):
     students = Students.objects.all()    
     return render(request, "hod_template/manage_student.html", {"students": students})
 
+def student_reports(request):
+    students = Students.objects.all()    
+    class_levels = Class_level.objects.all()
+    return render(request, "hod_template/students_report.html", {"students": students,"class_levels":class_levels})
+
 
 def manage_parent(request):
     per_page = request.GET.get('per_page', 3)  # Get the number of items to display per page from the request
@@ -3996,3 +4001,50 @@ def delete_education_level(request, education_level_id):
 
     # If the request method is not POST, display a confirmation page.
     return redirect('confirm_delete_education_level', education_level_id=education_level_id)
+
+@csrf_exempt
+def filter_students(request):
+    try:
+        selected_class_id = request.GET.get('selected_class')
+        selected_year_id = request.GET.get('selected_year')
+
+        if not selected_class_id or not selected_year_id:
+            return JsonResponse({'error': 'Both class and year parameters are required.'}, status=400)
+
+        selected_class = Class_level.objects.get(id=selected_class_id)
+
+        # Assuming created_at is a reliable indicator of the student's registration date
+        start_date = f'{selected_year_id}-01-01T00:00:00Z'
+        end_date = f'{selected_year_id}-12-31T23:59:59Z'
+
+        # Filter students based on the selected class and registration date
+        filtered_students = Students.objects.filter(
+            selected_class=selected_class,
+            created_at__gte=start_date,
+            created_at__lte=end_date
+        )
+
+        data = [
+            {
+                'id': student.id,
+                'name': f'{student.admin.first_name} {student.surname} {student.admin.last_name}',
+                'education_level': student.education_level.name,
+                'current_class': student.selected_class.name,
+                'email': student.admin.email,
+                'gender': student.gender,
+                'profile_pic': student.profile_pic.url if student.profile_pic else None,
+                'registration_date': student.admin.date_joined.strftime('%Y-%m-%d'),
+            }
+            for student in filtered_students
+        ]
+
+        return JsonResponse({'data': data})
+
+    except Class_level.DoesNotExist:
+        return JsonResponse({'error': 'Selected class does not exist.'}, status=400)
+
+    except Students.DoesNotExist:
+        return JsonResponse({'error': 'No students found for the selected class and year.'}, status=400)
+
+    except Exception as e:
+        return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)

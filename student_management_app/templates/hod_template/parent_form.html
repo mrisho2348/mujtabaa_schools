@@ -50,7 +50,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="student">Select Student:</label>
-                                        <select class="form-control  js-example-basic-multiple" id="student" name="student_id">
+                                        <select   class="form-control select2bs4" style="width: 100%;"   id="student" name="student_id">
                                           {% for student in students %}
                                           <option value="{{ student.id }}">{{ student.admin.first_name }} {{ student.surname }} {{ student.admin.last_name }}</option>
                                           {% endfor %}

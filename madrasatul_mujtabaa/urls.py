@@ -65,7 +65,8 @@ urlpatterns = [
     path('admin_get_transport_attendance/', HodView.admin_get_transport_attendance, name='admin_get_transport_attendance'),
     # Add more URLs for other views if needed
   
-      
+    path('student-reports/', HodView.student_reports, name='student_reports'),  
+    path('filter_students/', HodView.filter_students, name='filter_students'),  
     path('qualification_form/<int:staff_id>/', HodView.qualifications_form, name='qualification_form'),
     path('skills_form/<int:staff_id>/', HodView.skills_form, name='skills_form'),
     path('employment_history_form/<int:staff_id>/', HodView.employment_history_form, name='employment_history_form'),
