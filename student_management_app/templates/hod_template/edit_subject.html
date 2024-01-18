@@ -1,6 +1,6 @@
 {% extends 'hod_template/base_template.html' %}
 {% block title %}
-  Add Subject
+  Edit Subject
 {% endblock title %}
 {% block main_content %}
   {% load static %}
@@ -18,14 +18,14 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                   <div class="card-header">
-                    <h2 class="card-title">Add Subject</h2>
+                    <h2 class="card-title"> Edit Subject</h2>
                   </div>
                   <div class="card-body">
                     <form method="post" action="{% if subject.id %}{% url 'create_or_edit_subject' subject_id=subject.id %}{% else %}{% url 'create_or_edit_subject' subject_id=None %}{% endif %}">
                       {% csrf_token %}
                       <div class="form-group">
                         <label for="school_segment">School Segment:</label>
-                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment">
+                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="education_level" required>
                           <option value="Primary" {% if subject.school_segment == "Primary" %} selected {% endif %}>Primary</option>
                           <option value="Nursery" {% if subject.school_segment == "Nursery" %} selected {% endif %}>Nursery</option>
                           <option value="Secondary" {% if subject.school_segment == "Secondary" %} selected {% endif %}>Secondary</option>
@@ -33,7 +33,7 @@
                       </div>
                       <div class="form-group">
                         <label for="subject_name">Subject Name:</label>
-                        <input type="text" class="form-control" id="subject_name" name="subject_name" value="{{ subject.subject_name }}">
+                        <input type="text" class="form-control" id="subject_name" name="subject_name" value="{{ subject.subject_name }}" required>
                       </div>
                       <div class="card-footer">
                         <div class="form-row">
@@ -51,7 +51,7 @@
                             {% endif %}
                           </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save Subject</button>
+                        <button type="submit" class="btn btn-primary">Save Change</button>
                       </div>
                     </form>
                   </div>
