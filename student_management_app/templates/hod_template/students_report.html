@@ -15,36 +15,10 @@ Students Reports
 {% load static %}
 {% block main_content %}
 
-<div class="container">
-    <form id="search-form">
-        <div class="row">
-            <div class="col-md-3">
-                <label for="classSelect">Select Class:</label>
-                <select  class="form-control select2bs4" style="width: 100%;"  id="classSelect" >
-                    {% for class_level in class_levels %}
-                    <option value="{{ class_level.id }}">{{ class_level.name }}</option>
-                    {% endfor %}
-                  </select>
-            </div>
-            <div class="col-md-3">
-                <label for="yearSelect">Select Year:</label>
-                <select  class="form-control select2bs4" style="width: 100%;"   id="yearSelect">
-                    <option value="">Select Year</option>
-                    <!-- Populate this dropdown with all available years -->
-                    <!-- Example: -->
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <!-- Add other years as needed -->
-                </select>
-            </div>          
-        </div>
-    </form>
-</div>
+
 
 <div class="">
-    <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm  display" id="example"  style="width:100%">
+    <table class="table table-hover text-nowrap table-responsive-sm table-bordered table-striped table-sm  display"  id="example"  style="width:100%">
         <thead>
             <tr>
                 <th>S/N</th>
@@ -52,8 +26,7 @@ Students Reports
                 <th>Education Level</th>
                 <th>CURRENT CLASS</th>
                 <th>Email</th>           
-                <th>Gender</th>
-                <th>Picture</th>
+                <th>Gender</th>          
                 <th>Registration Date</th>
              
                
@@ -67,14 +40,7 @@ Students Reports
                 <td>{{ student.education_level.name }}</td>
                 <td>{{ student.selected_class.name }}</td>
                 <td>{{ student.admin.email }}</td>              
-                <td>{{ student.gender }}</td>
-                <td>
-                    {% if student.profile_pic %}
-                        <img src="{{ student.profile_pic }}" style="width:100px;" alt="Profile Picture" />
-                    {% else %}
-                        <p>No profile picture</p>
-                    {% endif %}
-                </td>
+                <td>{{ student.gender }}</td>            
                 <td>{{ student.admin.date_joined }}</td>           
       
             </tr>
@@ -92,58 +58,5 @@ Students Reports
 {% include 'hod_template/datatable.html' %}
 {% endblock main_content %}
 
-{% block customer_js %}
-<!-- Include this script in your HTML template -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#classSelect, #yearSelect').change(function () {
-            // Get selected class and year
-            var selectedClass = $('#classSelect').val();
-            var selectedYear = $('#yearSelect').val();
-
-            // Make AJAX request
-            $.ajax({
-                type: 'GET',
-                url: '/filter_students/',  // Update with your actual URL
-                data: {
-                    selected_class: selectedClass,
-                    selected_year: selectedYear
-                },
-                success: function (data) {
-                    // Update the table with the filtered data
-                    updateTable(data.data);
-                },
-                error: function (error) {
-                    alert('Error:', error);
-                }
-            });
-        });
-
-        function updateTable(data) {
-            // Clear existing table rows
-            $('#student-table-body').empty();
-
-            // Append new rows with filtered data
-            data.forEach(function (student) {
-                var row = '<tr>' +
-                    '<td>' + student.id + '</td>' +
-                    '<td>' + student.name + '</td>' +
-                    '<td>' + student.education_level + '</td>' +
-                    '<td>' + student.current_class + '</td>' +
-                    '<td>' + student.email + '</td>' +
-                    '<td>' + student.gender + '</td>' +
-                    '<td>' + (student.profile_pic ? '<img src="' + student.profile_pic + '" style="width:100px;" alt="Profile Picture" />' : 'No profile picture') + '</td>' +
-                    '<td>' + student.registration_date + '</td>' +
-                    '</tr>';
-
-                $('#student-table-body').append(row);
-            });
-        }
-    });
-</script>
 
 
-
-{% endblock customer_js %}

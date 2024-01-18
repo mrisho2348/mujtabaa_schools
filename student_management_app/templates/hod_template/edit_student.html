@@ -321,50 +321,58 @@ Edit Student | username: {{ username}} | #ID. {{id}}
 </script>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Get references to the education level and subjects select elements
-        var educationLevelSelect = $('#school_segment');
-        var subjectsSelect = $('#subjects');
-        s
-        // Listen for changes in the education level select
-        educationLevelSelect.on('change', function() {
-            var selectedEducationLevel = educationLevelSelect.val();
 
-            // Make an AJAX request to fetch subjects based on the selected education level
-            $.ajax({
-                url: '/get_subjects_by_education_level/', // Replace with the actual URL for your backend view
-                data: {
-                    'education_level_id': selectedEducationLevel
-                },
-                dataType: 'json',
-                success: function(data) {
-                    // Clear the subjects select
-                    subjectsSelect.empty();
 
-                    // Add a default option
+  $(document).ready(function() {
+    // Get references to the education level and current class select elements
+    var educationLevelSelect = $('#school_segment');
+    var subjectsSelect = $('#subjects');  // Update to match the ID of your subjects select element
+
+    // Listen for changes in the education level select
+    educationLevelSelect.on('change', function() {
+        // Get the selected education level id
+        var educationLevelId = $(this).val();
+
+        // Clear the subjects dropdown
+        subjectsSelect.empty();
+
+        // Add a default option
+        subjectsSelect.append($('<option>', {
+            value: '',
+            text: 'Select subjects'
+        }));
+
+        // Populate the subjects dropdown with retrieved data
+        $.ajax({
+            type: 'GET',
+            url: '/get_subject_by_education_level/',
+            data: {
+                education_level_id: educationLevelId
+            },
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function(index, item) {
                     subjectsSelect.append($('<option>', {
-                        value: '',
-                        text: 'Select Subjects'
+                        value: item.id,
+                        text: item.subject_name  // Use the correct property name
                     }));
-
-                    // Populate the subjects select with retrieved data
-                    $.each(data, function(index, item) {
-                        subjectsSelect.append($('<option>', {
-                            value: item.id,
-                            text: item.subject_name
-                        }));
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // Handle any errors here
-                    console.error(error);
-                }
-            });
+                });
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors here
+                console.error(error);
+            }
         });
     });
-</script>
+});
 
+    
+
+
+
+</script>
 
 
 {% endblock main_content %}

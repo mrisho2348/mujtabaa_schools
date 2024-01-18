@@ -2555,10 +2555,7 @@ def manage_student(request):
     students = Students.objects.all()    
     return render(request, "hod_template/manage_student.html", {"students": students})
 
-def student_reports(request):
-    students = Students.objects.all()    
-    class_levels = Class_level.objects.all()
-    return render(request, "hod_template/students_report.html", {"students": students,"class_levels":class_levels})
+
 
 
 def manage_parent(request):
@@ -2783,6 +2780,18 @@ def get_class_levels(request):
         class_levels = Class_level.objects.filter(school_level_id=education_level_id).values('id', 'name')
         return JsonResponse(list(class_levels), safe=False)
 
+def get_subject_by_education_level(request):
+    if request.method == 'GET':
+        education_level_id = request.GET.get('education_level_id')
+    
+        # Query subjects based on the selected education level
+        subjects = Subject.objects.filter(education_level_id=education_level_id).values('id', 'subject_name')
+
+        # Convert the queryset to a list of dictionaries
+        subjects_list = list(subjects)
+
+        return JsonResponse(subjects_list, safe=False)
+    
 def get_subjects_by_education_level(request):
     if request.method == 'GET':
         education_level_id = request.GET.get('education_level_id')
@@ -2903,7 +2912,7 @@ def edit_student_save(request):
 
         # del request.session['student_id']
         messages.success(request, "Successfully edited student")
-        return redirect("add_previous_education", student_id=user.students.id)
+        return HttpResponseRedirect(reverse("manage_student"))
         # return HttpResponseRedirect(reverse("edit_student", kwargs={"student_id": student_id}))
 
     except CustomUser.DoesNotExist:
@@ -2956,7 +2965,7 @@ def edit_student(request, student_id):
         })
     except Students.DoesNotExist:
         messages.error(request, "Student does not exist")
-        return HttpResponseRedirect(reverse("manage_studen"))
+        return HttpResponseRedirect(reverse("manage_student"))
     
       
 
@@ -3380,29 +3389,29 @@ def subject_wise_result(request, student_id,exam_type_id):
 def students_summary(request, exam_type=None):
 
     exam_type = get_object_or_404(ExamType, name=exam_type)
-    form_one_class = Class_level.objects.get(name='Form I')
+    form_one_class = Class_level.objects.get(name='FORM ONE')
     form_i_students = Students.objects.filter(selected_class=form_one_class)
-    form_two_class = Class_level.objects.get(name='Form II')
+    form_two_class = Class_level.objects.get(name='FORM TWO')
     form_ii_students = Students.objects.filter(selected_class=form_two_class)
-    form_three_class = Class_level.objects.get(name='Form III')
+    form_three_class = Class_level.objects.get(name='FORM THREE')
     form_iii_students = Students.objects.filter(selected_class=form_three_class)
-    form_four_class = Class_level.objects.get(name='Form IV')
+    form_four_class = Class_level.objects.get(name='FORM FOUR')
     form_iv_students = Students.objects.filter(selected_class=form_four_class)
     
        # Fetch primary students
-    standard_one_class = Class_level.objects.get(name='STD I')   
+    standard_one_class = Class_level.objects.get(name='STANDARD ONE')   
     std_i_students = Students.objects.filter(selected_class=standard_one_class)
-    standard_two_class = Class_level.objects.get(name='STD II')   
+    standard_two_class = Class_level.objects.get(name='STANDARD TWO')   
     std_ii_students = Students.objects.filter(selected_class=standard_two_class)
-    standard_three_class = Class_level.objects.get(name='STD III') 
+    standard_three_class = Class_level.objects.get(name='STANDARD THREE') 
     std_iii_students = Students.objects.filter(selected_class=standard_three_class)
-    standard_four_class = Class_level.objects.get(name='STD IV') 
+    standard_four_class = Class_level.objects.get(name='STANDARD FOUR') 
     std_iv_students = Students.objects.filter(selected_class=standard_four_class)
-    standard_five_class = Class_level.objects.get(name='STD V') 
+    standard_five_class = Class_level.objects.get(name='STANDARD FIVE') 
     std_v_students = Students.objects.filter(selected_class=standard_five_class)
-    standard_six_class = Class_level.objects.get(name='STD VI')     
+    standard_six_class = Class_level.objects.get(name='STANDARD SIX')     
     std_vi_students = Students.objects.filter(selected_class=standard_six_class)
-    standard_seven_class = Class_level.objects.get(name='STD VII')         
+    standard_seven_class = Class_level.objects.get(name='STANDARD SEVEN')         
     std_vii_students = Students.objects.filter(selected_class=standard_seven_class)
     
        # Fetch nursery students
@@ -4006,18 +4015,17 @@ def delete_education_level(request, education_level_id):
 def filter_students(request):
     try:
         selected_class_id = request.GET.get('selected_class')
-        selected_year_id = request.GET.get('selected_year')
+        selected_year = request.GET.get('selected_year')
 
-        if not selected_class_id or not selected_year_id:
+        if not selected_class_id or not selected_year:
             return JsonResponse({'error': 'Both class and year parameters are required.'}, status=400)
 
-        selected_class = Class_level.objects.get(id=selected_class_id)
+        selected_class = Class_level.objects.get(id=selected_class_id)   
 
-        # Assuming created_at is a reliable indicator of the student's registration date
-        start_date = f'{selected_year_id}-01-01T00:00:00Z'
-        end_date = f'{selected_year_id}-12-31T23:59:59Z'
+        # Convert selected_year to a valid DateTime object
+        start_date = datetime(int(selected_year), 1, 1, 0, 0, 0)
+        end_date = datetime(int(selected_year), 12, 31, 23, 59, 59)
 
-        # Filter students based on the selected class and registration date
         filtered_students = Students.objects.filter(
             selected_class=selected_class,
             created_at__gte=start_date,
@@ -4031,8 +4039,7 @@ def filter_students(request):
                 'education_level': student.education_level.name,
                 'current_class': student.selected_class.name,
                 'email': student.admin.email,
-                'gender': student.gender,
-                'profile_pic': student.profile_pic.url if student.profile_pic else None,
+                'gender': student.gender,              
                 'registration_date': student.admin.date_joined.strftime('%Y-%m-%d'),
             }
             for student in filtered_students
@@ -4040,11 +4047,19 @@ def filter_students(request):
 
         return JsonResponse({'data': data})
 
-    except Class_level.DoesNotExist:
+    except Class_level.DoesNotExist as cls_err:
+        print(f'Class Does Not Exist Error: {cls_err}')
         return JsonResponse({'error': 'Selected class does not exist.'}, status=400)
 
-    except Students.DoesNotExist:
+    except Students.DoesNotExist as std_err:
+        print(f'Students Do Not Exist Error: {std_err}')
         return JsonResponse({'error': 'No students found for the selected class and year.'}, status=400)
 
     except Exception as e:
+        print(f'Unexpected Error: {e}')
         return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
+    
+def student_reports(request):
+    students = Students.objects.all()    
+    class_levels = Class_level.objects.all()
+    return render(request, "hod_template/students_report.html", {"class_levels":class_levels,"students":students})    

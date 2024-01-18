@@ -103,6 +103,7 @@ urlpatterns = [
     path('admin_get_attendance_date', HodView.admin_get_attendance_date, name='admin_get_attendance_date'), 
     path('admin_save_updateattendance', HodView.admin_save_updateattendance, name='admin_save_updateattendance'),
     path('get_subjects_by_education_level', HodView.get_subjects_by_education_level, name='get_subjects_by_education_level'),
+    path('get_subject_by_education_level/', HodView.get_subject_by_education_level, name='get_subject_by_education_level'),
     path('admin_profile', HodView.admin_profile, name='admin_profile'),     
     path('single_student_detail/<int:student_id>/', HodView.single_student_detail, name='single_student_detail'),
     path('single_parent_detail/<str:parent_id>', HodView.single_parent_detail, name='single_parent_detail'),
