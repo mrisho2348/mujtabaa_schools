@@ -24,11 +24,12 @@
                     <form method="post" action="{% if subject.id %}{% url 'create_or_edit_subject' subject_id=subject.id %}{% else %}{% url 'create_or_edit_subject' subject_id=None %}{% endif %}">
                       {% csrf_token %}
                       <div class="form-group">
-                        <label for="school_segment">School Segment:</label>
-                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="education_level" required>
-                          <option value="Primary" {% if subject.school_segment == "Primary" %} selected {% endif %}>Primary</option>
-                          <option value="Nursery" {% if subject.school_segment == "Nursery" %} selected {% endif %}>Nursery</option>
-                          <option value="Secondary" {% if subject.school_segment == "Secondary" %} selected {% endif %}>Secondary</option>
+                        <label for="school_segment">School Education Level</label>
+                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment" required>
+                            <option value="">Select Education Level</option>
+                            {% for education_level in education_levels %}
+                            <option value="{{ education_level.id }}" {% if education_level.id == students.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
+                            {% endfor %}
                         </select>
                       </div>
                       <div class="form-group">
