@@ -25,7 +25,7 @@
                       {% csrf_token %}
                       <div class="form-group">
                         <label for="school_segment">School Education Level</label>
-                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="school_segment" required>                           
+                        <select   class="form-control select2bs4" style="width: 100%;"  id="school_segment" name="education_level" required>                           
                             {% for education_level in education_levels %}
                             <option value="{{ education_level.id }}" {% if education_level.id == students.education_level.id %}selected{% endif %}>{{ education_level.name }}</option>
                             {% endfor %}
