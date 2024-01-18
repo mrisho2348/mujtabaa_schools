@@ -2637,7 +2637,7 @@ def create_or_edit_subject(request, subject_id):
         subject.save()
 
         messages.success(request, 'Subject details successfully updated.')
-        return redirect('edit_subject', subject_id=subject_id)
+        return redirect('manage_subject')
 
     return render(request, 'hod_template/edit_subject.html', {'subject': subject, 'education_levels': education_levels})
 
